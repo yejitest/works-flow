@@ -3,1669 +3,423 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>WORKS Flow — AI 액션 아이템 예측</title>
+<title>Flow AI — NAVER WORKS 목업</title>
 <style>
-/* ─── WDS Design Tokens (공식 LINE WORKS 가이드) ──── */
-:root {
-  /* Primary colors — WDS */
-  --green:      #03C75A;  /* Green700 · Theme */
-  --green-lt:   #E1F9E9;
-  --green-dk:   #05A847;
-  --blue:       #157EFB;  /* Blue600 · Accent/Active */
-  --blue-lt:    #E6F0FF;
-  --blue-md:    #BFDBFE;
-  --blue-dk:    #1166D6;
-  --red:        #FD472B;  /* Red640 · Error/Warning */
-  --red-lt:     #FFE9E6;
-  --orange:     #F9A826;  /* Orange500 · Caution */
-  --orange-lt:  #FFF3DD;
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 
-  /* Accent */
-  --indigo:     #5046E5;
-  --indigo-lt:  #EEF2FF;
-  --amber:      var(--orange);
-  --amber-lt:   var(--orange-lt);
+  :root{
+    --bg:#FFFFFF;
+    --surface:#FAFAFA;
+    --border:#EAEAEA;
+    --text:#111111;
+    --text-sub:#6B6B6B;
+    --text-muted:#999999;
+    --green:#00C73C;
+    --green-strong:#00A832;
+    --green-bg:#E6F9EC;
+    --ai-purple:#6C5CE7;
+    --ai-purple-soft:#F1EEFE;
+    --tag-green:#0BAE78;
+    --tag-blue:#4181FF;
+    --tag-purple:#7C5BDA;
+    --tag-orange:#E67700;
+    --tag-gray:#8B8B8B;
+    --tag-pink:#E5447F;
+  }
 
-  /* WDS Gray scale */
-  --g900: #222222; /* Primary text */
-  --g800: #434343; /* Secondary text */
-  --g750: #555555; /* Edit mode title */
-  --g650: #767676; /* Tertiary text */
-  --g580: #989898; /* Placeholder text */
-  --g400: #CCCCCC; /* Disabled */
-  --g350: #DDDDDD; /* Line, outline */
-  --g300: #EEEEEE; /* Line */
-  --g200: #EEEEEE;
-  --g150: #F5F5F6; /* Content margin */
-  --g100: #FAFAFA; /* BG */
-  --g50:  #FAFAFA;
-  --g700: #434343; /* alias */
-  --g600: #767676; /* alias */
-  --g500: #767676; /* alias */
-  --white: #FFFFFF;
+  html,body{
+    background:var(--bg);color:var(--text);
+    font-family:-apple-system,'Apple SD Gothic Neo','Pretendard','Noto Sans KR',sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  body{display:flex;flex-direction:column;min-height:100vh}
+  a{color:inherit;text-decoration:none}
 
-  --flow-dark:   #07111F;
-  --flow-navy:   #0C1B33;
-  --flow-card:   rgba(255,255,255,.055);
-  --flow-border: rgba(255,255,255,.10);
-  --glow-blue:   rgba(21,126,251,.30);
+  /* ── Top Bar ── */
+  .topbar{
+    position:sticky;top:0;z-index:10;
+    background:rgba(255,255,255,.85);
+    backdrop-filter:saturate(180%) blur(12px);
+    -webkit-backdrop-filter:saturate(180%) blur(12px);
+    border-bottom:1px solid var(--border);
+    height:60px;
+  }
+  .topbar-inner{
+    max-width:1080px;margin:0 auto;padding:0 32px;height:100%;
+    display:flex;align-items:center;justify-content:space-between;
+  }
+  .topbar-logo{display:flex;align-items:center;height:18px}
+  .topbar-logo svg{display:block;height:18px;width:auto}
+  .topbar-right{display:flex;align-items:center;gap:12px}
+  .cta-demo{
+    height:36px;padding:0 16px;border-radius:999px;
+    background:var(--text);color:#fff;font-size:13px;font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;letter-spacing:-.1px;
+    border:none;cursor:pointer;transition:background .15s;
+  }
+  .cta-demo:hover{background:#000}
+  .avatar{
+    width:32px;height:32px;border-radius:50%;
+    background:linear-gradient(135deg,#00C73C 0%,#00A832 100%);
+    color:#FFF;font-size:13px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
+    border:none;cursor:pointer;letter-spacing:-.3px;
+  }
 
-  --r-sm: 4px; --r-md: 8px; --r-lg: 12px;
-  --r-xl: 16px; --r-2xl: 24px; --r-full: 999px;
+  /* ── Hero ── */
+  .hero{max-width:1080px;margin:0 auto;padding:120px 32px 40px;text-align:center}
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:6px;
+    font-size:12px;font-weight:600;color:var(--ai-purple);
+    background:var(--ai-purple-soft);
+    padding:6px 14px;border-radius:999px;margin-bottom:28px;letter-spacing:.2px;
+  }
+  .hero-eyebrow::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:var(--ai-purple);
+  }
+  .hero h1{
+    font-size:52px;font-weight:700;letter-spacing:-.8px;line-height:1.1;
+    color:var(--text);margin-bottom:24px;max-width:760px;
+    margin-left:auto;margin-right:auto;
+  }
+  .hero h1 em{font-style:normal;color:var(--ai-purple)}
+  .hero-sub{
+    font-size:18px;line-height:1.6;color:var(--text-sub);
+    max-width:560px;margin:0 auto 36px;font-weight:400;
+  }
+  .hero-actions{display:inline-flex;gap:10px}
+  .btn-primary{
+    height:44px;padding:0 22px;border-radius:999px;
+    background:var(--text);color:#fff;font-size:14px;font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;border:none;cursor:pointer;
+    transition:background .15s,transform .15s;
+  }
+  .btn-primary:hover{background:#000;transform:translateY(-1px)}
+  .btn-ghost{
+    height:44px;padding:0 22px;border-radius:999px;
+    background:#fff;color:var(--text);font-size:14px;font-weight:600;
+    display:inline-flex;align-items:center;gap:6px;
+    border:1px solid var(--border);cursor:pointer;transition:border-color .15s;
+  }
+  .btn-ghost:hover{border-color:#C0C0C0}
 
-  --sh-sm: 0 1px 4px rgba(0,0,0,.07);
-  --sh-md: 0 2px 12px rgba(0,0,0,.09);
-  --sh-lg: 0 8px 32px rgba(0,0,0,.12);
-  --sh-xl: 0 16px 48px rgba(0,0,0,.15);
-}
+  /* ── Features ── */
+  .features{flex:1;max-width:1080px;margin:0 auto;padding:40px 32px 120px;width:100%}
+  .section-label{
+    font-size:12px;font-weight:600;color:var(--text-muted);
+    text-transform:uppercase;letter-spacing:1.2px;margin-bottom:16px;
+  }
+  .features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .feature-card{
+    background:#fff;border:1px solid rgba(0,0,0,.08);border-radius:16px;
+    padding:28px;transition:border-color .2s,transform .2s;
+    display:flex;flex-direction:column;gap:32px;cursor:pointer;
+  }
+  .feature-card:hover{border-color:rgba(0,0,0,.18);transform:translateY(-2px)}
+  .feature-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+  .feature-tag{
+    display:inline-flex;align-items:center;
+    font-size:11px;font-weight:600;padding:5px 10px 3px;border-radius:6px;
+    letter-spacing:.2px;line-height:1.18;white-space:nowrap;
+    color:var(--tag-green);background:rgba(11,174,120,.15);
+  }
+  .feature-tag.blue{color:var(--tag-blue);background:rgba(65,129,255,.15)}
+  .feature-tag.purple,.feature-tag.ai{color:var(--tag-purple);background:rgba(124,91,218,.15)}
+  .feature-tag.orange{color:var(--tag-orange);background:rgba(230,119,0,.15)}
+  .feature-tag.gray{color:var(--tag-gray);background:rgba(139,139,139,.15)}
+  .feature-tag.pink{color:var(--tag-pink);background:rgba(229,68,127,.15)}
+  .feature-card .arrow{
+    width:24px;height:24px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    color:var(--text-muted);transition:color .15s,background .15s;
+  }
+  .feature-card:hover .arrow{color:var(--text);background:var(--surface)}
+  .feature-card-bottom{display:flex;flex-direction:column;gap:6px}
+  .feature-card h3{
+    font-size:19px;font-weight:700;letter-spacing:-.3px;color:var(--text);line-height:1.25;
+  }
+  .feature-card p{font-size:14px;line-height:1.5;color:var(--text-sub)}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: -apple-system, 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif;
-  font-size: 14px; color: var(--g800); background: var(--white); line-height: 1.5;
-}
-a { text-decoration: none; color: inherit; }
-button { cursor: pointer; border: none; background: none; font: inherit; }
+  /* ── Highlight section (big demo banner) ── */
+  .highlight{
+    max-width:1080px;margin:0 auto;padding:20px 32px 0;
+  }
+  .highlight-card{
+    position:relative;overflow:hidden;border-radius:20px;
+    background:linear-gradient(135deg,#F6F3FF 0%,#EEF2FF 55%,#E6F0FF 100%);
+    border:1px solid rgba(124,91,218,.18);
+    padding:40px 44px;display:grid;grid-template-columns:1.2fr 1fr;gap:32px;
+    align-items:center;
+  }
+  .highlight-card::before{
+    content:"";position:absolute;right:-80px;top:-80px;width:280px;height:280px;
+    border-radius:50%;background:radial-gradient(circle,rgba(124,91,218,.22) 0%,transparent 70%);
+    pointer-events:none;
+  }
+  .highlight-eyebrow{
+    display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:700;
+    color:var(--ai-purple);letter-spacing:.6px;text-transform:uppercase;margin-bottom:14px;
+  }
+  .highlight-eyebrow::before{
+    content:"";width:6px;height:6px;border-radius:50%;background:var(--ai-purple);
+  }
+  .highlight h2{
+    font-size:30px;font-weight:700;letter-spacing:-.5px;line-height:1.25;
+    color:var(--text);margin-bottom:14px;
+  }
+  .highlight p{font-size:15px;line-height:1.6;color:var(--text-sub);margin-bottom:22px}
+  .highlight .cta-row{display:flex;gap:10px}
+  .highlight-visual{
+    position:relative;
+    aspect-ratio:1.3/1;border-radius:14px;
+    background:#fff;border:1px solid rgba(0,0,0,.06);
+    box-shadow:0 20px 50px rgba(80,70,229,.12);
+    display:flex;flex-direction:column;overflow:hidden;
+  }
+  .hv-head{
+    height:30px;background:#F6F6FB;border-bottom:1px solid var(--border);
+    display:flex;align-items:center;padding:0 10px;gap:5px;
+  }
+  .hv-dot{width:8px;height:8px;border-radius:50%;background:#E4E4E4}
+  .hv-body{flex:1;padding:14px;display:flex;flex-direction:column;gap:8px}
+  .hv-bubble{
+    background:linear-gradient(135deg,#F6F3FF,#EEF2FF);
+    border:1px solid rgba(124,91,218,.15);
+    border-radius:10px;padding:10px 12px;font-size:11px;line-height:1.5;
+    color:var(--text);
+  }
+  .hv-bubble b{color:var(--ai-purple)}
+  .hv-sources{display:flex;gap:4px;margin-top:2px;flex-wrap:wrap}
+  .hv-src{
+    font-size:9px;font-weight:700;color:var(--text-sub);
+    padding:2px 7px;border-radius:10px;background:var(--surface);
+    display:inline-flex;align-items:center;gap:3px;
+  }
+  .hv-src::before{content:"";width:5px;height:5px;border-radius:50%;background:#E4E4E4}
+  .hv-src.mail::before{background:#FD472B}
+  .hv-src.msg::before{background:#03C75A}
+  .hv-src.cal::before{background:#157EFB}
+  .hv-src.drive::before{background:#F9A826}
 
-/* ─── Header ──────────────────────────────────────── */
-.site-header {
-  position: sticky; top: 0; z-index: 200;
-  height: 56px; background: rgba(255,255,255,.94);
-  backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--g200);
-  display: flex; align-items: center; padding: 0 24px; gap: 10px;
-  box-shadow: var(--sh-sm);
-}
-.lw-logo { display: flex; align-items: center; gap: 10px; }
-.lw-logo svg { display: block; flex-shrink: 0; }
-.flow-badge {
-  font-size: 11px; font-weight: 700; padding: 3px 10px;
-  background: var(--blue-lt); color: var(--blue);
-  border-radius: var(--r-full); border: 1px solid var(--blue-md);
-  letter-spacing: .3px;
-}
-.hd-spacer { flex: 1; }
-.hd-btn {
-  font-size: 12px; font-weight: 600; padding: 7px 16px;
-  border-radius: var(--r-full); transition: all .15s;
-}
-.hd-btn-ghost { color: var(--g600); border: 1px solid var(--g200); }
-.hd-btn-ghost:hover { background: var(--g100); }
-.hd-btn-primary { background: var(--blue); color: var(--white); }
-.hd-btn-primary:hover { background: var(--blue-dk); }
+  /* ── Footer ── */
+  .footer{font-size:12px;color:var(--text-muted)}
+  .footer-inner{
+    max-width:1080px;margin:0 auto;padding:24px 32px;
+    border-top:1px solid var(--border);
+    display:flex;justify-content:space-between;align-items:center;
+  }
 
-/* ─── Hero ────────────────────────────────────────── */
-.hero {
-  position: relative; overflow: hidden;
-  background: linear-gradient(160deg, #f0f7ff 0%, #f5f0ff 40%, #f0fffe 100%);
-  border-bottom: 1px solid var(--g200);
-  padding: 88px 24px 80px; text-align: center;
-}
-.hero-orb {
-  position: absolute; border-radius: 50%;
-  filter: blur(80px); opacity: .2; pointer-events: none;
-}
-.orb-a { width: 500px; height: 500px; background: var(--blue); top: -160px; left: -120px; }
-.orb-b { width: 380px; height: 380px; background: var(--indigo); bottom: -120px; right: -80px; }
-.orb-c { width: 260px; height: 260px; background: var(--green); top: 60px; right: 18%; }
-
-.hero-eyebrow {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 700; letter-spacing: .6px; text-transform: uppercase;
-  color: var(--blue); background: var(--blue-lt);
-  padding: 5px 14px; border-radius: var(--r-full);
-  border: 1px solid var(--blue-md); margin-bottom: 28px;
-}
-.hero-naming {
-  display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px;
-  background: var(--white); border: 1px solid var(--g200);
-  border-radius: var(--r-full); padding: 6px 16px; box-shadow: var(--sh-sm);
-}
-.hero-naming-label { font-size: 10px; color: var(--g400); font-weight: 600; letter-spacing: .4px; text-transform: uppercase; }
-.hero-naming-name  { font-size: 13px; font-weight: 700; color: var(--blue); }
-.hero-naming-desc  { font-size: 11px; color: var(--g500); padding-left: 8px; border-left: 1px solid var(--g200); }
-
-.hero-title {
-  font-size: clamp(44px, 8vw, 72px); font-weight: 800;
-  letter-spacing: -2px; color: var(--g900); line-height: 1.05;
-  margin-bottom: 4px;
-}
-.hero-title .hl { color: var(--blue); }
-.hero-sub-sm { font-size: 13px; font-weight: 600; color: var(--g400); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 6px; }
-.hero-desc {
-  font-size: clamp(14px, 2.5vw, 18px); color: var(--g600);
-  margin: 18px auto 36px; max-width: 540px; line-height: 1.75;
-}
-.hero-chips { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
-.chip {
-  font-size: 12px; padding: 5px 14px; border-radius: var(--r-full); border: 1px solid; font-weight: 500;
-}
-.chip-blue   { background: var(--blue-lt);  border-color: var(--blue-md);   color: var(--blue); }
-.chip-indigo { background: var(--indigo-lt); border-color: #C7D2FE; color: var(--indigo); }
-.chip-green  { background: #DCFCE7; border-color: #86EFAC; color: #166534; }
-.chip-ghost  { background: var(--white); border-color: var(--g200); color: var(--g600); }
-
-/* ─── Section Layout ──────────────────────────────── */
-.section { padding: 72px 24px; }
-.inner { max-width: 1120px; margin: 0 auto; }
-.sec-eye {
-  font-size: 10px; font-weight: 700; letter-spacing: 1.2px;
-  text-transform: uppercase; color: var(--g400); margin-bottom: 8px;
-}
-.sec-head {
-  font-size: clamp(22px, 3.5vw, 32px); font-weight: 700;
-  color: var(--g900); margin-bottom: 12px; line-height: 1.25;
-}
-.sec-desc { font-size: 14px; color: var(--g600); line-height: 1.8; max-width: 600px; }
-
-/* ─── How It Works ────────────────────────────────── */
-.hiw-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr);
-  gap: 2px; margin-top: 40px; background: var(--g200); border-radius: var(--r-xl);
-  overflow: hidden; border: 1px solid var(--g200);
-}
-@media (max-width: 720px) { .hiw-grid { grid-template-columns: 1fr; } }
-.hiw-step {
-  background: var(--white); padding: 32px 28px;
-  transition: background .2s;
-}
-.hiw-step:hover { background: var(--blue-lt); }
-.hiw-num {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: var(--blue-lt); color: var(--blue);
-  font-size: 14px; font-weight: 800;
-  display: flex; align-items: center; justify-content: center;
-  margin-bottom: 16px;
-}
-.hiw-step h3 { font-size: 15px; font-weight: 700; color: var(--g900); margin-bottom: 8px; }
-.hiw-step p  { font-size: 13px; color: var(--g600); line-height: 1.7; }
-.hiw-sources {
-  display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px;
-}
-.hiw-src {
-  font-size: 11px; padding: 3px 8px; border-radius: var(--r-full);
-  background: var(--g100); color: var(--g600); border: 1px solid var(--g200);
-}
-
-/* ─── CONCEPT SECTION ─────────────────────────────── */
-.concept-section {
-  background: var(--flow-dark);
-  padding: 80px 0 96px; position: relative; overflow: hidden;
-}
-.concept-section::before {
-  content: '';
-  position: absolute; inset: 0;
-  background:
-    radial-gradient(ellipse 800px 600px at 10% 40%, rgba(21,126,251,.12) 0%, transparent 60%),
-    radial-gradient(ellipse 600px 500px at 85% 60%, rgba(80,70,229,.10) 0%, transparent 60%);
-  pointer-events: none;
-}
-.concept-inner { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
-.concept-header { text-align: center; margin-bottom: 48px; }
-.concept-eye {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase;
-  color: rgba(21,126,251,.9); background: rgba(21,126,251,.1);
-  border: 1px solid rgba(21,126,251,.25);
-  padding: 5px 14px; border-radius: var(--r-full); margin-bottom: 20px;
-}
-.concept-title {
-  font-size: clamp(26px, 4vw, 38px); font-weight: 800;
-  color: var(--white); letter-spacing: -1px; margin-bottom: 12px; line-height: 1.2;
-}
-.concept-title .hl { color: #60A5FA; }
-.concept-desc { font-size: 14px; color: rgba(255,255,255,.55); line-height: 1.8; max-width: 520px; margin: 0 auto; }
-
-/* Scenario Tabs */
-.scenario-tabs {
-  display: flex; gap: 6px; justify-content: center; flex-wrap: wrap;
-  margin-bottom: 40px;
-}
-.stab {
-  padding: 8px 20px; border-radius: var(--r-full); font-size: 12px; font-weight: 600;
-  border: 1px solid var(--flow-border); color: rgba(255,255,255,.5);
-  transition: all .2s; cursor: pointer;
-}
-.stab:hover { border-color: rgba(21,126,251,.5); color: rgba(255,255,255,.8); }
-.stab.active {
-  background: var(--blue); border-color: var(--blue); color: var(--white);
-  box-shadow: 0 0 16px rgba(21,126,251,.4);
-}
-.stab-num {
-  display: inline-flex; align-items: center; justify-content: center;
-  width: 18px; height: 18px; border-radius: 50%;
-  background: rgba(255,255,255,.15); font-size: 10px; font-weight: 800;
-  margin-right: 6px;
-}
-.stab.active .stab-num { background: rgba(255,255,255,.3); }
-
-/* ─── Demo Stage — Real WORKS app look (light theme) ─── */
-.demo-stage {
-  background: #FFFFFF;
-  border-radius: 12px; overflow: hidden;
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,.06),
-    0 32px 80px rgba(0,0,0,.5),
-    0 0 60px rgba(21,126,251,.15);
-}
-
-/* Browser chrome */
-.stage-topbar {
-  background: #E8ECEF;
-  border-bottom: 1px solid #D5D9DD;
-  height: 36px; display: flex; align-items: center; padding: 0 14px; gap: 8px;
-}
-.mac-dot { width: 11px; height: 11px; border-radius: 50%; }
-.mac-dot.r { background: #FF5F56; }
-.mac-dot.y { background: #FFBD2E; }
-.mac-dot.g { background: #27C93F; }
-.stage-url {
-  margin-left: 12px; flex: 1; max-width: 360px;
-  background: #FFFFFF; border: 1px solid #D5D9DD;
-  border-radius: 6px; padding: 4px 10px;
-  font-size: 10.5px; color: #6B7280;
-  display: flex; align-items: center; gap: 6px;
-  font-family: -apple-system, 'SF Mono', 'Menlo', monospace;
-}
-.stage-url-lock { color: #03C75A; font-size: 10px; }
-.stage-url-host { color: #202124; font-weight: 600; }
-
-/* Works layout: left nav + app content */
-.works-layout {
-  display: flex; background: #F7F8FA;
-  min-height: 400px;
-}
-
-/* Vertical nav (like real WORKS PC app) */
-.works-nav {
-  width: 58px; flex-shrink: 0;
-  background: #2B2F36; padding: 10px 0;
-  display: flex; flex-direction: column; align-items: center; gap: 3px;
-}
-.works-nav-logo {
-  width: 38px; height: 38px; border-radius: 9px;
-  background: #03C75A; margin-bottom: 10px;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 2px 6px rgba(3,199,90,.3);
-}
-.nav-profile {
-  width: 32px; height: 32px; border-radius: 50%;
-  background: linear-gradient(135deg, #0D9488, #03C75A);
-  display: flex; align-items: center; justify-content: center;
-  color: #fff; font-size: 11px; font-weight: 700;
-  margin-bottom: 12px;
-  border: 2px solid rgba(255,255,255,.15);
-}
-.nav-icon {
-  width: 42px; height: 42px; border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  color: rgba(255,255,255,.55); font-size: 17px;
-  transition: all .3s; position: relative;
-}
-.nav-icon-label {
-  position: absolute; bottom: 2px; font-size: 7.5px; font-weight: 600;
-  color: rgba(255,255,255,.35); letter-spacing: -.3px;
-}
-.nav-icon:hover { background: rgba(255,255,255,.06); color: rgba(255,255,255,.9); }
-.nav-icon.monitoring {
-  color: rgba(255,255,255,.85);
-}
-.nav-icon.monitoring .nav-icon-label { color: rgba(255,255,255,.6); }
-.nav-icon.monitoring::before {
-  content: ''; position: absolute; left: -9px; top: 50%;
-  transform: translateY(-50%);
-  width: 3px; height: 18px; border-radius: 0 3px 3px 0;
-  background: transparent; transition: all .3s;
-}
-.nav-icon.active {
-  background: rgba(3,199,90,.18); color: #4ADE80;
-}
-.nav-icon.active::before { background: #03C75A; height: 22px; }
-.nav-icon.flow-active {
-  background: rgba(21,126,251,.18); color: #60A5FA;
-}
-.nav-icon.flow-active::before { background: var(--blue); height: 22px; }
-
-/* Works content area — 4 panels */
-.works-content {
-  flex: 1; display: grid; grid-template-columns: repeat(4, 1fr);
-  background: #F7F8FA; min-width: 0;
-}
-@media (max-width: 900px) { .works-content { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .works-content { grid-template-columns: 1fr; } }
-
-.works-panel {
-  background: #FFFFFF;
-  border-right: 1px solid #EAEBEE;
-  display: flex; flex-direction: column; min-width: 0;
-}
-.works-panel:last-child { border-right: none; }
-@media (max-width: 900px) {
-  .works-panel:nth-child(2) { border-right: none; }
-  .works-panel:nth-child(1), .works-panel:nth-child(2) { border-bottom: 1px solid #EAEBEE; }
-}
-
-/* Panel header (like WORKS app header) */
-.panel-header {
-  padding: 14px 14px 0; border-bottom: 1px solid #F0F1F3;
-  background: #FFFFFF;
-}
-.panel-head-top {
-  display: flex; align-items: center; gap: 7px; margin-bottom: 10px;
-}
-.panel-app-icon {
-  width: 22px; height: 22px; border-radius: 5px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 12px; flex-shrink: 0;
-}
-.panel-name {
-  font-size: 13px; font-weight: 700; color: #202124; letter-spacing: -.3px;
-}
-.panel-count {
-  margin-left: auto; font-size: 10px; font-weight: 700;
-  color: #03C75A; background: rgba(3,199,90,.1);
-  padding: 2px 7px; border-radius: 999px;
-}
-.panel-tabs {
-  display: flex; gap: 14px; font-size: 11px;
-}
-.panel-tab {
-  color: #676E77; padding-bottom: 8px;
-  border-bottom: 2px solid transparent; font-weight: 500;
-}
-.panel-tab.active {
-  color: #202124; font-weight: 700; border-bottom-color: #03C75A;
-}
-
-.panel-items {
-  padding: 6px 6px 10px; flex: 1;
-}
-
-/* Source items — WORKS list style */
-.src-item {
-  padding: 9px 10px; border-radius: 8px; margin-bottom: 1px;
-  background: transparent;
-  border: 1px solid transparent;
-  position: relative; overflow: hidden;
-  transition: all .35s cubic-bezier(.4,0,.2,1);
-}
-.src-item:hover { background: #F5F7FA; }
-.src-item.dimmed { opacity: .35; }
-.src-item.highlighted {
-  background: rgba(21,126,251,.06);
-  border-color: rgba(21,126,251,.45);
-  box-shadow: 0 0 0 2px rgba(21,126,251,.1), 0 4px 12px rgba(21,126,251,.18);
-  opacity: 1;
-}
-.src-item.highlighted::after {
-  content: ''; position: absolute; top: 0; left: -60%; width: 60%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(21,126,251,.22), transparent);
-  animation: scanBeam .55s ease-out forwards;
-  pointer-events: none;
-}
-@keyframes scanBeam {
-  0%   { left: -60%; }
-  100% { left: 110%; }
-}
-.signal-badge {
-  position: absolute; top: 6px; right: 6px;
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--blue); color: var(--white);
-  font-size: 10px; font-weight: 800;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transform: scale(0);
-  transition: all .25s cubic-bezier(.34,1.56,.64,1) .2s;
-  box-shadow: 0 0 12px rgba(21,126,251,.55);
-  z-index: 2;
-}
-.src-item.highlighted .signal-badge { opacity: 1; transform: scale(1); }
-
-/* Mail item — WORKS */
-.mail-item { display: flex; gap: 9px; align-items: flex-start; }
-.mail-avatar {
-  width: 30px; height: 30px; border-radius: 50%; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: var(--white);
-  border: 1px solid rgba(0,0,0,.04);
-}
-.mail-body { min-width: 0; flex: 1; }
-.mail-meta-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-.mail-from  { font-size: 12px; font-weight: 700; color: #202124; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
-.mail-time  { font-size: 10px; color: #989898; flex-shrink: 0; }
-.mail-subj  { font-size: 11.5px; color: #202124; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
-.mail-prev  { font-size: 10.5px; color: #989898; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px; }
-.mail-unread { width: 7px; height: 7px; border-radius: 50%; background: #03C75A; flex-shrink: 0; box-shadow: 0 0 0 2px rgba(3,199,90,.15); }
-
-/* Message item — WORKS */
-.msg-item { display: flex; gap: 9px; align-items: center; }
-.msg-room-icon {
-  width: 34px; height: 34px; border-radius: 10px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 15px;
-  color: #fff;
-}
-.msg-body { min-width: 0; flex: 1; }
-.msg-meta-top { display: flex; align-items: center; justify-content: space-between; gap: 6px; }
-.msg-room { font-size: 12px; font-weight: 700; color: #202124; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
-.msg-time  { font-size: 10px; color: #989898; flex-shrink: 0; }
-.msg-last { font-size: 11px; color: #676E77; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 3px; }
-.msg-bottom { display: flex; align-items: center; justify-content: space-between; margin-top: 3px; }
-.msg-count { font-size: 10px; font-weight: 700; background: #FD472B; color: var(--white); padding: 1px 7px; border-radius: 999px; min-width: 18px; text-align: center; }
-
-/* Calendar item — WORKS */
-.cal-item { display: flex; gap: 10px; align-items: flex-start; }
-.cal-date-block {
-  flex-shrink: 0; width: 40px; padding: 4px 0; text-align: center;
-  background: #F7F8FA; border-radius: 6px; border-left: 3px solid #03C75A;
-}
-.cal-item.urgent .cal-date-block { border-left-color: #FD472B; background: #FFF5F4; }
-.cal-item.warning .cal-date-block { border-left-color: #F9A826; background: #FFFAF0; }
-.cal-day-num { font-size: 14px; font-weight: 800; color: #202124; line-height: 1; }
-.cal-day-name { font-size: 9px; color: #676E77; margin-top: 2px; font-weight: 600; }
-.cal-body { min-width: 0; flex: 1; padding-top: 2px; }
-.cal-time  { font-size: 10px; font-weight: 600; color: #676E77; margin-bottom: 3px; }
-.cal-title { font-size: 11.5px; font-weight: 700; color: #202124; line-height: 1.35; }
-.cal-loc   { font-size: 10px; color: #989898; margin-top: 3px; display: flex; align-items: center; gap: 3px; }
-.cal-dday {
-  display: inline-block; font-size: 9px; font-weight: 800;
-  padding: 2px 6px; border-radius: 4px; margin-top: 4px;
-  letter-spacing: -.2px;
-}
-.dday-red   { background: #FFE9E6; color: #FD472B; }
-.dday-amber { background: #FFF3DD; color: #C87A00; }
-.dday-green { background: #E1F9E9; color: #05A847; }
-
-/* Drive item — WORKS */
-.drv-item { display: flex; gap: 9px; align-items: flex-start; }
-.drv-icon {
-  width: 32px; height: 32px; border-radius: 6px; flex-shrink: 0;
-  display: flex; align-items: center; justify-content: center; font-size: 15px;
-  color: #fff;
-}
-.drv-body { min-width: 0; flex: 1; }
-.drv-name { font-size: 11.5px; font-weight: 600; color: #202124; line-height: 1.35; word-break: break-all; }
-.drv-meta { font-size: 10px; color: #989898; margin-top: 3px; }
-.drv-badges { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 5px; }
-.drv-badge {
-  display: inline-flex; align-items: center; gap: 3px;
-  font-size: 9.5px; font-weight: 600;
-  padding: 2px 6px; border-radius: 4px;
-}
-.drv-badge-red   { background: #FFE9E6; color: #FD472B; }
-.drv-badge-amber { background: #FFF3DD; color: #C87A00; }
-.drv-badge-blue  { background: #E6F0FF; color: #157EFB; }
-.drv-badge-gray  { background: #F1F3F7; color: #676E77; }
-
-/* ─── Analysis Bridge (Flow AI 레이어) ─────────────── */
-.analysis-bridge {
-  padding: 16px 20px;
-  background: linear-gradient(90deg, rgba(21,126,251,.05) 0%, rgba(80,70,229,.05) 100%);
-  border-top: 1px solid #EAEBEE; border-bottom: 1px solid #EAEBEE;
-  display: flex; align-items: center; gap: 16px;
-  min-height: 60px; position: relative;
-}
-.analysis-bridge::before {
-  content: 'FLOW AI';
-  position: absolute; top: -8px; left: 20px;
-  background: var(--blue); color: var(--white);
-  font-size: 9px; font-weight: 800; letter-spacing: .5px;
-  padding: 3px 10px; border-radius: 999px;
-  box-shadow: 0 2px 6px rgba(21,126,251,.35);
-}
-.scan-status {
-  display: flex; align-items: center; gap: 10px; flex: 1;
-  min-width: 0;
-}
-.scan-spinner {
-  width: 18px; height: 18px; border-radius: 50%;
-  border: 2px solid rgba(21,126,251,.2); border-top-color: var(--blue);
-  animation: spin .8s linear infinite; flex-shrink: 0;
-  opacity: 0; transition: opacity .3s;
-}
-.scan-spinner.visible { opacity: 1; }
-@keyframes spin { to { transform: rotate(360deg); } }
-
-.scan-text {
-  font-size: 12px; font-weight: 600; color: #6B7280;
-  transition: all .4s;
-}
-.scan-text.active { color: #202124; }
-
-.scan-progress-bar {
-  flex: 1; max-width: 220px; height: 3px;
-  background: #E5E7EB; border-radius: 999px; overflow: hidden;
-}
-.scan-progress-fill {
-  height: 100%; border-radius: 999px;
-  background: linear-gradient(90deg, var(--blue), #818CF8);
-  width: 0%; transition: width .9s cubic-bezier(.4,0,.2,1);
-}
-
-.signals-found {
-  display: flex; align-items: center; gap: 8px;
-  opacity: 0; transform: translateX(12px);
-  transition: all .4s cubic-bezier(.4,0,.2,1);
-}
-.signals-found.visible { opacity: 1; transform: translateX(0); }
-.sf-badge {
-  font-size: 11px; font-weight: 700;
-  background: var(--blue-lt); color: var(--blue);
-  border: 1px solid var(--blue-md);
-  padding: 4px 12px; border-radius: 999px;
-  white-space: nowrap;
-}
-.sf-dot {
-  width: 6px; height: 6px; border-radius: 50%; background: var(--blue);
-  animation: pulse-dot 1.2s ease-in-out infinite;
-  box-shadow: 0 0 6px var(--blue);
-}
-@keyframes pulse-dot {
-  0%,100% { opacity: 1; transform: scale(1); }
-  50%     { opacity: .4; transform: scale(.6); }
-}
-
-/* ─── Action Card Area ─────────────────────────────── */
-.action-area {
-  padding: 20px 20px 24px; min-height: 180px;
-  background: #F7F8FA;
-  display: flex; align-items: center; justify-content: center;
-}
-.action-placeholder {
-  display: flex; flex-direction: column; align-items: center; gap: 10px;
-  color: #D1D5DB; font-size: 12px; text-align: center;
-  transition: opacity .3s;
-}
-.action-placeholder svg { opacity: .5; }
-
-.action-card {
-  display: none; width: 100%; max-width: 780px;
-  background: var(--white); border-radius: var(--r-xl);
-  box-shadow: 0 0 0 1px rgba(255,255,255,.08), var(--sh-xl), 0 0 40px rgba(21,126,251,.12);
-  overflow: hidden; position: relative;
-  animation: cardReveal .5s cubic-bezier(.34,1.36,.64,1) forwards;
-}
-@keyframes cardReveal {
-  from { opacity: 0; transform: translateY(24px) scale(.97); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-.action-card.visible { display: block; }
-
-/* Priority stripe */
-.action-card-stripe {
-  height: 4px; width: 100%;
-}
-.priority-high   .action-card-stripe { background: linear-gradient(90deg, var(--blue), var(--indigo)); }
-.priority-urgent .action-card-stripe { background: linear-gradient(90deg, var(--red), #FB923C); }
-.priority-medium .action-card-stripe { background: linear-gradient(90deg, var(--amber), var(--green)); }
-
-.action-card-body { padding: 20px 24px; }
-.ac-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 16px; }
-.ac-icon {
-  width: 40px; height: 40px; border-radius: 12px;
-  background: var(--blue-lt); display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; font-size: 18px;
-}
-.ac-meta { flex: 1; min-width: 0; }
-.ac-eyebrow {
-  display: flex; align-items: center; gap: 6px; margin-bottom: 4px;
-}
-.ac-label {
-  font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: var(--blue);
-}
-.ac-priority {
-  font-size: 9px; font-weight: 700; padding: 2px 8px; border-radius: var(--r-full);
-}
-.priority-high   .ac-priority { background: var(--blue-lt); color: var(--blue); }
-.priority-urgent .ac-priority { background: #FEE2E2; color: var(--red); }
-.priority-medium .ac-priority { background: var(--amber-lt); color: #B45309; }
-
-.ac-title { font-size: 16px; font-weight: 800; color: var(--g900); line-height: 1.3; }
-.ac-desc  { font-size: 13px; color: var(--g600); line-height: 1.75; margin-bottom: 18px; word-break: keep-all; }
-
-/* Signal references */
-.ac-signals { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
-.ac-signal {
-  display: flex; align-items: center; gap: 10px; padding: 8px 12px;
-  background: var(--g50); border-radius: var(--r-md); border: 1px solid var(--g100);
-  opacity: 0; transform: translateX(-8px);
-  transition: all .3s ease;
-}
-.ac-signal.visible { opacity: 1; transform: translateX(0); }
-.ac-signal-src {
-  font-size: 10px; font-weight: 700; padding: 2px 8px;
-  border-radius: var(--r-full);  flex-shrink: 0;
-}
-.src-mail  { background: #FEE2E2; color: #DC2626; }
-.src-msg   { background: #DCFCE7; color: #16A34A; }
-.src-cal   { background: var(--blue-lt); color: var(--blue); }
-.src-drive { background: var(--amber-lt); color: #B45309; }
-
-.ac-signal-text { font-size: 12px; color: var(--g700); flex: 1; min-width: 0; line-height: 1.4; }
-
-/* Action buttons */
-.ac-footer {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  padding-top: 16px; border-top: 1px solid var(--g100);
-}
-.ac-btn {
-  padding: 9px 20px; border-radius: var(--r-full); font-size: 13px; font-weight: 700;
-  transition: all .15s;
-}
-.ac-btn-primary { background: var(--blue); color: var(--white); }
-.ac-btn-primary:hover { background: var(--blue-dk); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(21,126,251,.35); }
-.ac-btn-secondary { color: var(--g600); border: 1px solid var(--g200); }
-.ac-btn-secondary:hover { background: var(--g100); }
-.ac-btn-done { background: var(--green); color: var(--white); display: none; }
-.ac-btn-done:hover { opacity: .9; }
-
-.ac-time-hint { margin-left: auto; font-size: 11px; color: var(--g400); }
-
-/* Replay button */
-.replay-wrap { text-align: center; margin-top: 20px; }
-.replay-btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  font-size: 12px; font-weight: 600; color: rgba(255,255,255,.4);
-  padding: 6px 14px; border-radius: var(--r-full);
-  border: 1px solid var(--flow-border);
-  transition: all .2s; cursor: pointer;
-  opacity: 0; pointer-events: none;
-}
-.replay-btn.visible { opacity: 1; pointer-events: auto; }
-.replay-btn:hover { border-color: rgba(21,126,251,.5); color: rgba(255,255,255,.7); }
-
-/* Toast */
-.toast {
-  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
-  background: var(--g900); color: var(--white); font-size: 13px; font-weight: 600;
-  padding: 12px 24px; border-radius: var(--r-full); z-index: 9999;
-  box-shadow: var(--sh-xl); white-space: nowrap;
-  opacity: 0; pointer-events: none;
-  transition: all .3s cubic-bezier(.34,1.56,.64,1);
-}
-.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* ─── Features Grid ─────────────────────────────────── */
-.features-grid {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 40px;
-}
-@media (max-width: 760px) { .features-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 480px) { .features-grid { grid-template-columns: 1fr; } }
-
-.feat-card {
-  background: var(--white); border: 1px solid var(--g200);
-  border-radius: var(--r-xl); padding: 24px; box-shadow: var(--sh-sm);
-  transition: all .2s;
-}
-.feat-card:hover { transform: translateY(-3px); box-shadow: var(--sh-md); border-color: var(--blue-md); }
-.feat-icon-wrap {
-  width: 44px; height: 44px; border-radius: var(--r-lg);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 20px; margin-bottom: 14px;
-}
-.feat-card h3 { font-size: 14px; font-weight: 700; color: var(--g900); margin-bottom: 6px; }
-.feat-card p  { font-size: 12px; color: var(--g600); line-height: 1.7; }
-
-/* ─── Compare ──────────────────────────────────────── */
-.compare-grid {
-  display: grid; grid-template-columns: 1fr auto 1fr; gap: 0;
-  align-items: center; margin-top: 36px;
-}
-@media (max-width: 640px) { .compare-grid { grid-template-columns: 1fr; gap: 16px; } }
-.cmp-card {
-  background: var(--white); border: 1px solid var(--g200);
-  border-radius: var(--r-xl); padding: 28px 24px;
-}
-.cmp-card.highlight { border-color: var(--blue-md); background: var(--blue-lt); }
-.cmp-badge {
-  display: inline-block; font-size: 10px; font-weight: 700;
-  padding: 3px 10px; border-radius: var(--r-full); margin-bottom: 14px;
-}
-.badge-before { background: var(--g100); color: var(--g500); border: 1px solid var(--g200); }
-.badge-after  { background: var(--blue-lt); color: var(--blue); border: 1px solid var(--blue-md); }
-.cmp-card h3 { font-size: 15px; font-weight: 700; color: var(--g900); margin-bottom: 8px; }
-.cmp-card p  { font-size: 13px; color: var(--g600); line-height: 1.7; }
-.cmp-example {
-  margin-top: 16px; padding: 10px 12px; border-radius: var(--r-md);
-  font-size: 12px; line-height: 1.6;
-}
-.cmp-example.before { background: var(--g100); color: var(--g600); }
-.cmp-example.after  { background: rgba(21,126,251,.1); color: var(--blue); }
-.cmp-arrow {
-  font-size: 28px; color: var(--g300); text-align: center; padding: 0 16px; font-weight: 300;
-}
-
-/* ─── Privacy ──────────────────────────────────────── */
-.privacy-section {
-  background: var(--g50); border-top: 1px solid var(--g200); border-bottom: 1px solid var(--g200);
-}
-.privacy-points {
-  display: flex; gap: 32px; flex-wrap: wrap; margin-top: 28px;
-}
-.privacy-point { display: flex; align-items: flex-start; gap: 12px; flex: 1; min-width: 200px; }
-.pp-icon {
-  width: 36px; height: 36px; border-radius: var(--r-md);
-  background: var(--blue-lt); color: var(--blue);
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 16px;
-}
-.pp-text h4 { font-size: 13px; font-weight: 700; color: var(--g900); margin-bottom: 4px; }
-.pp-text p  { font-size: 12px; color: var(--g600); line-height: 1.6; }
-
-/* ─── Footer ───────────────────────────────────────── */
-.footer {
-  background: var(--g900); color: rgba(255,255,255,.45); padding: 40px 24px;
-  text-align: center; font-size: 12px; line-height: 1.8;
-}
-.footer-logo { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; }
-.footer-logo svg { opacity: .55; }
-
-/* ─── Utility ──────────────────────────────────────── */
-@media (max-width: 640px) {
-  .hd-btn-ghost { display: none; }
-  .analysis-bridge { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .scan-progress-bar { max-width: 100%; width: 100%; }
-}
+  /* Responsive */
+  @media (max-width:900px){
+    .hero{padding:72px 24px 48px}
+    .hero h1{font-size:40px;letter-spacing:-.8px}
+    .hero-sub{font-size:16px}
+    .features{padding:24px 24px 72px}
+    .features-grid{grid-template-columns:1fr}
+    .topbar-inner{padding:0 24px}
+    .highlight{padding:16px 24px 0}
+    .highlight-card{grid-template-columns:1fr;padding:28px}
+  }
 </style>
 </head>
 <body>
 
-<!-- ── Header ───────────────────────────────────────────────── -->
-<header class="site-header">
-  <div class="lw-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" width="174" height="19" viewBox="0 0 174 19" fill="none" style="height:18px;width:auto"><path d="M17.0804 19H21.6945C21.9229 19 22.1243 18.8435 22.1781 18.62L26.5325 0.594588C26.6042 0.290588 26.3758 0 26.0624 0H20.9154C20.687 0 20.49 0.158706 20.443 0.382235L16.5968 18.4009C16.5318 18.7094 16.7669 19 17.0826 19H17.0804Z" fill="url(#paint0_linear_13536_183486)"></path><path opacity="0.25" d="M16.5987 18.5351L20.4449 0.516353C20.4919 0.295059 20.689 0.134118 20.9173 0.134118H26.0643C26.3128 0.134118 26.5053 0.319647 26.5389 0.547647C26.5792 0.261529 26.3598 0 26.0643 0H20.9173C20.689 0 20.4919 0.158706 20.4449 0.382235L16.5987 18.4009C16.5853 18.4591 16.5875 18.5172 16.5942 18.5708C16.5942 18.5596 16.5942 18.5462 16.5987 18.5351Z" fill="white"></path><path d="M20.3958 9.06907C18.3047 4.50012 15.0339 3.81836 13.2697 3.81836C11.5055 3.81836 8.23466 4.50012 6.14363 9.06907C5.022 11.5189 4.40633 14.7579 4.3526 18.4662C4.34812 18.7591 4.5832 19.0005 4.87648 19.0005H9.44808C9.73241 19.0005 9.96748 18.7725 9.97196 18.4886C10.019 15.6162 10.4712 13.1149 11.2548 11.4005C11.8548 10.0906 12.5309 9.42895 13.2697 9.42895C14.0085 9.42895 14.6846 10.0928 15.2846 11.4005C16.0727 13.1217 16.5249 15.6386 16.5674 18.5288C16.5719 18.7904 16.7868 19.0005 17.0488 19.0005H21.7032C21.9719 19.0005 22.189 18.7837 22.1868 18.5154C22.1375 14.7869 21.5196 11.5301 20.3935 9.06907H20.3958Z" fill="url(#paint1_linear_13536_183486)"></path><path opacity="0.4" d="M6.14552 9.20318C8.23655 4.63424 11.5074 3.95248 13.2716 3.95248C15.0357 3.95248 18.3066 4.63424 20.3976 9.20318C21.5126 11.6397 22.1282 14.8585 22.1887 18.5422C22.1887 18.5333 22.1909 18.5244 22.1909 18.5154C22.1417 14.7869 21.5238 11.5301 20.3976 9.06907C18.3066 4.50012 15.0357 3.81836 13.2716 3.81836C11.5074 3.81836 8.23655 4.50012 6.14552 9.06907C5.02389 11.5189 4.40822 14.7579 4.35449 18.4662C4.35449 18.4752 4.35449 18.4864 4.35673 18.4953C4.42166 14.8317 5.03508 11.6285 6.14552 9.20318Z" fill="white"></path><path d="M9.48171 19H4.83846C4.61458 19 4.42204 18.848 4.36831 18.6312L0.0138697 0.594588C-0.0600103 0.290588 0.170585 0 0.484015 0H5.63099C5.85935 0 6.05636 0.158706 6.10337 0.382235L9.95409 18.4188C10.019 18.7184 9.78842 19.0022 9.48171 19.0022V19Z" fill="url(#paint2_linear_13536_183486)"></path><path opacity="0.5" d="M0.479933 0.134118H5.62691C5.85526 0.134118 6.05228 0.292823 6.09929 0.516353L9.95001 18.5529C9.95001 18.5529 9.95001 18.5753 9.95224 18.5865C9.95896 18.5328 9.9612 18.4769 9.95001 18.4188L6.09929 0.382235C6.05228 0.158706 5.85526 0 5.62914 0H0.479933C0.184413 0 -0.0327499 0.261529 0.00530952 0.547647C0.0388913 0.319647 0.231427 0.134118 0.479933 0.134118Z" fill="white"></path><path d="M99.3335 6.72495C99.3335 4.36448 97.6813 2.43989 95.6059 2.3326V2.32812H88.3164V17.0431H91.1955V11.124H92.9776L96.1141 17.0431H99.329L96.1499 11.0458C97.9589 10.6613 99.329 8.87307 99.329 6.72718L99.3335 6.72495ZM94.9567 8.37012H91.1977V5.07754H94.9567C95.7469 5.07754 96.3872 5.81518 96.3872 6.72271C96.3872 7.63024 95.7469 8.36789 94.9567 8.36789V8.37012Z" fill="#202936"></path><path d="M37.5047 6.86577V17.0431H34.6055V2.32812H38.1025L43.527 12.5613V2.32812H46.4263V17.0431H42.8912L37.5047 6.86577Z" fill="#202936"></path><path d="M52.3386 14.0545L51.4027 17.0431H48.3535L53.1221 2.32812H56.9751L61.7437 17.0431H58.6945L57.7587 14.0545H52.3341H52.3386ZM55.0497 5.07307L53.1983 11.2917H56.9012L55.0497 5.07307Z" fill="#202936"></path><path d="M73.8225 2.32812L69.0539 17.0431H65.295L60.5264 2.32812H63.4816L67.1666 13.7572L70.8696 2.32812H73.8248H73.8225Z" fill="#202936"></path><path d="M86.0704 14.278V17.0408H75.6914V2.32812H86.0704V5.09095H78.5705V7.83589H84.6869V10.5987H78.5705V14.278H86.0704Z" fill="#202936"></path><path d="M119.207 2.32812L118 9.65765C117.042 7.37542 115.511 6.11918 113.462 6.11918C111.414 6.11918 109.882 7.37542 108.924 9.65765L107.718 2.32812H104.704L107.442 17.0431H110.297C110.297 12.2193 111.483 8.98483 113.46 8.98483C115.437 8.98483 116.623 12.2193 116.623 17.0431H119.478L122.216 2.32812H119.202H119.207Z" fill="#202936"></path><path d="M123.638 8.41434C123.638 4.90269 125.415 2.08398 129.566 2.08398C133.717 2.08398 135.494 4.90269 135.494 8.41434V10.9715C135.494 14.463 133.717 17.284 129.566 17.284C125.415 17.284 123.638 14.4653 123.638 10.9715V8.41434ZM132.559 8.5261C132.559 6.19246 131.773 4.84681 129.566 4.84681C127.359 4.84681 126.573 6.19022 126.573 8.5261V10.8597C126.573 13.1755 127.359 14.5189 129.566 14.5189C131.773 14.5189 132.559 13.1755 132.559 10.8597V8.5261Z" fill="#202936"></path><path d="M148.831 6.72495C148.831 4.36448 147.178 2.43989 145.103 2.3326V2.32812H137.813V17.0431H140.693V11.124H142.475L145.611 17.0431H148.826L145.647 11.0458C147.456 10.6613 148.826 8.87307 148.826 6.72718L148.831 6.72495ZM144.454 8.37012H140.695V5.07754H144.454C145.244 5.07754 145.884 5.81518 145.884 6.72271C145.884 7.63024 145.244 8.36789 144.454 8.36789V8.37012Z" fill="#202936"></path><path d="M168.442 17.2837C164.69 17.2837 162.879 15.0797 162.879 12.4108H165.921C165.977 13.9598 167.135 14.5209 168.442 14.5209C170.142 14.5209 170.795 13.7564 170.795 13.0076C170.795 12.185 170.274 11.7558 169.116 11.3468L166.763 10.5063C164.207 9.59206 163.329 8.35817 163.309 6.32406C163.291 3.91441 165.082 2.08594 168.312 2.08594C172.083 2.08594 173.634 4.49558 173.634 6.79123H170.592C170.424 5.37182 169.584 4.84876 168.315 4.84876C166.951 4.84876 166.242 5.50147 166.242 6.32406C166.242 7.22041 166.913 7.49982 168.371 8.02288L170.574 8.80747C172.759 9.59206 173.728 11.0115 173.728 12.9539C173.728 15.4195 171.805 17.2859 168.445 17.2859L168.442 17.2837Z" fill="#202936"></path><path d="M162.241 2.32812H158.894L155.171 8.24718H154.103V2.32812H151.224V17.0431H154.103V11.124H155.171L159.084 17.0431H162.431L157.568 9.68448L162.241 2.32812Z" fill="#202936"></path><defs><linearGradient id="paint0_linear_13536_183486" x1="16.8901" y1="18.962" x2="25.7999" y2="-0.171604" gradientUnits="userSpaceOnUse"><stop stop-color="#0563EB"></stop><stop offset="1" stop-color="#6040FF"></stop></linearGradient><linearGradient id="paint1_linear_13536_183486" x1="4.3526" y1="11.4094" x2="22.189" y2="11.4094" gradientUnits="userSpaceOnUse"><stop stop-color="#00BEFF"></stop><stop offset="1" stop-color="#0093FF"></stop></linearGradient><linearGradient id="paint2_linear_13536_183486" x1="0.723565" y1="-0.160941" x2="9.63343" y2="18.9794" gradientUnits="userSpaceOnUse"><stop stop-color="#00E355"></stop><stop offset="1" stop-color="#00CF62"></stop></linearGradient></defs></svg>
+<!-- Top Bar -->
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="topbar-logo" aria-label="NAVER WORKS">
+      <svg xmlns="http://www.w3.org/2000/svg" width="174" height="19" viewBox="0 0 174 19" fill="none"><path d="M17.0804 19H21.6945C21.9229 19 22.1243 18.8435 22.1781 18.62L26.5325 0.594588C26.6042 0.290588 26.3758 0 26.0624 0H20.9154C20.687 0 20.49 0.158706 20.443 0.382235L16.5968 18.4009C16.5318 18.7094 16.7669 19 17.0826 19H17.0804Z" fill="url(#g1)"/><path d="M20.3958 9.06907C18.3047 4.50012 15.0339 3.81836 13.2697 3.81836C11.5055 3.81836 8.23466 4.50012 6.14363 9.06907C5.022 11.5189 4.40633 14.7579 4.3526 18.4662C4.34812 18.7591 4.5832 19.0005 4.87648 19.0005H9.44808C9.73241 19.0005 9.96748 18.7725 9.97196 18.4886C10.019 15.6162 10.4712 13.1149 11.2548 11.4005C11.8548 10.0906 12.5309 9.42895 13.2697 9.42895C14.0085 9.42895 14.6846 10.0928 15.2846 11.4005C16.0727 13.1217 16.5249 15.6386 16.5674 18.5288C16.5719 18.7904 16.7868 19.0005 17.0488 19.0005H21.7032C21.9719 19.0005 22.189 18.7837 22.1868 18.5154C22.1375 14.7869 21.5196 11.5301 20.3935 9.06907H20.3958Z" fill="url(#g2)"/><path d="M9.48171 19H4.83846C4.61458 19 4.42204 18.848 4.36831 18.6312L0.0138697 0.594588C-0.0600103 0.290588 0.170585 0 0.484015 0H5.63099C5.85935 0 6.05636 0.158706 6.10337 0.382235L9.95409 18.4188C10.019 18.7184 9.78842 19.0022 9.48171 19.0022V19Z" fill="url(#g3)"/><path d="M99.3335 6.72495C99.3335 4.36448 97.6813 2.43989 95.6059 2.3326V2.32812H88.3164V17.0431H91.1955V11.124H92.9776L96.1141 17.0431H99.329L96.1499 11.0458C97.9589 10.6613 99.329 8.87307 99.329 6.72718L99.3335 6.72495ZM94.9567 8.37012H91.1977V5.07754H94.9567C95.7469 5.07754 96.3872 5.81518 96.3872 6.72271C96.3872 7.63024 95.7469 8.36789 94.9567 8.36789V8.37012Z" fill="#202936"/><path d="M37.5047 6.86577V17.0431H34.6055V2.32812H38.1025L43.527 12.5613V2.32812H46.4263V17.0431H42.8912L37.5047 6.86577Z" fill="#202936"/><path d="M52.3386 14.0545L51.4027 17.0431H48.3535L53.1221 2.32812H56.9751L61.7437 17.0431H58.6945L57.7587 14.0545H52.3341H52.3386ZM55.0497 5.07307L53.1983 11.2917H56.9012L55.0497 5.07307Z" fill="#202936"/><path d="M73.8225 2.32812L69.0539 17.0431H65.295L60.5264 2.32812H63.4816L67.1666 13.7572L70.8696 2.32812H73.8248H73.8225Z" fill="#202936"/><path d="M86.0704 14.278V17.0408H75.6914V2.32812H86.0704V5.09095H78.5705V7.83589H84.6869V10.5987H78.5705V14.278H86.0704Z" fill="#202936"/><path d="M119.207 2.32812L118 9.65765C117.042 7.37542 115.511 6.11918 113.462 6.11918C111.414 6.11918 109.882 7.37542 108.924 9.65765L107.718 2.32812H104.704L107.442 17.0431H110.297C110.297 12.2193 111.483 8.98483 113.46 8.98483C115.437 8.98483 116.623 12.2193 116.623 17.0431H119.478L122.216 2.32812H119.202H119.207Z" fill="#202936"/><path d="M123.638 8.41434C123.638 4.90269 125.415 2.08398 129.566 2.08398C133.717 2.08398 135.494 4.90269 135.494 8.41434V10.9715C135.494 14.463 133.717 17.284 129.566 17.284C125.415 17.284 123.638 14.4653 123.638 10.9715V8.41434ZM132.559 8.5261C132.559 6.19246 131.773 4.84681 129.566 4.84681C127.359 4.84681 126.573 6.19022 126.573 8.5261V10.8597C126.573 13.1755 127.359 14.5189 129.566 14.5189C131.773 14.5189 132.559 13.1755 132.559 10.8597V8.5261Z" fill="#202936"/><path d="M148.831 6.72495C148.831 4.36448 147.178 2.43989 145.103 2.3326V2.32812H137.813V17.0431H140.693V11.124H142.475L145.611 17.0431H148.826L145.647 11.0458C147.456 10.6613 148.826 8.87307 148.826 6.72718L148.831 6.72495ZM144.454 8.37012H140.695V5.07754H144.454C145.244 5.07754 145.884 5.81518 145.884 6.72271C145.884 7.63024 145.244 8.36789 144.454 8.36789V8.37012Z" fill="#202936"/><path d="M168.442 17.2837C164.69 17.2837 162.879 15.0797 162.879 12.4108H165.921C165.977 13.9598 167.135 14.5209 168.442 14.5209C170.142 14.5209 170.795 13.7564 170.795 13.0076C170.795 12.185 170.274 11.7558 169.116 11.3468L166.763 10.5063C164.207 9.59206 163.329 8.35817 163.309 6.32406C163.291 3.91441 165.082 2.08594 168.312 2.08594C172.083 2.08594 173.634 4.49558 173.634 6.79123H170.592C170.424 5.37182 169.584 4.84876 168.315 4.84876C166.951 4.84876 166.242 5.50147 166.242 6.32406C166.242 7.22041 166.913 7.49982 168.371 8.02288L170.574 8.80747C172.759 9.59206 173.728 11.0115 173.728 12.9539C173.728 15.4195 171.805 17.2859 168.445 17.2859L168.442 17.2837Z" fill="#202936"/><path d="M162.241 2.32812H158.894L155.171 8.24718H154.103V2.32812H151.224V17.0431H154.103V11.124H155.171L159.084 17.0431H162.431L157.568 9.68448L162.241 2.32812Z" fill="#202936"/><defs><linearGradient id="g1" x1="16.89" y1="18.96" x2="25.8" y2="-0.17" gradientUnits="userSpaceOnUse"><stop stop-color="#0563EB"/><stop offset="1" stop-color="#6040FF"/></linearGradient><linearGradient id="g2" x1="4.35" y1="11.41" x2="22.19" y2="11.41" gradientUnits="userSpaceOnUse"><stop stop-color="#00BEFF"/><stop offset="1" stop-color="#0093FF"/></linearGradient><linearGradient id="g3" x1="0.72" y1="-0.16" x2="9.63" y2="18.98" gradientUnits="userSpaceOnUse"><stop stop-color="#00E355"/><stop offset="1" stop-color="#00CF62"/></linearGradient></defs></svg>
+    </a>
+    <div class="topbar-right">
+      <a href="demo.html" class="cta-demo">
+        라이브 데모
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <button type="button" class="avatar" aria-label="프로필">예</button>
+    </div>
   </div>
-  <span class="flow-badge">Flow</span>
-  <div class="hd-spacer"></div>
-  <button class="hd-btn hd-btn-ghost" onclick="document.querySelector('.how-section').scrollIntoView({behavior:'smooth'})">작동 방식</button>
-  <button class="hd-btn hd-btn-primary" onclick="document.querySelector('.concept-section').scrollIntoView({behavior:'smooth'})">✦ 체험하기</button>
 </header>
 
-<!-- ── Hero ─────────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero-orb orb-a"></div>
-  <div class="hero-orb orb-b"></div>
-  <div class="hero-orb orb-c"></div>
-
-  <div class="hero-eyebrow">
-    <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.3"/><path d="M6 3.5V6l1.5 1.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-    WORKS AI · 새로운 기능 제안
-  </div>
-
-  <div class="hero-naming">
-    <span class="hero-naming-label">Feature Name</span>
-    <span class="hero-naming-name">WORKS Flow</span>
-    <span class="hero-naming-desc">교차 분석 기반 AI 액션 아이템 예측</span>
-  </div>
-
-  <div class="hero-sub-sm">WORKS</div>
-  <h1 class="hero-title"><span class="hl">Flow</span></h1>
-
-  <p class="hero-desc">
-    메일·메시지·캘린더·드라이브를 조용히 교차 분석해<br>
-    사용자가 미처 인식하지 못한 <strong>다음 액션</strong>을 정확히 제안합니다.
+<!-- Hero -->
+<section class="hero" id="hero">
+  <span class="hero-eyebrow">FLOW AI · 목업 v1</span>
+  <h1>놓친 일을 <em>먼저</em> 찾아주는 AI</h1>
+  <p class="hero-sub">
+    메일 · 메시지 · 캘린더 · 드라이브를 가로질러 맥락을 읽고,<br/>
+    지금 필요한 답장과 일정을 한큐에 처리해주는 NAVER WORKS AI 제안.
   </p>
-
-  <div class="hero-chips">
-    <span class="chip chip-blue">🔗 4개 소스 교차 분석</span>
-    <span class="chip chip-indigo">✦ AI 액션 예측</span>
-    <span class="chip chip-green">🛡 개인 데이터 보호</span>
-    <span class="chip chip-ghost">인라인 제안 · 거절 가능</span>
-    <span class="chip chip-ghost">지능형 우선순위 정렬</span>
+  <div class="hero-actions">
+    <a href="demo.html" class="btn-primary">
+      라이브 데모 열기
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </a>
+    <a href="#features" class="btn-ghost">기능 전체 보기</a>
   </div>
 </section>
 
-<!-- ── How It Works ───────────────────────────────────────────── -->
-<section class="section how-section" style="background: var(--g50);">
-  <div class="inner">
-    <div class="sec-eye">HOW IT WORKS</div>
-    <h2 class="sec-head">조용히 분석하고, 정확히 제안해요</h2>
-    <p class="sec-desc">별도 앱 없이 WORKS 안에서 이미 흐르는 데이터를 연결합니다. 사용자가 놓치기 쉬운 시점에 딱 맞게 개입합니다.</p>
-    <div class="hiw-grid">
-      <div class="hiw-step">
-        <div class="hiw-num">1</div>
-        <h3>4개 소스 동시 모니터링</h3>
-        <p>추가 설정 없이 WORKS의 메일, 메시지, 캘린더, 드라이브를 실시간으로 조용히 읽습니다.</p>
-        <div class="hiw-sources">
-          <span class="hiw-src">📧 메일</span>
-          <span class="hiw-src">💬 메시지</span>
-          <span class="hiw-src">📅 캘린더</span>
-          <span class="hiw-src">📁 드라이브</span>
-        </div>
+<!-- Highlight banner -->
+<section class="highlight">
+  <div class="highlight-card">
+    <div>
+      <span class="highlight-eyebrow">Key Concept</span>
+      <h2>교차 분석으로 "지금 해야 할 일"을 조용히 찾아요</h2>
+      <p>오늘 답장이 밀린 메일, 마감 임박 일정, 계획보다 늦어진 문서까지 &mdash; 사용자가 직접 뒤질 필요 없이 Flow가 먼저 알려주고 초안까지 준비합니다.</p>
+      <div class="cta-row">
+        <a href="demo.html" class="btn-primary">데모에서 체험</a>
+        <a href="#features" class="btn-ghost">기능 구조 보기</a>
       </div>
-      <div class="hiw-step">
-        <div class="hiw-num">2</div>
-        <h3>AI가 연결점을 발견</h3>
-        <p>단일 신호가 아니라 여러 소스에서 같은 맥락의 신호가 겹칠 때만 액션으로 판단합니다. 오탐을 최소화합니다.</p>
-        <div class="hiw-sources">
-          <span class="hiw-src">미응답 탐지</span>
-          <span class="hiw-src">마감 임박</span>
-          <span class="hiw-src">누락 공유</span>
-        </div>
+    </div>
+    <div class="highlight-visual" aria-hidden="true">
+      <div class="hv-head">
+        <span class="hv-dot"></span><span class="hv-dot"></span><span class="hv-dot"></span>
       </div>
-      <div class="hiw-step">
-        <div class="hiw-num">3</div>
-        <h3>인라인 카드로 조용히 제안</h3>
-        <p>Push 알림 대신 작업 흐름을 방해하지 않는 위치에 카드로 제안합니다. 수락하거나 무시할 수 있습니다.</p>
-        <div class="hiw-sources">
-          <span class="hiw-src">지금 하기</span>
-          <span class="hiw-src">나중에</span>
-          <span class="hiw-src">무시</span>
+      <div class="hv-body">
+        <div class="hv-bubble">
+          <b>✨ 우선순위 1</b> &middot; 이팀장님 요청한 Q2 기획서,<br/>내일 10시 임원 보고 전에 먼저 회신이 필요해요.
+        </div>
+        <div class="hv-sources">
+          <span class="hv-src mail">메일 1</span>
+          <span class="hv-src msg">메시지 2</span>
+          <span class="hv-src cal">일정 1</span>
+          <span class="hv-src drive">파일 1</span>
+        </div>
+        <div class="hv-bubble" style="margin-top:4px">
+          답장 초안은 <b>내 말투 218통</b>을 학습해 준비했어요. 톤만 고르면 바로 발송 가능합니다.
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CONCEPT EXPERIENCE ─────────────────────────────────────── -->
-<section class="concept-section" id="concept-demo">
-  <div class="concept-inner">
-    <div class="concept-header">
-      <div class="concept-eye">
-        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="4"/></svg>
-        CONCEPT EXPERIENCE
+<!-- Feature Cards -->
+<section class="features" id="features">
+  <div class="section-label">FLOW AI 기능</div>
+  <div class="features-grid">
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag ai">교차 분석</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
       </div>
-      <h2 class="concept-title">Flow가 <span class="hl">연결점</span>을 찾는 순간</h2>
-      <p class="concept-desc">실제 시나리오 3가지로 어떻게 액션 아이템을 발견하는지 직접 확인해보세요.</p>
-    </div>
-
-    <!-- Scenario Tabs -->
-    <div class="scenario-tabs" role="tablist">
-      <button class="stab active" data-scenario="0" role="tab">
-        <span class="stab-num">1</span>임원 보고 준비
-      </button>
-      <button class="stab" data-scenario="1" role="tab">
-        <span class="stab-num">2</span>답변 지연 리스크
-      </button>
-      <button class="stab" data-scenario="2" role="tab">
-        <span class="stab-num">3</span>마감 임박 경보
-      </button>
-    </div>
-
-    <!-- Demo Stage — Real WORKS app window -->
-    <div class="demo-stage">
-      <!-- Browser chrome -->
-      <div class="stage-topbar">
-        <div class="mac-dot r"></div><div class="mac-dot y"></div><div class="mac-dot g"></div>
-        <div class="stage-url">
-          <span class="stage-url-lock">🔒</span>
-          <span class="stage-url-host">works.yourcompany.com</span>
-          <span style="opacity:.5">/dashboard</span>
-        </div>
+      <div class="feature-card-bottom">
+        <h3>Flow 우선순위 보드</h3>
+        <p>메일·메시지·캘린더·드라이브를 교차 분석해 지금 꼭 처리해야 할 일을 우선순위로 정리</p>
       </div>
+    </a>
 
-      <!-- Works Layout: Left nav + 4 app panels -->
-      <div class="works-layout">
-        <!-- Left vertical nav (like WORKS PC) -->
-        <aside class="works-nav">
-          <div class="works-nav-logo">
-            <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-              <path d="M4 11L11 4l7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M4 15L11 8l7 7" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </div>
-          <div class="nav-profile">김</div>
-          <div class="nav-icon" title="홈">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M10.4502 4.08203C11.2977 3.35468 12.4858 3.30895 13.376 3.94531L13.5498 4.08203L19.3496 9.06641V9.06738L19.3516 9.06836C20.079 9.69189 20.4999 10.6032 20.5 11.5742V18.6641C20.5 19.6774 19.6763 20.5 18.668 20.5H15.5625C15.157 20.5 14.8271 20.1713 14.8271 19.7617V14.0898C14.8269 13.283 14.1794 12.6328 13.3701 12.6328H10.6299C9.82062 12.6328 9.17309 13.283 9.17285 14.0898V19.7617C9.17285 20.1713 8.84299 20.5 8.4375 20.5H5.33203C4.32366 20.5 3.5 19.6774 3.5 18.6641V11.5742C3.50012 10.6144 3.92016 9.69983 4.65332 9.06445L4.65234 9.06348L10.4502 4.08203Z" stroke="currentColor" stroke-width="2"/></svg>
-          </div>
-          <div class="nav-icon monitoring" data-nav="mail" title="메일">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M21 17.9997C21 19.6565 19.6569 20.9997 18 20.9997H6C4.34315 20.9997 3 19.6565 3 17.9997V11.028L10.9365 16.0124C11.5868 16.4207 12.4132 16.4207 13.0635 16.0124L21 11.028V17.9997Z"/><path d="M17 3C18.6569 3 20 4.34315 20 6V9.30957L13.0596 13.6475C12.4112 14.0526 11.5888 14.0526 10.9404 13.6475L4 9.30957V6C4 4.34315 5.34315 3 7 3H17ZM8.5 8.375C8.01675 8.375 7.625 8.76675 7.625 9.25C7.625 9.73325 8.01675 10.125 8.5 10.125H12.5C12.9832 10.125 13.375 9.73325 13.375 9.25C13.375 8.76675 12.9832 8.375 12.5 8.375H8.5ZM8.5 5.375C8.01675 5.375 7.625 5.76675 7.625 6.25C7.625 6.73325 8.01675 7.125 8.5 7.125H15.5C15.9832 7.125 16.375 6.73325 16.375 6.25C16.375 5.76675 15.9832 5.375 15.5 5.375H8.5Z"/></svg>
-          </div>
-          <div class="nav-icon monitoring" data-nav="msg" title="메시지">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12.0005 2.25C17.0982 2.25023 21.2367 6.11282 21.2368 10.8613C21.2368 15.6099 17.0983 19.4724 12.0005 19.4727H10.1079C8.82914 19.4727 7.56838 19.8279 6.47607 20.4834L4.66357 21.5732C4.45941 21.6883 4.23703 21.75 4.01514 21.75C3.80219 21.7499 3.58918 21.697 3.40283 21.5908C3.00321 21.3694 2.76325 20.9527 2.76318 20.501V10.8613C2.76331 6.11267 6.90254 2.25 12.0005 2.25ZM7.63818 9.51367C6.92997 9.51386 6.35523 10.0887 6.35498 10.7969C6.35515 11.5051 6.92992 12.0789 7.63818 12.0791C8.34646 12.0789 8.92024 11.5052 8.92041 10.7969C8.92016 10.0887 8.34641 9.51384 7.63818 9.51367ZM11.9995 9.51367C11.2914 9.51398 10.7175 10.0888 10.7173 10.7969C10.7175 11.5051 11.2914 12.0788 11.9995 12.0791C12.7079 12.0791 13.2825 11.5053 13.2827 10.7969C13.2825 10.0886 12.7079 9.51367 11.9995 9.51367ZM16.3618 9.51367C15.6536 9.51386 15.0789 10.0887 15.0786 10.7969C15.0788 11.5051 15.6536 12.0789 16.3618 12.0791C17.0701 12.079 17.6439 11.5052 17.644 10.7969C17.6438 10.0887 17.0701 9.51381 16.3618 9.51367Z"/></svg>
-          </div>
-          <div class="nav-icon monitoring" data-nav="cal" title="캘린더">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M5.75 2.75C4.09315 2.75 2.75 4.09315 2.75 5.75V6.41907H21.25V5.75C21.25 4.09315 19.9069 2.75 18.25 2.75H5.75Z"/><path d="M2.75 8.41907V18.25C2.75 19.9069 4.09315 21.25 5.75 21.25H18.25C19.9069 21.25 21.25 19.9069 21.25 18.25V8.41907H2.75Z"/></svg>
-          </div>
-          <div class="nav-icon" title="주소록">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.2998 3C19.791 3 21 4.20903 21 5.7002V13.001C21 13.526 20.8423 14.0389 20.5479 14.4736C20.3259 14.8013 20.0329 15.075 19.6904 15.2734L19.5752 15.3398L19.2061 15.5635C19.1809 15.5787 19.1573 15.5962 19.1357 15.6162L19.1309 15.6211C19.0745 15.6734 19.0335 15.7402 19.0137 15.8145C19.0045 15.8487 19 15.8844 19 15.9199V18.2998C19 19.791 17.791 21 16.2998 21H5.7002C4.20903 21 3 19.791 3 18.2998V5.7002C3 4.20903 4.20903 3 5.7002 3H18.2998Z"/></svg>
-          </div>
-          <div class="nav-icon" title="게시판">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2C19.6569 2 21 3.34315 21 5V19C21 20.6569 19.6569 22 18 22H6C4.34315 22 3 20.6569 3 19V5C3 3.34315 4.34315 2 6 2H18ZM8 16.2744C7.51694 16.2744 7.1253 16.6664 7.125 17.1494C7.125 17.6327 7.51675 18.0244 8 18.0244H16C16.4832 18.0244 16.875 17.6327 16.875 17.1494C16.8747 16.6664 16.4831 16.2744 16 16.2744H8ZM8 13.0244C7.51694 13.0244 7.1253 13.4164 7.125 13.8994C7.125 14.3827 7.51675 14.7744 8 14.7744H16C16.4832 14.7744 16.875 14.3827 16.875 13.8994C16.8747 13.4164 16.4831 13.0244 16 13.0244H8ZM8 9.77441C7.51694 9.77441 7.1253 10.1664 7.125 10.6494C7.125 11.1327 7.51675 11.5244 8 11.5244H16C16.4832 11.5244 16.875 11.1327 16.875 10.6494C16.8747 10.1664 16.4831 9.77441 16 9.77441H8ZM12 5.7998C11.3097 5.7998 10.7501 6.35954 10.75 7.0498C10.75 7.74016 11.3096 8.2998 12 8.2998C12.6904 8.2998 13.25 7.74016 13.25 7.0498C13.2499 6.35954 12.6903 5.7998 12 5.7998Z"/></svg>
-          </div>
-          <div class="nav-icon monitoring" data-nav="drive" title="드라이브">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M11 12.5667V22.0061C10.8264 21.9435 10.6563 21.8651 10.4941 21.7688L4.44336 18.176C3.54863 17.6448 3.00005 16.6814 3 15.6409V8.35962C3 8.16926 3.01824 7.98113 3.05371 7.7981L11 12.5667ZM20.9453 7.7981C20.9808 7.98118 21 8.16919 21 8.35962V15.6409C21 16.6814 20.4514 17.6448 19.5566 18.176L13.5059 21.7688C13.3437 21.8651 13.1736 21.9435 13 22.0061V12.5667L20.9453 7.7981ZM10.4941 2.23071C11.4221 1.67971 12.5779 1.67971 13.5059 2.23071L19.5566 5.82349C19.6857 5.90009 19.8069 5.98681 19.9209 6.08032L12 10.8342L4.07812 6.08032C4.1923 5.98663 4.31413 5.90022 4.44336 5.82349L10.4941 2.23071Z"/></svg>
-          </div>
-          <div class="nav-icon" title="할 일">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C14.8126 3 17.3232 4.2907 18.9736 6.31152L12 13.2861L9.10742 10.3936C8.71693 10.0031 8.08389 10.0031 7.69336 10.3936C7.30303 10.7841 7.3029 11.4172 7.69336 11.8076L11.293 15.4072C11.6835 15.7974 12.3166 15.7975 12.707 15.4072L20.0791 8.03418C20.6676 9.23084 21 10.5764 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"/></svg>
-          </div>
-        </aside>
-
-        <!-- Main content area with 4 panels -->
-        <div class="works-content">
-          <!-- MAIL PANEL -->
-          <div class="works-panel" data-source="mail">
-            <div class="panel-header">
-              <div class="panel-head-top">
-                <div class="panel-app-icon" style="background:#FFE9E6;color:#FD472B">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M21 17.9997C21 19.6565 19.6569 20.9997 18 20.9997H6C4.34315 20.9997 3 19.6565 3 17.9997V11.028L10.9365 16.0124C11.5868 16.4207 12.4132 16.4207 13.0635 16.0124L21 11.028V17.9997Z"/><path d="M17 3C18.6569 3 20 4.34315 20 6V9.30957L13.0596 13.6475C12.4112 14.0526 11.5888 14.0526 10.9404 13.6475L4 9.30957V6C4 4.34315 5.34315 3 7 3H17ZM8.5 8.375C8.01675 8.375 7.625 8.76675 7.625 9.25C7.625 9.73325 8.01675 10.125 8.5 10.125H12.5C12.9832 10.125 13.375 9.73325 13.375 9.25C13.375 8.76675 12.9832 8.375 12.5 8.375H8.5ZM8.5 5.375C8.01675 5.375 7.625 5.76675 7.625 6.25C7.625 6.73325 8.01675 7.125 8.5 7.125H15.5C15.9832 7.125 16.375 6.73325 16.375 6.25C16.375 5.76675 15.9832 5.375 15.5 5.375H8.5Z"/></svg>
-                </div>
-                <span class="panel-name">메일</span>
-                <span class="panel-count">읽지 않음 3</span>
-              </div>
-              <div class="panel-tabs">
-                <span class="panel-tab active">받은편지함</span>
-                <span class="panel-tab">중요</span>
-              </div>
-            </div>
-            <div class="panel-items">
-              <div class="src-item" data-col="mail" data-idx="0">
-                <div class="signal-badge"></div>
-                <div class="mail-item">
-                  <div class="mail-avatar" style="background:#E97B2A">클</div>
-                  <div class="mail-body">
-                    <div class="mail-meta-top">
-                      <span class="mail-from">클라이언트</span>
-                      <span class="mail-time">2주 전</span>
-                    </div>
-                    <div class="mail-subj">최종 제안서 4월 25일까지</div>
-                    <div class="mail-prev">안녕하세요, 말씀드린 대로 4월 25일까지...</div>
-                  </div>
-                </div>
-              </div>
-              <div class="src-item" data-col="mail" data-idx="1">
-                <div class="signal-badge"></div>
-                <div class="mail-item">
-                  <div class="mail-avatar" style="background:#5046E5">이</div>
-                  <div class="mail-body">
-                    <div class="mail-meta-top">
-                      <span class="mail-from">이팀장 <span class="mail-unread" style="display:inline-block;vertical-align:middle;margin-left:4px"></span></span>
-                      <span class="mail-time">3일 전</span>
-                    </div>
-                    <div class="mail-subj">Q2 전략기획서 받을 수 있을까요?</div>
-                    <div class="mail-prev">임원 보고 준비 중인데, 혹시 최종본을...</div>
-                  </div>
-                </div>
-              </div>
-              <div class="src-item" data-col="mail" data-idx="2">
-                <div class="signal-badge"></div>
-                <div class="mail-item">
-                  <div class="mail-avatar" style="background:#0D9488">인</div>
-                  <div class="mail-body">
-                    <div class="mail-meta-top">
-                      <span class="mail-from">인사팀</span>
-                      <span class="mail-time">3일 전</span>
-                    </div>
-                    <div class="mail-subj">스프린트 킥오프 참석 확인 요청</div>
-                    <div class="mail-prev">내일 오전 9시 스프린트 킥오프 미팅...</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- MESSAGE PANEL -->
-          <div class="works-panel" data-source="msg">
-            <div class="panel-header">
-              <div class="panel-head-top">
-                <div class="panel-app-icon" style="background:#E1F9E9;color:#03C75A">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12.0005 2.25C17.0982 2.25023 21.2367 6.11282 21.2368 10.8613C21.2368 15.6099 17.0983 19.4724 12.0005 19.4727H10.1079C8.82914 19.4727 7.56838 19.8279 6.47607 20.4834L4.66357 21.5732C4.45941 21.6883 4.23703 21.75 4.01514 21.75C3.80219 21.7499 3.58918 21.697 3.40283 21.5908C3.00321 21.3694 2.76325 20.9527 2.76318 20.501V10.8613C2.76331 6.11267 6.90254 2.25 12.0005 2.25ZM7.63818 9.51367C6.92997 9.51386 6.35523 10.0887 6.35498 10.7969C6.35515 11.5051 6.92992 12.0789 7.63818 12.0791C8.34646 12.0789 8.92024 11.5052 8.92041 10.7969C8.92016 10.0887 8.34641 9.51384 7.63818 9.51367ZM11.9995 9.51367C11.2914 9.51398 10.7175 10.0888 10.7173 10.7969C10.7175 11.5051 11.2914 12.0788 11.9995 12.0791C12.7079 12.0791 13.2825 11.5053 13.2827 10.7969C13.2825 10.0886 12.7079 9.51367 11.9995 9.51367ZM16.3618 9.51367C15.6536 9.51386 15.0789 10.0887 15.0786 10.7969C15.0788 11.5051 15.6536 12.0789 16.3618 12.0791C17.0701 12.079 17.6439 11.5052 17.644 10.7969C17.6438 10.0887 17.0701 9.51381 16.3618 9.51367Z"/></svg>
-                </div>
-                <span class="panel-name">메시지</span>
-                <span class="panel-count">읽지 않음 6</span>
-              </div>
-              <div class="panel-tabs">
-                <span class="panel-tab active">전체</span>
-                <span class="panel-tab">1:1</span>
-                <span class="panel-tab">그룹</span>
-              </div>
-            </div>
-            <div class="panel-items">
-              <div class="src-item" data-col="msg" data-idx="0">
-                <div class="signal-badge"></div>
-                <div class="msg-item">
-                  <div class="msg-room-icon" style="background:linear-gradient(135deg,#157EFB,#5046E5)">📢</div>
-                  <div class="msg-body">
-                    <div class="msg-meta-top">
-                      <span class="msg-room">Q2 전략팀</span>
-                      <span class="msg-time">오전 11:24</span>
-                    </div>
-                    <div class="msg-last">박부장: 내일 임원분들도 참석하신다고 해요</div>
-                    <div class="msg-bottom"><span style="font-size:10px;color:#989898">채널 · 12명</span><span class="msg-count">2</span></div>
-                  </div>
-                </div>
-              </div>
-              <div class="src-item" data-col="msg" data-idx="1">
-                <div class="signal-badge"></div>
-                <div class="msg-item">
-                  <div class="msg-room-icon" style="background:linear-gradient(135deg,#0D9488,#03C75A)">김</div>
-                  <div class="msg-body">
-                    <div class="msg-meta-top">
-                      <span class="msg-room">김개발</span>
-                      <span class="msg-time">5일 전</span>
-                    </div>
-                    <div class="msg-last">스프린트 일정 확인 부탁드립니다 🙏</div>
-                    <div class="msg-bottom"><span style="font-size:10px;color:#FD472B;font-weight:600">⚠ 5일째 미답변</span><span class="msg-count">1</span></div>
-                  </div>
-                </div>
-              </div>
-              <div class="src-item" data-col="msg" data-idx="2">
-                <div class="signal-badge"></div>
-                <div class="msg-item">
-                  <div class="msg-room-icon" style="background:linear-gradient(135deg,#F9A826,#FD472B)">📝</div>
-                  <div class="msg-body">
-                    <div class="msg-meta-top">
-                      <span class="msg-room">제안서 작업방</span>
-                      <span class="msg-time">오후 2:08</span>
-                    </div>
-                    <div class="msg-last">팀원: 아직 2장 작업 중이에요 😅</div>
-                    <div class="msg-bottom"><span style="font-size:10px;color:#989898">그룹 · 5명</span><span class="msg-count">3</span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- CALENDAR PANEL -->
-          <div class="works-panel" data-source="cal">
-            <div class="panel-header">
-              <div class="panel-head-top">
-                <div class="panel-app-icon" style="background:#E6F0FF;color:#157EFB">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M5.75 2.75C4.09315 2.75 2.75 4.09315 2.75 5.75V6.41907H21.25V5.75C21.25 4.09315 19.9069 2.75 18.25 2.75H5.75Z"/><path fill-rule="evenodd" clip-rule="evenodd" d="M2.75 8.41907V18.25C2.75 19.9069 4.09315 21.25 5.75 21.25H18.25C19.9069 21.25 21.25 19.9069 21.25 18.25V8.41907H2.75Z"/></svg>
-                </div>
-                <span class="panel-name">캘린더</span>
-                <span class="panel-count">오늘 · 내일 3</span>
-              </div>
-              <div class="panel-tabs">
-                <span class="panel-tab active">다가오는 일정</span>
-                <span class="panel-tab">주간</span>
-              </div>
-            </div>
-            <div class="panel-items">
-              <div class="src-item" data-col="cal" data-idx="0">
-                <div class="signal-badge"></div>
-                <div class="cal-item urgent">
-                  <div class="cal-date-block">
-                    <div class="cal-day-num">22</div>
-                    <div class="cal-day-name">내일·화</div>
-                  </div>
-                  <div class="cal-body">
-                    <div class="cal-time">10:00 — 12:00</div>
-                    <div class="cal-title">Q2 임원 전략 보고회</div>
-                    <div class="cal-loc">📍 대회의실 A · C레벨 참석</div>
-                    <div class="cal-dday dday-red">D-1</div>
-                  </div>
-                </div>
-              </div>
-              <div class="src-item" data-col="cal" data-idx="1">
-                <div class="signal-badge"></div>
-                <div class="cal-item warning">
-                  <div class="cal-date-block">
-                    <div class="cal-day-num">22</div>
-                    <div class="cal-day-name">내일·화</div>
-                  </div>
-                  <div class="cal-body">
-                    <div class="cal-time">09:00 — 10:00</div>
-                    <div class="cal-title">스프린트 킥오프 미팅</div>
-                    <div class="cal-loc">🖥 화상 · 팀 전체</div>
-                    <div class="cal-dday dday-amber">D-1</div>
-                  </div>
-                </div>
-              </div>
-              <div class="src-item" data-col="cal" data-idx="2">
-                <div class="signal-badge"></div>
-                <div class="cal-item urgent">
-                  <div class="cal-date-block">
-                    <div class="cal-day-num">25</div>
-                    <div class="cal-day-name">금</div>
-                  </div>
-                  <div class="cal-body">
-                    <div class="cal-time">종일</div>
-                    <div class="cal-title">클라이언트 제안서 마감</div>
-                    <div class="cal-loc">⚠ 최종 납품 기한</div>
-                    <div class="cal-dday dday-red">D-4</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- DRIVE PANEL -->
-          <div class="works-panel" data-source="drive">
-            <div class="panel-header">
-              <div class="panel-head-top">
-                <div class="panel-app-icon" style="background:#FFF3DD;color:#C87A00">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11 12.5667V22.0061C10.8264 21.9435 10.6563 21.8651 10.4941 21.7688L4.44336 18.176C3.54863 17.6448 3.00005 16.6814 3 15.6409V8.35962C3 8.16926 3.01824 7.98113 3.05371 7.7981L11 12.5667ZM20.9453 7.7981C20.9808 7.98118 21 8.16919 21 8.35962V15.6409C21 16.6814 20.4514 17.6448 19.5566 18.176L13.5059 21.7688C13.3437 21.8651 13.1736 21.9435 13 22.0061V12.5667L20.9453 7.7981ZM10.4941 2.23071C11.4221 1.67971 12.5779 1.67971 13.5059 2.23071L19.5566 5.82349C19.6857 5.90009 19.8069 5.98681 19.9209 6.08032L12 10.8342L4.07812 6.08032C4.1923 5.98663 4.31413 5.90022 4.44336 5.82349L10.4941 2.23071Z"/></svg>
-                </div>
-                <span class="panel-name">드라이브</span>
-                <span class="panel-count">최근 수정 3</span>
-              </div>
-              <div class="panel-tabs">
-                <span class="panel-tab active">내 파일</span>
-                <span class="panel-tab">공유됨</span>
-              </div>
-            </div>
-            <div class="panel-items">
-              <div class="src-item" data-col="drive" data-idx="0">
-                <div class="signal-badge"></div>
-                <div class="drv-item">
-                  <div class="drv-icon" style="background:#157EFB">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 1.5h5l3 3V12a1 1 0 01-1 1H3a1 1 0 01-1-1V2.5a1 1 0 011-1z" stroke="#fff" stroke-width="1.3"/><path d="M8 1.5V5h3" stroke="#fff" stroke-width="1.3"/></svg>
-                  </div>
-                  <div class="drv-body">
-                    <div class="drv-name">스프린트_기획서.docx</div>
-                    <div class="drv-meta">내가 1일 전 수정 · 본인 외 3명</div>
-                    <div class="drv-badges">
-                      <span class="drv-badge drv-badge-amber">💬 미확인 댓글 3</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="src-item" data-col="drive" data-idx="1">
-                <div class="signal-badge"></div>
-                <div class="drv-item">
-                  <div class="drv-icon" style="background:#157EFB">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 1.5h5l3 3V12a1 1 0 01-1 1H3a1 1 0 01-1-1V2.5a1 1 0 011-1z" stroke="#fff" stroke-width="1.3"/><path d="M8 1.5V5h3" stroke="#fff" stroke-width="1.3"/></svg>
-                  </div>
-                  <div class="drv-body">
-                    <div class="drv-name">제안서_최종.docx</div>
-                    <div class="drv-meta">팀원이 4일 전 수정</div>
-                    <div class="drv-badges">
-                      <span class="drv-badge drv-badge-amber">📊 완성도 40%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="src-item" data-col="drive" data-idx="2">
-                <div class="signal-badge"></div>
-                <div class="drv-item">
-                  <div class="drv-icon" style="background:#D24726">
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 1.5h5l3 3V12a1 1 0 01-1 1H3a1 1 0 01-1-1V2.5a1 1 0 011-1z" stroke="#fff" stroke-width="1.3"/><path d="M8 1.5V5h3" stroke="#fff" stroke-width="1.3"/></svg>
-                  </div>
-                  <div class="drv-body">
-                    <div class="drv-name">Q2_전략기획서_v3.2.pptx</div>
-                    <div class="drv-meta">내가 오늘 14:15 수정</div>
-                    <div class="drv-badges">
-                      <span class="drv-badge drv-badge-red">🔒 미공유</span>
-                      <span class="drv-badge drv-badge-gray">나만 보기</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div><!-- /works-content -->
-      </div><!-- /works-layout -->
-
-      <!-- Analysis Bridge -->
-      <div class="analysis-bridge">
-        <div class="scan-status">
-          <div class="scan-spinner" id="scanSpinner"></div>
-          <span class="scan-text" id="scanText">시나리오를 선택하면 분석을 시작합니다</span>
-        </div>
-        <div class="scan-progress-bar">
-          <div class="scan-progress-fill" id="scanProgress"></div>
-        </div>
-        <div class="signals-found" id="signalsFound">
-          <div class="sf-dot"></div>
-          <span class="sf-badge" id="signalsBadge">신호 3개 연결됨</span>
-        </div>
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag">AI 답장</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
       </div>
-
-      <!-- Action Card Area -->
-      <div class="action-area" id="actionArea">
-        <div class="action-placeholder" id="actionPlaceholder">
-          <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-            <circle cx="20" cy="20" r="18" stroke="currentColor" stroke-width="2" stroke-dasharray="4 4"/>
-            <path d="M20 12v8l5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-          <span>Flow가 신호를 분석하면 여기에 액션 카드가 나타납니다</span>
-        </div>
-
-        <div class="action-card" id="actionCard">
-          <div class="action-card-stripe"></div>
-          <div class="action-card-body">
-            <div class="ac-header">
-              <div class="ac-icon" id="acIcon">✦</div>
-              <div class="ac-meta">
-                <div class="ac-eyebrow">
-                  <span class="ac-label">Flow가 발견한 액션</span>
-                  <span class="ac-priority" id="acPriority">우선순위: 높음</span>
-                </div>
-                <div class="ac-title" id="acTitle"></div>
-              </div>
-            </div>
-            <p class="ac-desc" id="acDesc"></p>
-            <div class="ac-signals" id="acSignals"></div>
-            <div class="ac-footer">
-              <button class="ac-btn ac-btn-primary" id="acBtnPrimary" onclick="handleAction('primary')"></button>
-              <button class="ac-btn ac-btn-secondary" onclick="handleAction('secondary')" id="acBtnSecondary"></button>
-              <button class="ac-btn ac-btn-done" id="acBtnDone">✓ 완료됨</button>
-              <span class="ac-time-hint" id="acTimeHint"></span>
-            </div>
-          </div>
-        </div>
-      </div><!-- /action-area -->
-
-    </div><!-- /demo-stage -->
-
-    <div class="replay-wrap">
-      <button class="replay-btn" id="replayBtn" onclick="replayScenario()">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M10 6A4 4 0 112 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><path d="M2 3.5V6H4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        다시 보기
-      </button>
-    </div>
-  </div><!-- /concept-inner -->
-</section><!-- /concept-section -->
-
-<!-- ── Before / After ────────────────────────────────────────── -->
-<section class="section" style="background: var(--white);">
-  <div class="inner">
-    <div class="sec-eye">CONCEPT</div>
-    <h2 class="sec-head">놓치던 액션이 보이기 시작합니다</h2>
-    <p class="sec-desc">데이터는 이미 WORKS 안에 있었습니다. Flow는 그것을 처음으로 연결합니다.</p>
-    <div class="compare-grid">
-      <div class="cmp-card">
-        <span class="cmp-badge badge-before">지금까지</span>
-        <h3>신호는 각 앱에 분산돼 있었어요</h3>
-        <p>메일에서 자료 요청을 받았지만, 캘린더의 임박한 보고 일정과 연결되지 않아 공유를 깜빡했습니다.</p>
-        <div class="cmp-example before">이팀장 메일 → 읽고 잊음<br>내일 임원 보고 → 준비 미흡</div>
+      <div class="feature-card-bottom">
+        <h3>메일 답장 초안 Canvas</h3>
+        <p>내 보낸메일함에서 말투를 학습해 맥락에 맞는 답장을 먼저 작성하고, 톤·길이를 실시간 조정</p>
       </div>
-      <div class="cmp-arrow">→</div>
-      <div class="cmp-card highlight">
-        <span class="cmp-badge badge-after">WORKS Flow</span>
-        <h3 style="color:var(--blue)">교차 신호를 연결해 먼저 알려드려요</h3>
-        <p>메일의 요청, 캘린더의 보고 일정, 드라이브의 미공유 파일을 동시에 감지해 액션 카드로 제안합니다.</p>
-        <div class="cmp-example after">"내일 임원 보고 전, Q2 전략기획서를<br>이팀장님께 공유하세요" ✦</div>
+    </a>
+
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag blue">메시지 한큐</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
       </div>
-    </div>
+      <div class="feature-card-bottom">
+        <h3>메시지 초안 한큐 발송</h3>
+        <p>미응답 감지 시 채팅 흐름에 맞는 초안을 제안하고 ⌘Enter 한 번으로 WORKS 메시지 발송</p>
+      </div>
+    </a>
+
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag purple">말투 학습</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
+      </div>
+      <div class="feature-card-bottom">
+        <h3>내 말투 AI 학습</h3>
+        <p>218통 분석으로 선호 어미·이모지 빈도·문장 길이를 파악 &mdash; 언제든 "다시 학습"으로 리셋</p>
+      </div>
+    </a>
+
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag orange">인라인 번역</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
+      </div>
+      <div class="feature-card-bottom">
+        <h3>스마트 번역</h3>
+        <p>새 창 없이 메일·메시지 본문을 그 자리에서 영어·한국어로 전환, 되돌리기는 ⌘Z</p>
+      </div>
+    </a>
+
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag pink">Canvas 컨트롤</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
+      </div>
+      <div class="feature-card-bottom">
+        <h3>문장 단위 인라인 다듬기</h3>
+        <p>드래그한 문장만 짧게/자세히/부드럽게/단호하게 &mdash; GPT Canvas 스타일의 로컬 리라이트</p>
+      </div>
+    </a>
+
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag gray">자연어 질의</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
+      </div>
+      <div class="feature-card-bottom">
+        <h3>Flow 질의창</h3>
+        <p>"오늘 답장 필요한 메일", "이번 주 꼭 봐야 할 것" 등 자연어로 Flow에 바로 질문</p>
+      </div>
+    </a>
+
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag">후속 액션</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
+      </div>
+      <div class="feature-card-bottom">
+        <h3>마감 · 지연 알림</h3>
+        <p>마감 임박, 답변 지연, 후속 제안 3단계 강도로 부드럽게 챙길 건 챙기고 넘길 건 넘깁니다</p>
+      </div>
+    </a>
+
+    <a href="demo.html" class="feature-card">
+      <div class="feature-card-top">
+        <span class="feature-tag blue">실시간 Sync</span>
+        <span class="arrow">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M7 17L17 7M8 7h9v9"/></svg>
+        </span>
+      </div>
+      <div class="feature-card-bottom">
+        <h3>라이브 교차 동기화</h3>
+        <p>메일·메시지·캘린더·드라이브 변경을 2분 주기로 교차 재학습해 항상 최신 맥락 유지</p>
+      </div>
+    </a>
   </div>
 </section>
 
-<!-- ── Features ───────────────────────────────────────────────── -->
-<section class="section" style="background: var(--g50);">
-  <div class="inner">
-    <div class="sec-eye">KEY FEATURES</div>
-    <h2 class="sec-head">Flow를 특별하게 만드는 것들</h2>
-    <div class="features-grid">
-      <div class="feat-card">
-        <div class="feat-icon-wrap" style="background:var(--blue-lt)">🔗</div>
-        <h3>4-소스 교차 분석</h3>
-        <p>단일 앱이 아닌 메일·메시지·캘린더·드라이브를 동시에 읽어 더 정확한 맥락 판단이 가능합니다.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap" style="background:var(--indigo-lt)">🧠</div>
-        <h3>다중 신호 조건 트리거</h3>
-        <p>단일 이벤트에 반응하지 않습니다. 2개 이상의 소스에서 같은 맥락이 겹쳐야만 액션으로 판단합니다.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap" style="background:#FEF3C7">⚡</div>
-        <h3>우선순위 자동 정렬</h3>
-        <p>마감일, 참석자 수, 미응답 기간 등을 종합해 지금 당장 필요한 액션과 나중에 해도 되는 것을 구분합니다.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap" style="background:#DCFCE7">🌿</div>
-        <h3>인라인 · 비침습적 제안</h3>
-        <p>Push 알림이나 팝업 없이, 작업 흐름 안에서 자연스럽게 카드를 삽입합니다. 흐름을 끊지 않습니다.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap" style="background:#FEE2E2">🛡</div>
-        <h3>본인에게만 보이는 분석</h3>
-        <p>모든 분석 결과는 본인 화면에만 표시됩니다. 팀원이나 관리자는 제안 내용을 볼 수 없습니다.</p>
-      </div>
-      <div class="feat-card">
-        <div class="feat-icon-wrap" style="background:rgba(21,126,251,.1)">🎛</div>
-        <h3>완전한 수동 제어</h3>
-        <p>무시, 거절, 끄기가 항상 가능합니다. Flow는 제안할 뿐 강제하지 않습니다. 선택은 항상 사용자에게 있습니다.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Privacy ───────────────────────────────────────────────── -->
-<section class="section privacy-section">
-  <div class="inner">
-    <div class="sec-eye">PRIVACY & TRUST</div>
-    <h2 class="sec-head">AI가 보는 것, 사용자가 결정합니다</h2>
-    <p class="sec-desc">Flow는 분석 결과를 절대 외부에 노출하지 않으며, 사용자가 언제든 기능을 끌 수 있습니다.</p>
-    <div class="privacy-points">
-      <div class="privacy-point">
-        <div class="pp-icon">🔒</div>
-        <div class="pp-text">
-          <h4>온디바이스 맥락 판단</h4>
-          <p>메일·메시지 내용은 서버로 전송되지 않습니다. 신호 감지는 클라이언트 레벨에서 처리됩니다.</p>
-        </div>
-      </div>
-      <div class="privacy-point">
-        <div class="pp-icon">👁</div>
-        <div class="pp-text">
-          <h4>분석 결과 = 나만 봄</h4>
-          <p>Flow가 발견한 액션 카드는 본인 화면에만 나타납니다. 팀원, 관리자, 어드민 모두 볼 수 없습니다.</p>
-        </div>
-      </div>
-      <div class="privacy-point">
-        <div class="pp-icon">⚙️</div>
-        <div class="pp-text">
-          <h4>언제든 끄기 가능</h4>
-          <p>설정에서 Flow 기능 전체 또는 소스별로 ON/OFF를 조절할 수 있습니다. 기본값은 ON, 동의 없이 활성화되지 않습니다.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ── Footer ────────────────────────────────────────────────── -->
 <footer class="footer">
-  <div class="footer-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" width="174" height="19" viewBox="0 0 174 19" fill="none" style="height:16px;width:auto"><path d="M17.0804 19H21.6945C21.9229 19 22.1243 18.8435 22.1781 18.62L26.5325 0.594588C26.6042 0.290588 26.3758 0 26.0624 0H20.9154C20.687 0 20.49 0.158706 20.443 0.382235L16.5968 18.4009C16.5318 18.7094 16.7669 19 17.0826 19H17.0804Z" fill="url(#paint0_footer)"></path><path opacity="0.25" d="M16.5987 18.5351L20.4449 0.516353C20.4919 0.295059 20.689 0.134118 20.9173 0.134118H26.0643C26.3128 0.134118 26.5053 0.319647 26.5389 0.547647C26.5792 0.261529 26.3598 0 26.0643 0H20.9173C20.689 0 20.4919 0.158706 20.4449 0.382235L16.5987 18.4009C16.5853 18.4591 16.5875 18.5172 16.5942 18.5708C16.5942 18.5596 16.5942 18.5462 16.5987 18.5351Z" fill="white"></path><path d="M20.3958 9.06907C18.3047 4.50012 15.0339 3.81836 13.2697 3.81836C11.5055 3.81836 8.23466 4.50012 6.14363 9.06907C5.022 11.5189 4.40633 14.7579 4.3526 18.4662C4.34812 18.7591 4.5832 19.0005 4.87648 19.0005H9.44808C9.73241 19.0005 9.96748 18.7725 9.97196 18.4886C10.019 15.6162 10.4712 13.1149 11.2548 11.4005C11.8548 10.0906 12.5309 9.42895 13.2697 9.42895C14.0085 9.42895 14.6846 10.0928 15.2846 11.4005C16.0727 13.1217 16.5249 15.6386 16.5674 18.5288C16.5719 18.7904 16.7868 19.0005 17.0488 19.0005H21.7032C21.9719 19.0005 22.189 18.7837 22.1868 18.5154C22.1375 14.7869 21.5196 11.5301 20.3935 9.06907H20.3958Z" fill="url(#paint1_footer)"></path><path opacity="0.4" d="M6.14552 9.20318C8.23655 4.63424 11.5074 3.95248 13.2716 3.95248C15.0357 3.95248 18.3066 4.63424 20.3976 9.20318C21.5126 11.6397 22.1282 14.8585 22.1887 18.5422C22.1887 18.5333 22.1909 18.5244 22.1909 18.5154C22.1417 14.7869 21.5238 11.5301 20.3976 9.06907C18.3066 4.50012 15.0357 3.81836 13.2716 3.81836C11.5074 3.81836 8.23655 4.50012 6.14552 9.06907C5.02389 11.5189 4.40822 14.7579 4.35449 18.4662C4.35449 18.4752 4.35449 18.4864 4.35673 18.4953C4.42166 14.8317 5.03508 11.6285 6.14552 9.20318Z" fill="white"></path><path d="M9.48171 19H4.83846C4.61458 19 4.42204 18.848 4.36831 18.6312L0.0138697 0.594588C-0.0600103 0.290588 0.170585 0 0.484015 0H5.63099C5.85935 0 6.05636 0.158706 6.10337 0.382235L9.95409 18.4188C10.019 18.7184 9.78842 19.0022 9.48171 19.0022V19Z" fill="url(#paint2_footer)"></path><path opacity="0.5" d="M0.479933 0.134118H5.62691C5.85526 0.134118 6.05228 0.292823 6.09929 0.516353L9.95001 18.5529C9.95001 18.5529 9.95001 18.5753 9.95224 18.5865C9.95896 18.5328 9.9612 18.4769 9.95001 18.4188L6.09929 0.382235C6.05228 0.158706 5.85526 0 5.62914 0H0.479933C0.184413 0 -0.0327499 0.261529 0.00530952 0.547647C0.0388913 0.319647 0.231427 0.134118 0.479933 0.134118Z" fill="white"></path><path d="M99.3335 6.72495C99.3335 4.36448 97.6813 2.43989 95.6059 2.3326V2.32812H88.3164V17.0431H91.1955V11.124H92.9776L96.1141 17.0431H99.329L96.1499 11.0458C97.9589 10.6613 99.329 8.87307 99.329 6.72718L99.3335 6.72495ZM94.9567 8.37012H91.1977V5.07754H94.9567C95.7469 5.07754 96.3872 5.81518 96.3872 6.72271C96.3872 7.63024 95.7469 8.36789 94.9567 8.36789V8.37012Z" fill="rgba(255,255,255,0.5)"></path><path d="M37.5047 6.86577V17.0431H34.6055V2.32812H38.1025L43.527 12.5613V2.32812H46.4263V17.0431H42.8912L37.5047 6.86577Z" fill="rgba(255,255,255,0.5)"></path><path d="M52.3386 14.0545L51.4027 17.0431H48.3535L53.1221 2.32812H56.9751L61.7437 17.0431H58.6945L57.7587 14.0545H52.3341H52.3386ZM55.0497 5.07307L53.1983 11.2917H56.9012L55.0497 5.07307Z" fill="rgba(255,255,255,0.5)"></path><path d="M73.8225 2.32812L69.0539 17.0431H65.295L60.5264 2.32812H63.4816L67.1666 13.7572L70.8696 2.32812H73.8248H73.8225Z" fill="rgba(255,255,255,0.5)"></path><path d="M86.0704 14.278V17.0408H75.6914V2.32812H86.0704V5.09095H78.5705V7.83589H84.6869V10.5987H78.5705V14.278H86.0704Z" fill="rgba(255,255,255,0.5)"></path><path d="M119.207 2.32812L118 9.65765C117.042 7.37542 115.511 6.11918 113.462 6.11918C111.414 6.11918 109.882 7.37542 108.924 9.65765L107.718 2.32812H104.704L107.442 17.0431H110.297C110.297 12.2193 111.483 8.98483 113.46 8.98483C115.437 8.98483 116.623 12.2193 116.623 17.0431H119.478L122.216 2.32812H119.202H119.207Z" fill="rgba(255,255,255,0.5)"></path><path d="M123.638 8.41434C123.638 4.90269 125.415 2.08398 129.566 2.08398C133.717 2.08398 135.494 4.90269 135.494 8.41434V10.9715C135.494 14.463 133.717 17.284 129.566 17.284C125.415 17.284 123.638 14.4653 123.638 10.9715V8.41434ZM132.559 8.5261C132.559 6.19246 131.773 4.84681 129.566 4.84681C127.359 4.84681 126.573 6.19022 126.573 8.5261V10.8597C126.573 13.1755 127.359 14.5189 129.566 14.5189C131.773 14.5189 132.559 13.1755 132.559 10.8597V8.5261Z" fill="rgba(255,255,255,0.5)"></path><path d="M148.831 6.72495C148.831 4.36448 147.178 2.43989 145.103 2.3326V2.32812H137.813V17.0431H140.693V11.124H142.475L145.611 17.0431H148.826L145.647 11.0458C147.456 10.6613 148.826 8.87307 148.826 6.72718L148.831 6.72495ZM144.454 8.37012H140.695V5.07754H144.454C145.244 5.07754 145.884 5.81518 145.884 6.72271C145.884 7.63024 145.244 8.36789 144.454 8.36789V8.37012Z" fill="rgba(255,255,255,0.5)"></path><path d="M168.442 17.2837C164.69 17.2837 162.879 15.0797 162.879 12.4108H165.921C165.977 13.9598 167.135 14.5209 168.442 14.5209C170.142 14.5209 170.795 13.7564 170.795 13.0076C170.795 12.185 170.274 11.7558 169.116 11.3468L166.763 10.5063C164.207 9.59206 163.329 8.35817 163.309 6.32406C163.291 3.91441 165.082 2.08594 168.312 2.08594C172.083 2.08594 173.634 4.49558 173.634 6.79123H170.592C170.424 5.37182 169.584 4.84876 168.315 4.84876C166.951 4.84876 166.242 5.50147 166.242 6.32406C166.242 7.22041 166.913 7.49982 168.371 8.02288L170.574 8.80747C172.759 9.59206 173.728 11.0115 173.728 12.9539C173.728 15.4195 171.805 17.2859 168.445 17.2859L168.442 17.2837Z" fill="rgba(255,255,255,0.5)"></path><path d="M162.241 2.32812H158.894L155.171 8.24718H154.103V2.32812H151.224V17.0431H154.103V11.124H155.171L159.084 17.0431H162.431L157.568 9.68448L162.241 2.32812Z" fill="rgba(255,255,255,0.5)"></path><defs><linearGradient id="paint0_footer" x1="16.8901" y1="18.962" x2="25.7999" y2="-0.171604" gradientUnits="userSpaceOnUse"><stop stop-color="#0563EB"></stop><stop offset="1" stop-color="#6040FF"></stop></linearGradient><linearGradient id="paint1_footer" x1="4.3526" y1="11.4094" x2="22.189" y2="11.4094" gradientUnits="userSpaceOnUse"><stop stop-color="#00BEFF"></stop><stop offset="1" stop-color="#0093FF"></stop></linearGradient><linearGradient id="paint2_footer" x1="0.723565" y1="-0.160941" x2="9.63343" y2="18.9794" gradientUnits="userSpaceOnUse"><stop stop-color="#00E355"></stop><stop offset="1" stop-color="#00CF62"></stop></linearGradient></defs></svg>
+  <div class="footer-inner">
+    <span>Flow AI &mdash; NAVER WORKS 목업 v1</span>
+    <span>© 2026 yejitest</span>
   </div>
-  <p>WORKS AI 새로운 기능 제안 · AI 액션 아이템 예측 어시스턴트</p>
-  <p style="margin-top:6px; opacity:.5">이 페이지는 기능 컨셉 제안 목적으로 제작되었습니다 · 실제 서비스 제공 여부와 무관합니다</p>
 </footer>
 
-<!-- Toast -->
-<div class="toast" id="toast"></div>
-
-<script>
-/* ─── Scenario Data ────────────────────────────────────────── */
-const SCENARIOS = [
-  {
-    id: 0,
-    priority: 'high',
-    icon: '📋',
-    highlights: { mail: 1, msg: 0, cal: 0, drive: 2 },
-    signalCount: 3,
-    action: {
-      title: 'Q2 전략기획서, 보고 전 공유가 필요합니다',
-      desc: '이팀장님이 3일 전 Q2 전략기획서를 요청했고, 내일 오전 10시 임원 전략 보고회가 예정되어 있습니다. 최종 파일(v3.2)은 아직 공유되지 않은 상태입니다.',
-      priorityLabel: '우선순위: 높음',
-      cta: '지금 공유하기',
-      ctaSecondary: '나중에 알리기',
-      timeHint: '보고까지 약 18시간',
-      signals: [
-        { src: 'mail', text: '이팀장 · "Q2 전략기획서 받을 수 있을까요?" (3일 전)' },
-        { src: 'cal',  text: '내일 10:00 · Q2 임원 전략 보고회 (C레벨 참석)' },
-        { src: 'drive',text: 'Q2_전략기획서_v3.2.pptx · 미공유 상태' }
-      ]
-    }
-  },
-  {
-    id: 1,
-    priority: 'urgent',
-    icon: '⚠️',
-    highlights: { mail: 2, msg: 1, cal: 1, drive: 0 },
-    signalCount: 4,
-    action: {
-      title: '김개발님 메시지 5일째 미답변 — 내일 킥오프 전 필요',
-      desc: '김개발님의 스프린트 일정 확인 요청이 5일째 미답변 상태입니다. 내일 오전 9시 스프린트 킥오프 미팅이 예정되어 있으며, 드라이브의 기획서에 미확인 댓글도 3개 쌓여 있습니다.',
-      priorityLabel: '긴급',
-      cta: '메시지 열기',
-      ctaSecondary: '담당자 지정',
-      timeHint: '킥오프까지 약 12시간',
-      signals: [
-        { src: 'msg',  text: '김개발 · "스프린트 일정 확인 부탁드립니다" (5일 전, 미답변)' },
-        { src: 'mail', text: '인사팀 · 스프린트 킥오프 참석 확인 요청 (3일 전)' },
-        { src: 'cal',  text: '내일 09:00 · 스프린트 킥오프 미팅 (팀 전체)' },
-        { src: 'drive',text: '스프린트_기획서.docx · 미확인 댓글 3개' }
-      ]
-    }
-  },
-  {
-    id: 2,
-    priority: 'high',
-    icon: '🚨',
-    highlights: { mail: 0, msg: 2, cal: 2, drive: 1 },
-    signalCount: 4,
-    action: {
-      title: '마감 4일 전, 제안서 완성도 40% — 지금 조율 필요',
-      desc: '클라이언트 제안서 마감이 4월 25일(4일 후)입니다. 작업방 메시지에서 팀원이 아직 2장을 작업 중이라고 했으며, 드라이브 파일 완성도는 40%에 머물러 있습니다.',
-      priorityLabel: '우선순위: 높음',
-      cta: '팀에 알리기',
-      ctaSecondary: '마감 연장 검토',
-      timeHint: 'D-4 · 4월 25일 마감',
-      signals: [
-        { src: 'mail', text: '클라이언트 · "최종 제안서 4월 25일까지" (2주 전)' },
-        { src: 'msg',  text: '팀원 · "아직 2장 작업 중이에요" (오늘)' },
-        { src: 'cal',  text: '4월 25일 (D-4) · 클라이언트 제안서 최종 납품 기한' },
-        { src: 'drive',text: '제안서_최종.docx · 완성도 40% · 4일 전 마지막 수정' }
-      ]
-    }
-  }
-];
-
-/* ─── State ──────────────────────────────────────────────────── */
-let currentScenario = 0;
-let isAnimating = false;
-let animationTimers = [];
-
-/* ─── Elements ───────────────────────────────────────────────── */
-const scanSpinner  = document.getElementById('scanSpinner');
-const scanText     = document.getElementById('scanText');
-const scanProgress = document.getElementById('scanProgress');
-const signalsFound = document.getElementById('signalsFound');
-const signalsBadge = document.getElementById('signalsBadge');
-const actionCard   = document.getElementById('actionCard');
-const actionPlaceholder = document.getElementById('actionPlaceholder');
-const replayBtn    = document.getElementById('replayBtn');
-
-/* ─── Utils ──────────────────────────────────────────────────── */
-function delay(ms) {
-  return new Promise(resolve => {
-    const t = setTimeout(resolve, ms);
-    animationTimers.push(t);
-  });
-}
-
-function clearTimers() {
-  animationTimers.forEach(t => clearTimeout(t));
-  animationTimers = [];
-}
-
-function resetItems() {
-  document.querySelectorAll('.src-item').forEach(el => {
-    el.classList.remove('highlighted', 'dimmed');
-    const badge = el.querySelector('.signal-badge');
-    if (badge) badge.textContent = '';
-  });
-}
-
-function resetNav() {
-  document.querySelectorAll('.nav-icon').forEach(el => {
-    el.classList.remove('flow-active', 'active');
-  });
-}
-
-function activateNav(col) {
-  const icon = document.querySelector(`.nav-icon[data-nav="${col}"]`);
-  if (icon) icon.classList.add('flow-active');
-}
-
-function resetBridge() {
-  scanSpinner.classList.remove('visible');
-  scanText.classList.remove('active');
-  scanText.textContent = '시나리오를 선택하면 분석을 시작합니다';
-  scanProgress.style.width = '0%';
-  signalsFound.classList.remove('visible');
-}
-
-function resetCard() {
-  actionCard.classList.remove('visible', 'priority-high', 'priority-urgent', 'priority-medium');
-  actionCard.style.display = 'none';
-  actionPlaceholder.style.opacity = '1';
-  document.getElementById('acBtnDone').style.display = 'none';
-  document.getElementById('acBtnPrimary').style.display = '';
-  document.getElementById('acBtnSecondary').style.display = '';
-  document.getElementById('acSignals').innerHTML = '';
-}
-
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-/* ─── Highlight Items ────────────────────────────────────────── */
-function highlightItem(col, idx, signalNum) {
-  const items = document.querySelectorAll(`[data-col="${col}"]`);
-  items.forEach((el, i) => {
-    if (i === idx) {
-      el.classList.add('highlighted');
-      el.classList.remove('dimmed');
-      const badge = el.querySelector('.signal-badge');
-      if (badge) badge.textContent = signalNum;
-    } else if (!el.classList.contains('highlighted')) {
-      el.classList.add('dimmed');
-    }
-  });
-}
-
-function dimAllExcept(highlights) {
-  ['mail', 'msg', 'cal', 'drive'].forEach(col => {
-    const items = document.querySelectorAll(`[data-col="${col}"]`);
-    items.forEach((el, i) => {
-      if (i !== highlights[col]) {
-        el.classList.add('dimmed');
-      }
-    });
-  });
-}
-
-/* ─── Render Action Card ──────────────────────────────────────── */
-function renderActionCard(scenario) {
-  const s = scenario.action;
-  const card = actionCard;
-
-  // Priority class
-  card.classList.remove('priority-high', 'priority-urgent', 'priority-medium');
-  card.classList.add(`priority-${scenario.priority}`);
-
-  document.getElementById('acIcon').textContent = scenario.icon;
-  document.getElementById('acTitle').textContent = s.title;
-  document.getElementById('acDesc').textContent = s.desc;
-  document.getElementById('acPriority').textContent = s.priorityLabel;
-  document.getElementById('acBtnPrimary').textContent = s.cta;
-  document.getElementById('acBtnSecondary').textContent = s.ctaSecondary;
-  document.getElementById('acTimeHint').textContent = s.timeHint;
-
-  // Signals
-  const sigContainer = document.getElementById('acSignals');
-  sigContainer.innerHTML = '';
-  s.signals.forEach((sig, i) => {
-    const div = document.createElement('div');
-    div.className = 'ac-signal';
-    div.style.transitionDelay = `${i * 100}ms`;
-    const srcLabels = { mail: '메일', msg: '메시지', cal: '캘린더', drive: '드라이브' };
-    div.innerHTML = `
-      <span class="ac-signal-src src-${sig.src}">${srcLabels[sig.src]}</span>
-      <span class="ac-signal-text">${sig.text}</span>
-    `;
-    sigContainer.appendChild(div);
-  });
-}
-
-/* ─── Main Animation ─────────────────────────────────────────── */
-async function runScenario(idx) {
-  if (isAnimating) return;
-  isAnimating = true;
-
-  const scenario = SCENARIOS[idx];
-  currentScenario = idx;
-
-  // Reset everything
-  clearTimers();
-  resetItems();
-  resetNav();
-  resetBridge();
-  resetCard();
-  replayBtn.classList.remove('visible');
-
-  await delay(200);
-
-  // Phase 1: Start scanning
-  scanSpinner.classList.add('visible');
-  scanText.classList.add('active');
-  scanText.textContent = '메일 · 메시지 · 캘린더 · 드라이브 분석 중...';
-  scanProgress.style.width = '20%';
-
-  await delay(600);
-
-  // Phase 2: Highlight items one by one
-  const cols = ['mail', 'msg', 'cal', 'drive'];
-  const validCols = cols.filter(c => scenario.highlights[c] !== undefined);
-
-  let signalNum = 1;
-  for (const col of validCols) {
-    highlightItem(col, scenario.highlights[col], signalNum++);
-    activateNav(col);
-    scanProgress.style.width = `${20 + (signalNum / (validCols.length + 1)) * 50}%`;
-    scanText.textContent = `신호 ${signalNum - 1}개 감지됨...`;
-    await delay(500);
-  }
-
-  // Phase 3: Analysis complete signal
-  await delay(200);
-  scanProgress.style.width = '90%';
-  scanText.textContent = '연결점 분석 완료';
-  await delay(400);
-
-  scanProgress.style.width = '100%';
-  signalsBadge.textContent = `신호 ${scenario.signalCount}개 연결됨`;
-  signalsFound.classList.add('visible');
-  scanSpinner.classList.remove('visible');
-  await delay(500);
-
-  // Phase 4: Reveal action card
-  actionPlaceholder.style.opacity = '0';
-  await delay(300);
-
-  renderActionCard(scenario);
-  actionCard.style.display = 'block';
-  actionCard.classList.add('visible');
-
-  // Stagger signals
-  await delay(200);
-  actionCard.querySelectorAll('.ac-signal').forEach((el, i) => {
-    setTimeout(() => el.classList.add('visible'), i * 120);
-  });
-
-  await delay(600 + scenario.action.signals.length * 120);
-
-  // Show replay
-  replayBtn.classList.add('visible');
-  isAnimating = false;
-}
-
-/* ─── Replay ──────────────────────────────────────────────────── */
-function replayScenario() {
-  runScenario(currentScenario);
-}
-
-/* ─── Action Handlers ─────────────────────────────────────────── */
-function handleAction(type) {
-  const scenario = SCENARIOS[currentScenario];
-  if (type === 'primary') {
-    showToast(`✓ "${scenario.action.cta}" 실행됨 — 실제 WORKS에서 해당 화면으로 이동합니다`);
-    document.getElementById('acBtnPrimary').style.display = 'none';
-    document.getElementById('acBtnSecondary').style.display = 'none';
-    document.getElementById('acBtnDone').style.display = '';
-  } else {
-    showToast(`나중에 알림으로 다시 제안드릴게요`);
-    document.getElementById('acBtnSecondary').style.display = 'none';
-  }
-}
-
-/* ─── Tab Switching ───────────────────────────────────────────── */
-document.querySelectorAll('.stab').forEach(btn => {
-  btn.addEventListener('click', () => {
-    if (isAnimating) return;
-    document.querySelectorAll('.stab').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    const idx = parseInt(btn.dataset.scenario, 10);
-    runScenario(idx);
-  });
-});
-
-/* ─── IntersectionObserver Auto-play ─────────────────────────── */
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting && !isAnimating) {
-      // Small delay so user sees the initial state
-      setTimeout(() => runScenario(0), 600);
-      observer.disconnect();
-    }
-  });
-}, { threshold: 0.35 });
-
-observer.observe(document.getElementById('concept-demo'));
-</script>
 </body>
 </html>
