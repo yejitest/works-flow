@@ -19,9 +19,11 @@
     --g350:#DDDDDD; --g300:#EEEEEE; --g200:#F0F0F0;
     --g150:#F5F5F6; --g100:#FAFAFA; --white:#FFFFFF;
 
-    --grad-flow:linear-gradient(135deg,#157EFB 0%, #5046E5 55%, #7C3AED 100%);
-    --grad-flow-soft:linear-gradient(135deg,#E6F0FF 0%, #EEF2FF 55%, #F3EEFF 100%);
+    --grad-flow:linear-gradient(135deg,#B09BE5 0%, #7EAEE0 55%, #6BBCD8 100%);
+    --grad-flow-vivid:linear-gradient(135deg,#9B7FD4 0%, #6BAED4 100%);
+    --grad-flow-soft:linear-gradient(135deg,#EEE8FB 0%, #E3EEFB 55%, #DCF0F7 100%);
     --sh-2:0 4px 16px rgba(0,0,0,.06);
+    --sh-flow:0 8px 24px rgba(135,110,220,.22);
     --sh-3:0 20px 60px rgba(0,0,0,.15);
   }
   *{box-sizing:border-box}
@@ -41,13 +43,13 @@
   }
   .hamb{width:40px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--g800)}
   .hamb:hover{background:var(--g150)}
-  .brand{display:flex;align-items:center;gap:10px;padding-right:8px;margin-right:4px}
-  .brand-logo{display:flex;align-items:center;height:20px}
-  .brand-logo svg{height:20px;width:auto;display:block}
+  .brand{display:flex;align-items:center;gap:10px;padding-right:8px;margin-right:4px;margin-left:-14px}
+  .brand-logo{display:flex;align-items:center;height:16px}
+  .brand-logo svg{height:16px;width:auto;display:block}
   .brand-sub{font-size:17px;font-weight:700;color:var(--g900);letter-spacing:-.3px;
     padding-left:10px;border-left:1px solid var(--g300);line-height:1}
 
-  .top-search{flex:1;max-width:780px;height:40px;background:var(--g100);border-radius:20px;
+  .top-search{flex:1;max-width:480px;height:40px;background:var(--g100);border-radius:20px;
     display:flex;align-items:center;padding:0 16px;gap:10px;
     border:1px solid transparent;transition:all .15s}
   .top-search:hover,.top-search:focus-within{background:var(--white);border-color:var(--g350)}
@@ -64,7 +66,7 @@
     display:flex;align-items:center;justify-content:center;border:2px solid var(--white);line-height:1}
   .top-div{width:1px;height:22px;background:var(--g300);margin:0 6px}
   .top-avatar{width:34px;height:34px;border-radius:50%;margin-left:4px;
-    background:linear-gradient(135deg,#F9A826,#FD472B);
+    background:#2563EB;
     color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px}
   .flow-toggle{height:36px;padding:0 14px 0 12px;border-radius:18px;
     background:var(--grad-flow);color:var(--white);font-weight:700;
@@ -79,7 +81,13 @@
   }
 
   /* ====== Main grid ====== */
-  .app{display:grid;grid-template-columns:240px 1fr 380px;height:calc(100vh - 56px)}
+  .app{display:grid;grid-template-columns:240px 1fr 380px;height:calc(100vh - 56px);transition:grid-template-columns .25s cubic-bezier(.4,.2,.2,1)}
+  .app.sb-collapsed{grid-template-columns:0px 1fr 380px}
+  .app.sb-collapsed .sidebar{transform:translateX(-100%);opacity:0;pointer-events:none;transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
+  .sidebar{transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
+  .app.flow-collapsed{grid-template-columns:240px 1fr 0px}
+  .app.flow-collapsed aside.flow{transform:translateX(100%);opacity:0;pointer-events:none;transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
+  aside.flow{transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
 
   /* ====== Sidebar ====== */
   .sidebar{background:var(--white);border-right:1px solid var(--g300);
@@ -95,14 +103,19 @@
   .btn-compose.ghost:hover{background:var(--green-xlt)}
 
   .sb-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:14px}
-  .qf{padding:8px 4px;border-radius:8px;display:flex;flex-direction:column;
-    align-items:center;gap:3px;color:var(--g750);cursor:pointer}
+  .qf{padding:10px 4px 8px;border-radius:8px;display:flex;flex-direction:column;
+    align-items:center;justify-content:flex-start;gap:6px;color:var(--g750);cursor:pointer;
+    height:62px}
   .qf:hover{background:var(--g150)}
-  .qf-num{font-size:16px;font-weight:800;color:var(--blue);line-height:1}
-  .qf-ico{width:22px;height:22px;display:flex;align-items:center;justify-content:center}
-  .qf-label{font-size:11px;color:var(--g750);font-weight:500}
-  .qf.to-badge .qf-ico{border:1.5px solid var(--g580);border-radius:50%;
-    font-size:9px;font-weight:800;color:var(--g580);width:18px;height:18px}
+  .qf-top{height:24px;display:flex;align-items:center;justify-content:center}
+  .qf-num{font-size:15px;font-weight:800;color:var(--blue);line-height:24px}
+  .qf-ico{width:24px;height:24px;display:flex;align-items:center;justify-content:center}
+  .qf-ico svg{display:block}
+  .qf-label{font-size:11px;color:var(--g750);font-weight:500;line-height:1;height:12px;
+    display:flex;align-items:center}
+  .qf.to-badge .qf-ico{border:1.8px solid var(--g650);border-radius:999px;
+    font-size:9px;font-weight:700;color:var(--g650);width:28px;height:17px;line-height:1;
+    letter-spacing:.3px;padding-top:1px;box-sizing:border-box}
 
   .sb-nav{margin-bottom:14px}
   .sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;
@@ -120,14 +133,13 @@
   .sb-group.open .chev{transform:rotate(90deg)}
   .sb-sub{padding-left:4px}
   .sb-sub .sb-item{padding:7px 10px;font-size:12.5px}
-  .sb-sub .sb-item .ic{color:#F9D13C}
+  .sb-sub .sb-item .ic{color:var(--g580)}
   .tree-child{padding-left:18px}
   .sb-item .dot-purple{width:10px;height:10px;border-radius:50%;background:var(--purple);margin-right:2px}
 
   .sb-flow-card{margin:0 0 14px;padding:14px;border-radius:12px;
     background:var(--grad-flow);color:var(--white);position:relative;overflow:hidden;cursor:pointer}
-  .sb-flow-card::before{content:"";position:absolute;right:-25px;top:-25px;width:80px;height:80px;
-    border-radius:50%;background:rgba(255,255,255,.13)}
+  .sb-flow-card::before{display:none}
   .sb-flow-title{font-size:10px;font-weight:800;letter-spacing:.5px;opacity:.9}
   .sb-flow-desc{font-size:13px;font-weight:700;margin-top:4px;line-height:1.4}
   .sb-flow-cta{margin-top:10px;display:inline-flex;align-items:center;gap:6px;
@@ -140,12 +152,12 @@
 
   /* ====== Main ====== */
   .main{background:var(--white);display:flex;flex-direction:column;overflow:hidden}
-  .toolbar{height:52px;display:flex;align-items:center;gap:6px;padding:0 16px;
+  .toolbar{height:52px;display:flex;align-items:center;gap:0;padding:0 16px 0 14px;
     border-bottom:1px solid var(--g300);flex-shrink:0}
-  .tb-chk{width:28px;height:28px;display:flex;align-items:center;justify-content:center;border-radius:6px}
-  .tb-chk:hover{background:var(--g150)}
-  .tb-chk .box{width:16px;height:16px;border:1.5px solid var(--g400);border-radius:3px}
-  .tb-chk .cv{font-size:11px;color:var(--g580);margin-left:2px}
+  .tb-chk-wrap{display:flex;align-items:center;gap:3px;padding:5px 5px 5px 0;border-radius:5px;cursor:pointer;margin-left:6px;margin-right:8px;flex-shrink:0}
+  .tb-chk-wrap:hover{background:var(--g150)}
+  .tb-chk-wrap .box{width:16px;height:16px;border:1.5px solid var(--g400);border-radius:3px;flex-shrink:0}
+  .tb-chk-wrap .cv{color:var(--g580);display:flex;align-items:center}
   .tb-btn{height:30px;padding:0 12px;border-radius:6px;font-size:12.5px;color:var(--g800);
     font-weight:500;display:inline-flex;align-items:center;gap:4px}
   .tb-btn:hover{background:var(--g150)}
@@ -170,7 +182,7 @@
     box-shadow:inset 3px 0 0 var(--blue)}
   .ml-row.flow-flag:hover{background:linear-gradient(90deg, rgba(21,126,251,.09), rgba(80,70,229,.03))}
 
-  .ml-chk{width:16px;height:16px;border:1.5px solid var(--g400);border-radius:3px;justify-self:start}
+  .ml-chk{width:16px;height:16px;border:1.5px solid var(--g400);border-radius:3px;justify-self:start;margin-left:6px}
   .ml-star{color:var(--g400);font-size:15px;text-align:center}
   .ml-star.on{color:var(--orange)}
   .ml-read{color:var(--g580);display:flex;align-items:center;justify-content:center}
@@ -182,8 +194,9 @@
   .ml-to-badge.active{border-color:var(--blue);color:var(--blue)}
   .ml-subj-wrap{display:flex;align-items:center;gap:6px;min-width:0;padding-left:6px}
   .ml-subj{color:var(--g750);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
-  .ml-chip{flex-shrink:0;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.2px}
-  .ml-chip.flow{background:var(--grad-flow);color:var(--white);display:inline-flex;align-items:center;gap:3px}
+  .ml-chip{flex-shrink:0;padding:3px 6px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.2px}
+  .ml-chip.flow{background:var(--grad-flow);color:var(--white);display:inline-flex;flex-direction:row;align-items:center;gap:3px;white-space:nowrap;flex-shrink:0;line-height:1}
+  .ml-chip.flow svg{display:inline;vertical-align:middle;flex-shrink:0}
   .ml-chip.hr{background:var(--green-lt);color:var(--green-dk)}
   .ml-chip.invite{background:var(--blue-lt);color:var(--blue-dk)}
   .ml-chip.reminder{background:var(--orange-lt);color:#C87A00}
@@ -203,78 +216,155 @@
   .pg.active{background:var(--green);color:var(--white);font-weight:700}
 
   /* ====== Flow AI Panel ====== */
-  .flow{background:var(--white);border-left:1px solid var(--g300);
+  .flow{background:#F7F8FA;border-left:1px solid var(--g300);
     display:flex;flex-direction:column;overflow:hidden}
-  .flow-head{padding:14px 16px;border-bottom:1px solid var(--g300);
-    display:flex;align-items:center;gap:10px}
-  .flow-brand{width:30px;height:30px;border-radius:9px;background:var(--grad-flow);
-    display:flex;align-items:center;justify-content:center;color:var(--white);
-    font-weight:800;font-size:12px;box-shadow:0 4px 10px rgba(80,70,229,.3)}
-  .flow-name{font-size:14px;font-weight:800}
-  .flow-name .beta{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;
-    background:var(--indigo-lt);color:var(--indigo);font-size:9px;font-weight:700;vertical-align:middle}
-  .flow-sub{font-size:11px;color:var(--g650);margin-top:1px}
-  .flow-head .more{margin-left:auto}
 
-  .flow-status{padding:9px 16px;background:linear-gradient(90deg, var(--indigo-lt), var(--blue-lt));
-    display:flex;align-items:center;gap:8px;font-size:11px;color:var(--indigo);
-    font-weight:700;border-bottom:1px solid var(--g200)}
+  /* ── Head: gradient card ── */
+  .flow-head{
+    padding:18px 16px 16px;border-bottom:none;
+    display:flex;align-items:center;gap:10px;
+    background:var(--grad-flow);
+    position:relative;overflow:hidden;
+  }
+  .flow-head::after{
+    content:"";position:absolute;inset:0;
+    background:radial-gradient(ellipse at 70% -30%, rgba(255,255,255,.28) 0%, transparent 60%);
+    pointer-events:none;
+  }
+  .flow-brand{
+    width:32px;height:32px;border-radius:10px;
+    background:rgba(255,255,255,.22);backdrop-filter:blur(4px);
+    border:1px solid rgba(255,255,255,.35);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--white);font-weight:800;font-size:12px;
+    box-shadow:0 2px 8px rgba(0,0,0,.12);flex-shrink:0;
+  }
+  .flow-name{font-size:14px;font-weight:800;color:var(--white);letter-spacing:-.2px}
+  .flow-name .beta{
+    display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;
+    background:rgba(255,255,255,.25);color:rgba(255,255,255,.9);
+    font-size:9px;font-weight:700;vertical-align:middle;letter-spacing:.5px;
+  }
+  .flow-sub{font-size:11px;color:rgba(255,255,255,.78);margin-top:2px;font-weight:500}
+  .flow-head .more{margin-left:auto;color:rgba(255,255,255,.75)!important;
+    background:rgba(255,255,255,.15)!important;border-radius:8px;}
+  .flow-head .more:hover{background:rgba(255,255,255,.25)!important}
+
+  /* ── Status bar ── */
+  .flow-status{
+    padding:9px 16px;
+    background:rgba(176,155,229,.10);
+    display:flex;align-items:center;gap:8px;font-size:11px;
+    color:#7B68C8;font-weight:700;
+    border-bottom:1px solid rgba(176,155,229,.18);
+  }
   .flow-status .live{width:6px;height:6px;border-radius:50%;background:var(--green);
     box-shadow:0 0 0 3px rgba(3,199,90,.2)}
-  .flow-status .updating{margin-left:auto;color:var(--g650);font-weight:500;font-size:10px}
+  .flow-status .updating{margin-left:auto;color:var(--g580);font-weight:500;font-size:10px}
 
-  .flow-body{flex:1;overflow-y:auto;padding:14px}
-  .f-section-label{font-size:10px;color:var(--g580);font-weight:800;letter-spacing:.5px;
-    text-transform:uppercase;padding:6px 4px 8px}
+  /* ── Body & section ── */
+  .flow-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:0}
+  .f-section-label{
+    font-size:10px;color:var(--g580);font-weight:800;letter-spacing:.6px;
+    text-transform:uppercase;padding:6px 4px 8px;
+  }
 
-  .f-card{background:var(--white);border:1px solid var(--g300);border-radius:12px;
-    padding:14px;margin-bottom:10px}
-  .f-card.priority{border:1.5px solid transparent;
-    background:linear-gradient(var(--white),var(--white)) padding-box,var(--grad-flow) border-box;
-    box-shadow:var(--sh-2)}
+  /* ── Cards ── */
+  .f-card{
+    background:var(--white);
+    border:1px solid rgba(0,0,0,.07);
+    border-radius:14px;
+    padding:14px 14px 12px;margin-bottom:9px;
+    box-shadow:0 1px 4px rgba(0,0,0,.05);
+    transition:box-shadow .15s;
+  }
+  .f-card:hover{box-shadow:0 3px 12px rgba(0,0,0,.09)}
+  .f-card.priority{
+    border:1.5px solid transparent;
+    background:linear-gradient(var(--white),var(--white)) padding-box,
+               var(--grad-flow) border-box;
+    box-shadow:var(--sh-flow);
+  }
+  .f-card.priority:hover{box-shadow:0 10px 28px rgba(135,110,220,.28)}
+
+  /* ── Chips ── */
   .f-tag-row{display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap}
-  .f-chip{padding:3px 8px;border-radius:5px;font-size:10px;font-weight:700;letter-spacing:.3px}
+  .f-chip{padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.3px}
   .f-chip.pri{background:var(--grad-flow);color:var(--white)}
-  .f-chip.risk{background:var(--red-lt);color:var(--red)}
+  .f-chip.risk{background:#FFE9E6;color:var(--red)}
   .f-chip.due{background:var(--orange-lt);color:#C87A00}
   .f-chip.nudge{background:var(--green-lt);color:var(--green-dk)}
   .f-time{margin-left:auto;font-size:10px;color:var(--g580)}
+
+  /* ── Content ── */
   .f-title{font-size:13.5px;font-weight:800;color:var(--g900);line-height:1.4;letter-spacing:-.2px}
-  .f-desc{font-size:12px;color:var(--g750);line-height:1.55;margin-top:6px}
-  .f-ref{margin-top:10px;padding:8px 10px;background:var(--g100);border-radius:8px;
-    font-size:11px;color:var(--g750);display:flex;align-items:center;gap:8px}
+  .f-desc{font-size:12px;color:var(--g750);line-height:1.6;margin-top:6px}
+  .f-ref{
+    margin-top:10px;padding:8px 10px;
+    background:var(--g100);border-radius:9px;border:1px solid var(--g200);
+    font-size:11px;color:var(--g750);display:flex;align-items:center;gap:8px;
+  }
   .f-ref .dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
   .f-ref.mail .dot{background:var(--red)}
   .f-ref.cal .dot{background:var(--blue)}
   .f-ref.msg .dot{background:var(--green)}
-  .f-sources{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
-  .f-src{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--g650);
-    font-weight:600;padding:3px 8px;background:var(--g100);border-radius:10px}
+
+  /* ── Source tags ── */
+  .f-sources{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap}
+  .f-src{
+    display:inline-flex;align-items:center;gap:4px;font-size:10px;
+    color:var(--g650);font-weight:600;padding:3px 8px;
+    background:var(--g100);border-radius:20px;border:1px solid var(--g200);
+  }
   .f-src::before{content:"";width:5px;height:5px;border-radius:50%}
   .f-src.mail::before{background:var(--red)}
   .f-src.msg::before{background:var(--green)}
   .f-src.cal::before{background:var(--blue)}
   .f-src.drive::before{background:var(--orange)}
-  .f-actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
-  .f-btn{height:30px;padding:0 12px;border-radius:7px;font-size:12px;font-weight:700;
-    display:inline-flex;align-items:center;gap:5px}
-  .f-btn.primary{background:var(--g900);color:var(--white)}
-  .f-btn.primary:hover{background:#000}
-  .f-btn.ghost{background:var(--g150);color:var(--g800)}
-  .f-btn.ghost:hover{background:var(--g200)}
 
-  .flow-ask{padding:12px 14px;border-top:1px solid var(--g300);background:var(--white)}
-  .ask-row{display:flex;align-items:center;gap:8px;padding:5px 6px 5px 12px;
-    border:1.5px solid var(--g300);border-radius:10px;transition:border-color .15s}
-  .ask-row:focus-within{border-color:var(--indigo)}
+  /* ── Action buttons — all black ── */
+  .f-actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
+  .f-btn{
+    height:30px;padding:0 13px;border-radius:20px;font-size:12px;font-weight:700;
+    display:inline-flex;align-items:center;gap:5px;
+    transition:opacity .15s, transform .1s;
+  }
+  .f-btn:active{transform:scale(.97)}
+  .f-btn.primary{background:#111;color:var(--white)}
+  .f-btn.primary:hover{background:#000;opacity:.88}
+  .f-btn.ghost{background:transparent;color:#111;border:1px solid #111}
+  .f-btn.ghost:hover{background:rgba(0,0,0,.05)}
+
+  /* ── Ask bar ── */
+  .flow-ask{
+    padding:12px 14px;border-top:1px solid rgba(0,0,0,.07);
+    background:var(--white);
+    box-shadow:0 -2px 12px rgba(0,0,0,.05);
+  }
+  .ask-row{
+    display:flex;align-items:center;gap:8px;padding:6px 6px 6px 13px;
+    border:1.5px solid var(--g300);border-radius:24px;
+    background:var(--g100);
+    transition:border-color .15s, background .15s;
+  }
+  .ask-row:focus-within{border-color:#B09BE5;background:var(--white)}
   .ask-row input{flex:1;border:none;outline:none;font-size:13px;color:var(--g900);
-    background:transparent;padding:5px 0}
+    background:transparent;padding:4px 0}
   .ask-row input::placeholder{color:var(--g580)}
-  .ask-send{width:28px;height:28px;border-radius:7px;background:var(--grad-flow);
-    color:var(--white);display:flex;align-items:center;justify-content:center}
+  .ask-send{
+    width:30px;height:30px;border-radius:50%;
+    background:var(--grad-flow);color:var(--white);
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 2px 8px rgba(135,110,220,.3);
+    flex-shrink:0;
+  }
+  .ask-send:hover{box-shadow:0 4px 12px rgba(135,110,220,.45)}
   .ask-chips{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
-  .ask-chip{padding:4px 10px;border-radius:12px;background:var(--g150);
-    font-size:11px;color:var(--g750);font-weight:600;cursor:pointer}
+  .ask-chip{
+    padding:4px 11px;border-radius:20px;background:var(--g150);
+    font-size:11px;color:var(--g750);font-weight:600;cursor:pointer;
+    border:1px solid var(--g200);
+  }
   .ask-chip:hover{background:var(--g200)}
 
   ::-webkit-scrollbar{width:8px;height:8px}
@@ -283,9 +373,9 @@
   ::-webkit-scrollbar-track{background:transparent}
 
   .flow-hint{position:fixed;right:32px;bottom:28px;
-    background:var(--g900);color:var(--white);padding:10px 16px;
-    border-radius:30px;font-size:12px;font-weight:600;
-    box-shadow:0 12px 30px rgba(0,0,0,.25);display:flex;align-items:center;gap:8px;
+    background:var(--grad-flow);color:var(--white);padding:10px 18px;
+    border-radius:30px;font-size:12px;font-weight:700;
+    box-shadow:var(--sh-flow);display:flex;align-items:center;gap:8px;
     z-index:100;animation:hintIn .4s cubic-bezier(.2,.8,.2,1)}
   @keyframes hintIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
   .flow-hint .k{padding:2px 6px;border-radius:4px;background:rgba(255,255,255,.15);
@@ -775,7 +865,7 @@
 
 <!-- ============ TOP BAR ============ -->
 <header class="topbar">
-  <button class="hamb"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 5.5H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18.5H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+  <button class="hamb" id="hambBtn" title="사이드바 접기"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 5.5H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 18.5H20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
   <div class="brand">
     <span class="brand-logo">
       <svg xmlns="http://www.w3.org/2000/svg" width="174" height="19" viewBox="0 0 174 19" fill="none"><path d="M17.0804 19H21.6945C21.9229 19 22.1243 18.8435 22.1781 18.62L26.5325 0.594588C26.6042 0.290588 26.3758 0 26.0624 0H20.9154C20.687 0 20.49 0.158706 20.443 0.382235L16.5968 18.4009C16.5318 18.7094 16.7669 19 17.0826 19H17.0804Z" fill="url(#nwg1)"/><path d="M20.3958 9.06907C18.3047 4.50012 15.0339 3.81836 13.2697 3.81836C11.5055 3.81836 8.23466 4.50012 6.14363 9.06907C5.022 11.5189 4.40633 14.7579 4.3526 18.4662C4.34812 18.7591 4.5832 19.0005 4.87648 19.0005H9.44808C9.73241 19.0005 9.96748 18.7725 9.97196 18.4886C10.019 15.6162 10.4712 13.1149 11.2548 11.4005C11.8548 10.0906 12.5309 9.42895 13.2697 9.42895C14.0085 9.42895 14.6846 10.0928 15.2846 11.4005C16.0727 13.1217 16.5249 15.6386 16.5674 18.5288C16.5719 18.7904 16.7868 19.0005 17.0488 19.0005H21.7032C21.9719 19.0005 22.189 18.7837 22.1868 18.5154C22.1375 14.7869 21.5196 11.5301 20.3935 9.06907H20.3958Z" fill="url(#nwg2)"/><path d="M9.48171 19H4.83846C4.61458 19 4.42204 18.848 4.36831 18.6312L0.0138697 0.594588C-0.0600103 0.290588 0.170585 0 0.484015 0H5.63099C5.85935 0 6.05636 0.158706 6.10337 0.382235L9.95409 18.4188C10.019 18.7184 9.78842 19.0022 9.48171 19.0022V19Z" fill="url(#nwg3)"/><path d="M99.3335 6.72495C99.3335 4.36448 97.6813 2.43989 95.6059 2.3326V2.32812H88.3164V17.0431H91.1955V11.124H92.9776L96.1141 17.0431H99.329L96.1499 11.0458C97.9589 10.6613 99.329 8.87307 99.329 6.72718L99.3335 6.72495ZM94.9567 8.37012H91.1977V5.07754H94.9567C95.7469 5.07754 96.3872 5.81518 96.3872 6.72271C96.3872 7.63024 95.7469 8.36789 94.9567 8.36789V8.37012Z" fill="#202936"/><path d="M37.5047 6.86577V17.0431H34.6055V2.32812H38.1025L43.527 12.5613V2.32812H46.4263V17.0431H42.8912L37.5047 6.86577Z" fill="#202936"/><path d="M52.3386 14.0545L51.4027 17.0431H48.3535L53.1221 2.32812H56.9751L61.7437 17.0431H58.6945L57.7587 14.0545H52.3341H52.3386ZM55.0497 5.07307L53.1983 11.2917H56.9012L55.0497 5.07307Z" fill="#202936"/><path d="M73.8225 2.32812L69.0539 17.0431H65.295L60.5264 2.32812H63.4816L67.1666 13.7572L70.8696 2.32812H73.8248H73.8225Z" fill="#202936"/><path d="M86.0704 14.278V17.0408H75.6914V2.32812H86.0704V5.09095H78.5705V7.83589H84.6869V10.5987H78.5705V14.278H86.0704Z" fill="#202936"/><path d="M119.207 2.32812L118 9.65765C117.042 7.37542 115.511 6.11918 113.462 6.11918C111.414 6.11918 109.882 7.37542 108.924 9.65765L107.718 2.32812H104.704L107.442 17.0431H110.297C110.297 12.2193 111.483 8.98483 113.46 8.98483C115.437 8.98483 116.623 12.2193 116.623 17.0431H119.478L122.216 2.32812H119.202H119.207Z" fill="#202936"/><path d="M123.638 8.41434C123.638 4.90269 125.415 2.08398 129.566 2.08398C133.717 2.08398 135.494 4.90269 135.494 8.41434V10.9715C135.494 14.463 133.717 17.284 129.566 17.284C125.415 17.284 123.638 14.4653 123.638 10.9715V8.41434ZM132.559 8.5261C132.559 6.19246 131.773 4.84681 129.566 4.84681C127.359 4.84681 126.573 6.19022 126.573 8.5261V10.8597C126.573 13.1755 127.359 14.5189 129.566 14.5189C131.773 14.5189 132.559 13.1755 132.559 10.8597V8.5261Z" fill="#202936"/><path d="M148.831 6.72495C148.831 4.36448 147.178 2.43989 145.103 2.3326V2.32812H137.813V17.0431H140.693V11.124H142.475L145.611 17.0431H148.826L145.647 11.0458C147.456 10.6613 148.826 8.87307 148.826 6.72718L148.831 6.72495ZM144.454 8.37012H140.695V5.07754H144.454C145.244 5.07754 145.884 5.81518 145.884 6.72271C145.884 7.63024 145.244 8.36789 144.454 8.36789V8.37012Z" fill="#202936"/><path d="M168.442 17.2837C164.69 17.2837 162.879 15.0797 162.879 12.4108H165.921C165.977 13.9598 167.135 14.5209 168.442 14.5209C170.142 14.5209 170.795 13.7564 170.795 13.0076C170.795 12.185 170.274 11.7558 169.116 11.3468L166.763 10.5063C164.207 9.59206 163.329 8.35817 163.309 6.32406C163.291 3.91441 165.082 2.08594 168.312 2.08594C172.083 2.08594 173.634 4.49558 173.634 6.79123H170.592C170.424 5.37182 169.584 4.84876 168.315 4.84876C166.951 4.84876 166.242 5.50147 166.242 6.32406C166.242 7.22041 166.913 7.49982 168.371 8.02288L170.574 8.80747C172.759 9.59206 173.728 11.0115 173.728 12.9539C173.728 15.4195 171.805 17.2859 168.445 17.2859L168.442 17.2837Z" fill="#202936"/><path d="M162.241 2.32812H158.894L155.171 8.24718H154.103V2.32812H151.224V17.0431H154.103V11.124H155.171L159.084 17.0431H162.431L157.568 9.68448L162.241 2.32812Z" fill="#202936"/><defs><linearGradient id="nwg1" x1="16.89" y1="18.96" x2="25.8" y2="-0.17" gradientUnits="userSpaceOnUse"><stop stop-color="#0563EB"/><stop offset="1" stop-color="#6040FF"/></linearGradient><linearGradient id="nwg2" x1="4.35" y1="11.41" x2="22.19" y2="11.41" gradientUnits="userSpaceOnUse"><stop stop-color="#00BEFF"/><stop offset="1" stop-color="#0093FF"/></linearGradient><linearGradient id="nwg3" x1="0.72" y1="-0.16" x2="9.63" y2="18.98" gradientUnits="userSpaceOnUse"><stop stop-color="#00E355"/><stop offset="1" stop-color="#00CF62"/></linearGradient></defs></svg>
@@ -788,14 +878,14 @@
     <button class="adv"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7.5 18L7.5 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7.5 4L7.5 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="7.5" cy="15.5" r="2.5" stroke="currentColor" stroke-width="2"/><path d="M16.5 6L16.5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.5 20L16.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16.5" cy="8.5" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button>
   </div>
   <div class="top-right">
-    <button class="flow-toggle"><span class="pulse"></span>Flow AI<span style="background:rgba(255,255,255,.22);padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700">3</span></button>
-
     <!-- Product icons (official WORKS product icon set) -->
+    <div class="product-icons" style="display:flex;align-items:center;gap:0;margin:0 8px">
     <button class="app-ico" title="홈"><svg width="20" height="20" viewBox="0 0 48 48" fill="none"><path d="M39.92 16.8L26.69 5.78C25.13 4.48 22.87 4.48 21.31 5.78L8.08 16.8C6.76 17.9 6 19.53 6 21.24V38.39C6 40.38 7.61 41.99 9.6 41.99H18C18.55 41.99 19 41.54 19 40.99V26.99C19 26.44 19.45 25.99 20 25.99H28C28.55 25.99 29 26.44 29 26.99V40.99C29 41.54 29.45 41.99 30 41.99H38.4C40.39 41.99 42 40.38 42 38.39V21.24C42 19.52 41.24 17.89 39.92 16.8Z" fill="#0093FF"/></svg></button>
     <button class="app-ico" title="메시지"><svg width="20" height="20" viewBox="0 0 48 48" fill="none"><path d="M24 4.8C13.51 4.8 5 12.64 5 22.3V41.96C5 42.78 5.89 43.3 6.6 42.89L9.22 41.39C11.04 40.35 13.1 39.8 15.2 39.8H24C34.49 39.8 43 31.96 43 22.3C43 12.64 34.49 4.8 24 4.8Z" fill="#00CF62"/><path d="M14.75 24.55C15.99 24.55 17 23.54 17 22.3C17 21.06 15.99 20.05 14.75 20.05C13.51 20.05 12.5 21.06 12.5 22.3C12.5 23.54 13.51 24.55 14.75 24.55Z" fill="white"/><path d="M33.25 24.55C34.49 24.55 35.5 23.54 35.5 22.3C35.5 21.06 34.49 20.05 33.25 20.05C32.01 20.05 31 21.06 31 22.3C31 23.54 32.01 24.55 33.25 24.55Z" fill="white"/><path d="M24 24.55C25.24 24.55 26.25 23.54 26.25 22.3C26.25 21.06 25.24 20.05 24 20.05C22.76 20.05 21.75 21.06 21.75 22.3C21.75 23.54 22.76 24.55 24 24.55Z" fill="white"/></svg></button>
     <button class="app-ico" title="메일"><svg width="20" height="20" viewBox="0 0 48 48" fill="none"><path d="M24 13H7C5.9 13 5 13.9 5 15V38.4C5 40.39 6.61 42 8.6 42H38.43L24 13Z" fill="#00CF62"/><path d="M38.43 42H39.4C41.39 42 43 40.39 43 38.4V15C43 13.9 42.1 13 41 13H24V31.51L38.43 42Z" fill="#00B159"/><path d="M40 18.66V10.6C40 8.61 38.39 7 36.4 7H11.6C9.61 7 8 8.61 8 10.6V18.66C8 19.43 8.37 20.15 8.99 20.6L24 31.51L39.01 20.6C39.63 20.15 40 19.43 40 18.66Z" fill="#E1EEF4"/><path d="M33.38 14H14.62C14.28 14 14 13.72 14 13.38V12.62C14 12.28 14.28 12 14.62 12H33.38C33.72 12 34 12.28 34 12.62V13.38C34 13.72 33.72 14 33.38 14ZM28 19.38V18.62C28 18.28 27.72 18 27.38 18H14.62C14.28 18 14 18.28 14 18.62V19.38C14 19.72 14.28 20 14.62 20H27.38C27.72 20 28 19.72 28 19.38Z" fill="#2EA8FF"/></svg></button>
     <button class="app-ico" title="캘린더"><svg width="20" height="20" viewBox="0 0 48 48" fill="none"><path d="M42 9.6C42 7.61 40.39 6 38.4 6H9.6C7.61 6 6 7.61 6 9.6V15H42V9.6Z" fill="#5B42DE"/><path d="M6 15V38.4C6 40.39 7.61 42 9.6 42H38.4C40.39 42 42 40.39 42 38.4V15H6Z" fill="#7C66FF"/><path d="M30.34 20.29L26.44 22.91C26.19 23.08 26.12 23.42 26.29 23.67L26.8 24.42C26.97 24.67 27.31 24.74 27.56 24.57L30.2 22.79V34.82C30.2 35.12 30.44 35.37 30.75 35.37H31.66C31.96 35.37 32.21 35.13 32.21 34.82V20.66C32.21 20.36 31.97 20.11 31.66 20.11H30.89C30.7 20.11 30.51 20.17 30.35 20.28L30.34 20.29Z" fill="white"/><path d="M22 27.52C23.02 26.73 23.68 25.58 23.68 24.29C23.68 21.91 21.5 19.98 18.82 19.98C16.53 19.98 14.62 21.35 14.1 23.26C14.01 23.59 14.24 23.92 14.58 23.96L15.5 24.05C15.74 24.07 15.98 23.94 16.06 23.71C16.38 22.71 17.51 21.98 18.83 21.98C20.41 21.98 21.69 23.02 21.69 24.29C21.69 25.56 20.41 26.6 18.83 26.6H17.7C17.4 26.6 17.15 26.84 17.15 27.15V28.06C17.15 28.36 17.39 28.61 17.7 28.61H18.83C20.66 28.61 22.15 29.75 22.15 31.15C22.15 32.55 20.66 33.69 18.83 33.69C17.33 33.69 16.02 32.89 15.63 31.81C15.54 31.57 15.3 31.44 15.05 31.47L14.13 31.6C13.79 31.65 13.58 31.99 13.68 32.32C14.29 34.28 16.38 35.7 18.82 35.7C21.75 35.7 24.14 33.66 24.14 31.16C24.14 29.68 23.29 28.37 22 27.54V27.52Z" fill="white"/><circle cx="34.75" cy="10.5" r="1.75" fill="white"/><circle cx="13.25" cy="10.5" r="1.75" fill="white"/></svg></button>
     <button class="app-ico" title="드라이브"><svg width="20" height="20" viewBox="0 0 48 48" fill="none"><path d="M24 24L41.69 13.78C41.49 13.44 41.21 13.15 40.85 12.94L25.14 3.88C24.79 3.68 24.39 3.57 24 3.57V24Z" fill="#2CE765"/><path d="M24 24V44.43C24.39 44.43 24.79 44.33 25.14 44.12L40.85 35.05C41.2 34.85 41.49 34.56 41.69 34.21L24 23.99V24Z" fill="#6040FF"/><path d="M41.69 34.22C41.89 33.88 42 33.49 42 33.08V14.93C42 14.52 41.89 14.13 41.69 13.79L24 24.01L41.69 34.23V34.22Z" fill="#7F56FF"/><path d="M24 3.57C23.61 3.57 23.21 3.67 22.86 3.88L7.14 12.95C6.79 13.15 6.5 13.44 6.3 13.79L23.99 24.01V3.57H24Z" fill="#70F864"/><path d="M6.31 34.22C6.51 34.56 6.79 34.85 7.15 35.06L22.86 44.13C23.21 44.33 23.61 44.44 24 44.44V24.01L6.31 34.23V34.22Z" fill="#128FFF"/><path d="M24 24L6.31 13.78C6.11 14.12 6 14.51 6 14.92V33.07C6 33.48 6.11 33.87 6.31 34.21L24 23.99V24Z" fill="#27C0FF"/></svg></button>
+    </div>
     <div class="top-div"></div>
 
     <!-- Utility (lined) -->
@@ -817,16 +907,16 @@
       </div>
 
       <div class="sb-quick">
-        <div class="qf"><div class="qf-num">12</div><div class="qf-label">안읽음</div></div>
-        <div class="qf"><div class="qf-ico" style="color:var(--orange)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12.0066 4L9.526 9.626L3.25 10.094L8.114 13.953L6.51 20L12.0066 16.62M11.994 4L14.474 9.626L20.75 10.094L15.886 13.953L17.49 20L11.994 16.62" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="qf-label">중요</div></div>
-        <div class="qf"><div class="qf-ico" style="color:var(--g650)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12.93 7.75V12L16.24 14.36" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.43 12C4.43 7.3 8.24 3.5 12.93 3.5C17.63 3.5 21.43 7.3 21.43 12C21.43 16.69 17.63 20.5 12.93 20.5C10.9 20.5 9.05 19.79 7.59 18.61" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.79 12.47C6.79 12.47 5.65 13.91 4.91 14.83C3.8 14.28 2.07 13.42 2.07 13.42" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="qf-label">리마인드</div></div>
-        <div class="qf to-badge"><div class="qf-ico">TO</div><div class="qf-label">받는사람</div></div>
+        <div class="qf"><div class="qf-top"><div class="qf-num">12</div></div><div class="qf-label">안읽음</div></div>
+        <div class="qf"><div class="qf-top"><div class="qf-ico" style="color:var(--g650)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12.0066 4L9.526 9.626L3.25 10.094L8.114 13.953L6.51 20L12.0066 16.62M11.994 4L14.474 9.626L20.75 10.094L15.886 13.953L17.49 20L11.994 16.62" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="qf-label">중요</div></div>
+        <div class="qf"><div class="qf-top"><div class="qf-ico" style="color:var(--g650)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12.93 7.75V12L16.24 14.36" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.43 12C4.43 7.3 8.24 3.5 12.93 3.5C17.63 3.5 21.43 7.3 21.43 12C21.43 16.69 17.63 20.5 12.93 20.5C10.9 20.5 9.05 19.79 7.59 18.61" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.79 12.47C6.79 12.47 5.65 13.91 4.91 14.83C3.8 14.28 2.07 13.42 2.07 13.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="qf-label">리마인드</div></div>
+        <div class="qf to-badge"><div class="qf-top"><div class="qf-ico">TO</div></div><div class="qf-label">받는사람</div></div>
       </div>
 
-      <div class="sb-flow-card" onclick="openDraft()">
-        <div class="sb-flow-title">✨ FLOW AI</div>
-        <div class="sb-flow-desc">놓칠 뻔한 액션 아이템<br/>3개를 찾았어요</div>
-        <div class="sb-flow-cta">지금 확인
+      <div class="sb-flow-card">
+        <div class="sb-flow-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>Flow AI</div>
+        <div class="sb-flow-desc">지금 해야 할 일<br/>3개를 찾았어요</div>
+        <div class="sb-flow-cta" onclick="document.querySelector('.app').classList.remove('flow-collapsed')">지금 확인
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M8.75 4.5L16.25 12L8.75 19.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
@@ -864,7 +954,7 @@
   <!-- ============ MAIN ============ -->
   <main class="main">
     <div class="toolbar">
-      <button class="tb-chk"><div class="box"></div><svg class="cv" width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4.5 8.75L12 16.25L19.5 8.75" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <div class="tb-chk-wrap"><div class="box"></div><span class="cv"><svg width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4.5 8.75L12 16.25L19.5 8.75" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
       <button class="tb-btn">읽음</button>
       <button class="tb-btn">삭제</button>
       <button class="tb-btn split">스팸신고 <svg class="ca" width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4.5 8.75L12 16.25L19.5 8.75" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -877,9 +967,7 @@
       <button class="tb-btn split">리마인드 <svg class="ca" width="10" height="10" viewBox="0 0 24 24" fill="none"><path d="M4.5 8.75L12 16.25L19.5 8.75" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <button class="tb-ico" title="더 보기"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></button>
       <div class="tb-spacer"></div>
-      <button class="tb-ico" title="필터"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M7.5 18L7.5 20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M7.5 4L7.5 13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="7.5" cy="15.5" r="2.5" stroke="currentColor" stroke-width="2"/><path d="M16.5 6L16.5 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16.5 20L16.5 11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="16.5" cy="8.5" r="2.5" stroke="currentColor" stroke-width="2"/></svg></button>
-      <button class="tb-ico" title="최근"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12.93 7.75V12L16.24 14.36" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.43 12C4.43 7.3 8.24 3.5 12.93 3.5C17.63 3.5 21.43 7.3 21.43 12C21.43 16.69 17.63 20.5 12.93 20.5C10.9 20.5 9.05 19.79 7.59 18.61" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.79 12.47C6.79 12.47 5.65 13.91 4.91 14.83C3.8 14.28 2.07 13.42 2.07 13.42" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-      <button class="tb-ico active" title="목록"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M9 6L19 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M9 18H19" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="5.25" cy="6" r="1.25" fill="currentColor"/><circle cx="5.25" cy="12" r="1.25" fill="currentColor"/><circle cx="5.25" cy="18" r="1.25" fill="currentColor"/></svg></button>
+      <button class="tb-ico active" id="flowToggleBtn" title="Flow AI 패널" onclick="document.querySelector('.app').classList.toggle('flow-collapsed')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
     </div>
 
     <div class="mail-list">
@@ -892,7 +980,7 @@
         <span class="ml-from">윤지호 팀장</span>
         <span class="ml-to-badge active">TO</span>
         <span class="ml-subj-wrap">
-          <span class="ml-chip flow">✨ FLOW</span>
+          <span class="ml-chip flow"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg> Flow AI</span>
           <span class="ml-subj">Aurora 프로젝트 런칭 일정 조율 요청 - 안녕하세요, 지호입니다. 이번 주 중으로 런칭 시점을 확정하고 싶은데...</span>
         </span>
         <span class="ml-time">16:22</span>
@@ -906,7 +994,7 @@
         <span class="ml-from">Maya Tanaka</span>
         <span class="ml-to-badge active">TO</span>
         <span class="ml-subj-wrap">
-          <span class="ml-chip flow">✨ FLOW</span>
+          <span class="ml-chip flow"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg> Flow AI</span>
           <span class="ml-chip ext">외부</span>
           <span class="ml-subj">Re: Partnership proposal review — Could you confirm the revised terms by Friday? Our legal team...</span>
         </span>
@@ -1002,7 +1090,7 @@
         <span class="ml-from">김도현 PM</span>
         <span class="ml-to-badge active">TO</span>
         <span class="ml-subj-wrap">
-          <span class="ml-chip flow">✨ FLOW</span>
+          <span class="ml-chip flow"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg> Flow AI</span>
           <span class="ml-subj">스프린트 회고 일정 확인 부탁드립니다 🙏 — 이번 주 내로 시간 조율해서 공유드리면 감사하겠습니다...</span>
         </span>
         <span class="ml-time">4. 19. 17:02</span>
@@ -1143,7 +1231,6 @@
         <div class="flow-name">Flow AI<span class="beta">BETA</span></div>
         <div class="flow-sub">당신이 놓친 것을 먼저 찾아드려요</div>
       </div>
-      <button class="app-ico more" style="width:28px;height:28px;margin:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></button>
     </div>
 
     <div class="flow-status">
@@ -1183,14 +1270,8 @@
           <span class="f-src drive">파일 2</span>
         </div>
         <div class="f-actions">
-          <button class="f-btn primary" onclick="openDraft()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 18C20 13.3 16.19 9.5 11.5 9.5H4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 5L4 9.5L8 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            메일 초안
-          </button>
-          <button class="f-btn ghost" onclick="openMsg()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 11.5C21 16.75 16.97 21 12 21C10.79 21 9.63 20.77 8.57 20.36L4 21.5L5.14 16.93C4.73 15.87 4.5 14.71 4.5 13.5C4.5 8.25 8.53 4 13.5 4C18.47 4 21 7.5 21 11.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-            메시지로
-          </button>
+          <button class="f-btn primary" onclick="openDraft()">메일 초안</button>
+          <button class="f-btn ghost" onclick="openMsg()">메시지로</button>
           <button class="f-btn ghost">무시</button>
         </div>
       </div>
@@ -1232,10 +1313,7 @@
           <span class="f-src cal">일정 1</span>
         </div>
         <div class="f-actions">
-          <button class="f-btn primary" onclick="openMsg()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 11.5C21 16.75 16.97 21 12 21C10.79 21 9.63 20.77 8.57 20.36L4 21.5L5.14 16.93C4.73 15.87 4.5 14.71 4.5 13.5C4.5 8.25 8.53 4 13.5 4C18.47 4 21 7.5 21 11.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-            메시지로 답장
-          </button>
+          <button class="f-btn primary" onclick="openMsg()">메시지로 답장</button>
           <button class="f-btn ghost">일정 공유</button>
         </div>
       </div>
@@ -1267,11 +1345,6 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:var(--indigo)"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="currentColor"/></svg>
         <input placeholder="Flow에게 물어보기 — 예: 오늘 답장 필요한 메일" />
         <button class="ask-send" title="보내기"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3.59 6.02C3.02 4.58 4.5 3.19 5.9 3.86L20.16 10.65C21.3 11.19 21.3 12.81 20.16 13.35L5.9 20.14C4.5 20.81 3.02 19.42 3.59 17.98L5.78 12.43C5.89 12.15 5.89 11.85 5.78 11.57L3.59 6.02Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
-      </div>
-      <div class="ask-chips">
-        <span class="ask-chip">내일 보고 요약</span>
-        <span class="ask-chip">오늘 답장 필요한 메일</span>
-        <span class="ask-chip">Aurora 진행률</span>
       </div>
     </div>
   </aside>
@@ -1622,6 +1695,15 @@
 <div class="dr-toast" id="toast">✨ 방금 AI가 다시 썼어요</div>
 
 <script>
+  // ===== Sidebar collapse toggle =====
+  const hambBtn = document.getElementById('hambBtn');
+  const appEl = document.querySelector('.app');
+  if(hambBtn && appEl){
+    hambBtn.addEventListener('click', ()=>{
+      appEl.classList.toggle('sb-collapsed');
+    });
+  }
+
   // ===== Generic interactions =====
   document.querySelectorAll('.ml-row').forEach(r=>{
     r.addEventListener('click',(e)=>{
