@@ -19,9 +19,9 @@
     --g350:#DDDDDD; --g300:#EEEEEE; --g200:#F0F0F0;
     --g150:#F5F5F6; --g100:#FAFAFA; --white:#FFFFFF;
 
-    --grad-flow:linear-gradient(135deg,#B09BE5 0%, #7EAEE0 55%, #6BBCD8 100%);
-    --grad-flow-vivid:linear-gradient(135deg,#9B7FD4 0%, #6BAED4 100%);
-    --grad-flow-soft:linear-gradient(135deg,#EEE8FB 0%, #E3EEFB 55%, #DCF0F7 100%);
+    --grad-flow:linear-gradient(135deg,#9B78EE 0%, #5AAAF0 55%, #3DC4E8 100%);
+    --grad-flow-vivid:linear-gradient(135deg,#8A63E8 0%, #4AAAF0 100%);
+    --grad-flow-soft:linear-gradient(135deg,#EAE2FD 0%, #DCEEFF 55%, #D3F3FB 100%);
     --sh-2:0 4px 16px rgba(0,0,0,.06);
     --sh-flow:0 8px 24px rgba(135,110,220,.22);
     --sh-3:0 20px 60px rgba(0,0,0,.15);
@@ -82,17 +82,39 @@
 
   /* ====== Main grid ====== */
   .app{display:grid;grid-template-columns:240px 1fr 380px;height:calc(100vh - 56px);transition:grid-template-columns .25s cubic-bezier(.4,.2,.2,1)}
-  .app.sb-collapsed{grid-template-columns:0px 1fr 380px}
-  .app.sb-collapsed .sidebar{transform:translateX(-100%);opacity:0;pointer-events:none;transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
-  .sidebar{transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
+  .app.sb-collapsed{grid-template-columns:64px 1fr 380px}
+  .sidebar{transition:none}
   .app.flow-collapsed{grid-template-columns:240px 1fr 0px}
+  .app.sb-collapsed.flow-collapsed{grid-template-columns:64px 1fr 0px}
   .app.flow-collapsed aside.flow{transform:translateX(100%);opacity:0;pointer-events:none;transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
   aside.flow{transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
+
+  /* ====== Mini sidebar (collapsed) ====== */
+  .app.sb-collapsed .sb-quick,
+  .app.sb-collapsed .sb-flow-card,
+  .app.sb-collapsed .sb-group,
+  .app.sb-collapsed .sb-sub,
+  .app.sb-collapsed .sb-bottom,
+  .app.sb-collapsed .btn-compose.ghost { display:none }
+
+  .app.sb-collapsed .sb-label,
+  .app.sb-collapsed .sb-item .cnt { display:none }
+
+  .app.sb-collapsed .sb-scroll { padding:12px 0 8px }
+  .app.sb-collapsed .sb-compose { grid-template-columns:1fr; margin-bottom:12px; padding:0 12px }
+  .app.sb-collapsed .btn-compose.primary {
+    width:40px; height:40px; border-radius:50%; padding:0; margin-left:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .app.sb-collapsed .sb-nav { padding:0 8px }
+  .app.sb-collapsed .sb-item {
+    padding:9px 0 9px 14px; border-radius:8px;
+  }
 
   /* ====== Sidebar ====== */
   .sidebar{background:var(--white);border-right:1px solid var(--g300);
     display:flex;flex-direction:column;overflow:hidden}
-  .sb-scroll{flex:1;overflow-y:auto;padding:16px 14px 8px}
+  .sb-scroll{flex:1;overflow-y:auto;padding:16px 14px 8px;min-width:240px}
 
   .sb-compose{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
   .btn-compose{height:40px;border-radius:8px;font-weight:700;font-size:13px;
@@ -435,14 +457,15 @@
   }
   .dr-tone-card{
     border-radius:12px;padding:12px 14px;
-    background:var(--grad-flow-soft);
-    border:1px solid #E0E6FF;
+    background:linear-gradient(var(--white),var(--white)) padding-box,
+               linear-gradient(135deg,rgba(155,120,238,.7) 0%,rgba(90,170,240,.7) 55%,rgba(61,196,232,.7) 100%) border-box;
+    border:1.5px solid transparent;
     display:flex;align-items:center;gap:12px;font-size:12px;
   }
   .dr-tone-ico{
-    width:34px;height:34px;border-radius:10px;background:var(--white);
-    display:flex;align-items:center;justify-content:center;color:var(--indigo);
-    flex-shrink:0;box-shadow:0 2px 6px rgba(80,70,229,.15);
+    width:34px;height:34px;border-radius:10px;background:var(--g100);
+    display:flex;align-items:center;justify-content:center;color:var(--g900);
+    flex-shrink:0;
   }
   .dr-tone-body{flex:1;line-height:1.5}
   .dr-tone-body b{color:var(--indigo)}
@@ -451,7 +474,7 @@
   }
   .dr-tone-tag{
     padding:2px 8px;border-radius:10px;background:var(--white);
-    border:1px solid #D7DFFF;font-size:10px;color:var(--indigo);font-weight:700;
+    border:1px solid var(--g300);font-size:10px;color:var(--g750);font-weight:600;
   }
   .dr-relearn{
     padding:6px 10px;border-radius:8px;background:var(--white);
@@ -475,7 +498,7 @@
     background:var(--g150);border-radius:14px;font-size:12px;color:var(--g900);
   }
   .dr-recp-avt{
-    width:18px;height:18px;border-radius:50%;background:#5046E5;color:var(--white);
+    width:18px;height:18px;border-radius:50%;background:#F9A826;color:var(--white);
     font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;
   }
   .dr-recp .x{color:var(--g580);margin-left:2px;font-weight:700;cursor:pointer}
@@ -497,17 +520,8 @@
     outline:none;min-height:240px;
   }
   .dr-draft p{margin:0 0 14px}
-  .dr-draft .hl-edit{
-    background:linear-gradient(180deg, transparent 60%, rgba(80,70,229,.15) 60%);
-    transition:background .3s;
-  }
-  .dr-draft .hl-pop{
-    animation:hlPop .8s ease;
-  }
-  @keyframes hlPop{
-    0%{background:rgba(80,70,229,.4)}
-    100%{background:transparent}
-  }
+  .dr-draft .hl-edit{background:transparent}
+  .dr-draft .hl-pop{animation:none}
 
   /* Inline action bubble (appears on select) */
   .dr-bubble{
@@ -525,7 +539,7 @@
   /* Footer actions */
   .dr-foot{
     border-top:1px solid var(--g300);padding:12px 20px;flex-shrink:0;
-    display:flex;align-items:center;gap:8px;background:var(--g100);
+    display:flex;align-items:center;gap:8px;background:var(--white);
   }
   .dr-send{
     height:38px;padding:0 18px;border-radius:10px;background:var(--blue);color:var(--white);
@@ -545,107 +559,120 @@
 
   /* Right: AI Canvas controls */
   .dr-side{
-    background:linear-gradient(180deg, #FBFBFD 0%, #F6F6FB 100%);
-    border-left:1px solid var(--g300);overflow-y:auto;padding:18px 18px 24px;
+    background:var(--g100);
+    border-left:1px solid var(--g300);overflow-y:auto;padding:20px 20px 24px;
   }
   .dr-side-head{
-    display:flex;align-items:center;gap:8px;margin-bottom:6px;
+    display:flex;align-items:center;gap:10px;margin-bottom:6px;
   }
-  .dr-side-title{font-size:14px;font-weight:800;letter-spacing:-.2px}
-  .dr-side-sub{font-size:11px;color:var(--g650);line-height:1.5;margin-bottom:18px}
+  .dr-side-head-ico{
+    width:30px;height:30px;border-radius:9px;background:var(--grad-flow);
+    display:flex;align-items:center;justify-content:center;color:var(--white);
+    box-shadow:0 4px 10px rgba(80,70,229,.2);flex-shrink:0;
+  }
+  .dr-side-title{font-size:15px;font-weight:800;letter-spacing:-.3px;color:var(--g900)}
+  .dr-side-sub{font-size:11.5px;color:var(--g650);line-height:1.55;margin-bottom:4px}
 
   .dr-grp-label{
-    font-size:11px;color:var(--g650);font-weight:800;letter-spacing:.4px;
-    text-transform:uppercase;margin:16px 0 8px;display:flex;align-items:center;gap:6px;
+    font-size:13px;color:var(--g900);font-weight:700;letter-spacing:0;
+    text-transform:none;margin:26px 0 10px;display:flex;align-items:center;gap:7px;
   }
+  .dr-grp-label svg{color:var(--g900);flex-shrink:0;width:16px;height:16px;stroke-width:1.8}
   .dr-grp-label:first-child{margin-top:0}
 
   /* Tone presets */
-  .tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+  .tone-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
   .tone-btn{
-    padding:10px 10px;border-radius:10px;background:var(--white);
-    border:1.5px solid var(--g300);font-size:12px;color:var(--g800);font-weight:600;
-    display:flex;flex-direction:column;align-items:flex-start;gap:2px;text-align:left;
-    transition:all .12s;
+    padding:11px 12px;border-radius:10px;background:var(--white);
+    border:1px solid var(--g300);font-size:12.5px;color:var(--g800);font-weight:600;
+    display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;
+    transition:all .15s ease;
   }
-  .tone-btn:hover{border-color:var(--g400)}
+  .tone-btn:hover{border-color:var(--g400);box-shadow:0 2px 6px rgba(0,0,0,.04)}
   .tone-btn.active{
-    border-color:var(--indigo);background:var(--indigo-lt);color:var(--indigo);
-    box-shadow:0 0 0 3px rgba(80,70,229,.1);
+    border-color:var(--g900);color:var(--g900);background:var(--white);
   }
-  .tone-btn .t-ico{font-size:16px}
+  .tone-btn .t-ico{display:flex;color:var(--g580)}
+  .tone-btn .t-ico svg{width:15px;height:15px;stroke-width:1.6;fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round}
+  .tone-btn.active .t-ico{color:var(--g800)}
   .tone-btn .t-desc{font-size:10px;color:var(--g650);font-weight:500}
-  .tone-btn.active .t-desc{color:var(--indigo);opacity:.85}
+  .tone-btn.active .t-desc{color:var(--g750)}
 
   /* Slider-like length */
   .len-wrap{
-    display:flex;background:var(--white);border:1.5px solid var(--g300);border-radius:10px;
-    padding:3px;position:relative;
+    display:flex;background:var(--white);border:1px solid var(--g300);border-radius:10px;
+    padding:3px;position:relative;box-shadow:0 1px 2px rgba(0,0,0,.03);
   }
   .len-seg{
-    flex:1;padding:7px 0;text-align:center;font-size:12px;color:var(--g750);font-weight:600;
+    flex:1;padding:8px 0;text-align:center;font-size:12.5px;color:var(--g750);font-weight:600;
     border-radius:7px;cursor:pointer;z-index:1;transition:color .15s;
   }
-  .len-seg.active{color:var(--white)}
+  .len-seg.active{color:var(--g900)}
   .len-pill{
-    position:absolute;top:3px;bottom:3px;left:3px;width:calc(33.33% - 3px);
-    background:var(--grad-flow);border-radius:7px;
+    position:absolute;top:2px;bottom:2px;left:2px;width:calc(33.33% - 1px);
+    background:var(--white);border:1px solid var(--g900);border-radius:7px;
     transition:transform .3s cubic-bezier(.4,.6,.2,1);
   }
 
   /* Quick refine chips */
   .refine-chips{display:flex;flex-wrap:wrap;gap:6px}
   .ref-chip{
-    padding:6px 10px;border-radius:14px;background:var(--white);
-    border:1px solid var(--g300);font-size:11.5px;color:var(--g800);font-weight:600;
-    display:inline-flex;align-items:center;gap:4px;
+    padding:7px 12px;border-radius:16px;background:var(--white);
+    border:1px solid var(--g300);font-size:12px;color:var(--g800);font-weight:500;
+    display:inline-flex;align-items:center;gap:4px;transition:all .12s;
   }
-  .ref-chip:hover{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-lt)}
+  .ref-chip:hover{border-color:var(--g900);color:var(--g900);background:var(--white);
+    box-shadow:0 2px 6px rgba(0,0,0,.06)}
 
   /* Translate smart */
   .trans-card{
-    background:var(--white);border:1.5px solid var(--g300);border-radius:12px;
-    padding:12px;
+    background:var(--white);border:1px solid var(--g300);border-radius:12px;
+    padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.03);
   }
   .trans-top{
     display:flex;align-items:center;gap:8px;
   }
   .trans-lang{
-    padding:5px 10px;border-radius:8px;background:var(--g150);font-size:12px;color:var(--g800);
-    font-weight:700;display:inline-flex;align-items:center;gap:4px;cursor:pointer;
+    flex:1;padding:8px 12px;border-radius:8px;background:var(--g150);font-size:12.5px;
+    color:var(--g900);font-weight:600;display:inline-flex;align-items:center;
+    justify-content:center;gap:6px;cursor:pointer;transition:all .12s;
   }
+  .trans-lang:hover{background:var(--g200)}
   .trans-swap{
-    width:28px;height:28px;border-radius:8px;background:var(--white);
+    width:32px;height:32px;border-radius:8px;background:var(--white);
     border:1px solid var(--g300);display:flex;align-items:center;justify-content:center;
-    color:var(--g650);
+    color:var(--g650);flex-shrink:0;transition:all .12s;
   }
-  .trans-swap:hover{border-color:var(--indigo);color:var(--indigo)}
+  .trans-swap:hover{border-color:var(--g800);color:var(--g900);background:var(--g100)}
   .trans-apply{
-    margin-top:10px;width:100%;height:36px;border-radius:8px;background:var(--g900);
-    color:var(--white);font-weight:700;font-size:12px;
-    display:inline-flex;align-items:center;justify-content:center;gap:6px;
+    margin-top:10px;width:100%;height:38px;border-radius:8px;background:var(--g900);
+    color:var(--white);font-weight:600;font-size:12.5px;
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:all .12s;
   }
-  .trans-apply:hover{background:#000}
-  .trans-apply.applied{background:var(--green-dk)}
+  .trans-apply:hover{background:#000;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+  .trans-apply.applied{background:var(--white);color:var(--indigo);border:1.5px solid var(--indigo)}
+  .trans-apply.applied:hover{background:var(--indigo-lt);box-shadow:none;transform:none}
   .trans-hint{
-    margin-top:8px;font-size:10.5px;color:var(--g650);line-height:1.5;
+    margin-top:10px;font-size:11px;color:var(--g650);line-height:1.5;
   }
 
   /* Regenerate bar */
   .regen{
-    margin-top:18px;padding:12px;border-radius:12px;
-    background:var(--white);border:1.5px dashed var(--indigo);
-    display:flex;align-items:center;gap:10px;
+    margin-top:22px;padding:14px;border-radius:12px;
+    background:var(--white);border:1px solid var(--g300);
+    display:flex;align-items:center;gap:12px;
   }
   .regen-ico{
-    width:32px;height:32px;border-radius:10px;background:var(--indigo-lt);
-    display:flex;align-items:center;justify-content:center;color:var(--indigo);
+    width:36px;height:36px;border-radius:10px;background:var(--g150);
+    display:flex;align-items:center;justify-content:center;color:var(--g800);
+    flex-shrink:0;
   }
-  .regen-body{flex:1;font-size:11.5px;color:var(--g800);line-height:1.4}
+  .regen-body{flex:1;font-size:12px;color:var(--g900);line-height:1.45;font-weight:500}
   .regen-btn{
-    padding:6px 10px;border-radius:8px;background:var(--indigo);color:var(--white);
-    font-size:11px;font-weight:700;
+    padding:8px 14px;border-radius:8px;background:var(--g900);color:var(--white);
+    font-size:12px;font-weight:700;transition:all .12s;flex-shrink:0;
   }
+  .regen-btn:hover{background:#000;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
 
   /* ============ AI loading overlay (briefly when generating) ============ */
   .dr-loading{
@@ -686,12 +713,12 @@
     box-shadow:var(--sh-3);animation:draftIn .35s cubic-bezier(.2,.8,.2,1);
   }
   .msg-top{
-    height:56px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 18px;
+    height:60px;flex-shrink:0;display:flex;align-items:center;gap:10px;padding:0 20px;
     border-bottom:1px solid var(--g300);
   }
   .msg-top-left{display:flex;align-items:center;gap:10px}
   .msg-avt{
-    width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#5046E5,#7C3AED);
+    width:36px;height:36px;border-radius:50%;background:#00C7B7;
     color:var(--white);font-weight:700;font-size:14px;
     display:flex;align-items:center;justify-content:center;
   }
@@ -700,17 +727,17 @@
   .msg-top .sp{flex:1}
   .msg-mini-brand{
     display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:12px;
-    background:var(--grad-flow-soft);border:1px solid #E0E6FF;
-    font-size:11px;color:var(--indigo);font-weight:800;
+    background:var(--white);border:1px solid var(--g300);
+    font-size:11px;color:var(--g800);font-weight:700;
   }
   .msg-mini-brand .b{
-    width:16px;height:16px;border-radius:5px;background:var(--grad-flow);color:var(--white);
-    display:flex;align-items:center;justify-content:center;
+    width:14px;height:14px;display:flex;align-items:center;justify-content:center;
+    color:var(--g900);
   }
 
   /* Chat preview */
   .msg-chat{
-    flex:1;overflow-y:auto;padding:18px 20px;background:var(--g100);
+    flex:1;overflow-y:auto;padding:18px 20px;background:var(--white);
     display:flex;flex-direction:column;gap:10px;min-height:0;
   }
   .msg-date{
@@ -721,7 +748,7 @@
     word-break:break-word;
   }
   .msg-bubble.them{
-    background:var(--white);color:var(--g900);border:1px solid var(--g300);
+    background:var(--g100);color:var(--g900);border:1px solid var(--g200);
     border-top-left-radius:4px;align-self:flex-start;
   }
   .msg-meta{
@@ -734,12 +761,15 @@
 
   /* Context card (AI context source) */
   .msg-ctx-card{
-    align-self:stretch;background:var(--white);border:1px solid #E0E6FF;border-radius:12px;
-    padding:12px;display:flex;gap:10px;align-items:flex-start;
+    align-self:stretch;border-radius:12px;padding:12px;
+    background:linear-gradient(var(--white),var(--white)) padding-box,
+               linear-gradient(135deg,rgba(155,120,238,.7) 0%,rgba(90,170,240,.7) 55%,rgba(61,196,232,.7) 100%) border-box;
+    border:1.5px solid transparent;
+    display:flex;gap:10px;align-items:flex-start;
   }
   .msg-ctx-ico{
-    width:28px;height:28px;border-radius:8px;background:var(--indigo-lt);
-    display:flex;align-items:center;justify-content:center;color:var(--indigo);flex-shrink:0;
+    width:28px;height:28px;border-radius:8px;background:var(--g100);
+    display:flex;align-items:center;justify-content:center;color:var(--g900);flex-shrink:0;
   }
   .msg-ctx-body{font-size:12px;color:var(--g800);line-height:1.5;flex:1}
   .msg-ctx-body b{color:var(--g900)}
@@ -747,65 +777,66 @@
     display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;
   }
   .msg-ctx-body .tone span{
-    padding:2px 8px;border-radius:10px;background:var(--indigo-lt);
-    color:var(--indigo);font-size:10px;font-weight:700;
+    padding:2px 8px;border-radius:10px;background:var(--white);
+    border:1px solid var(--g300);color:var(--g750);font-size:10px;font-weight:600;
   }
 
   /* Draft bubble (pending) */
   .msg-draft-bubble{
-    background:var(--white);color:var(--g900);
-    border:1.5px solid transparent;
-    background:linear-gradient(var(--white),var(--white)) padding-box,
-               var(--grad-flow) border-box;
+    color:var(--g900);background:var(--g150);
+    border:1px solid var(--g300);
     border-radius:14px;border-top-right-radius:4px;
     padding:10px 12px;font-size:13px;line-height:1.55;
     max-width:72%;align-self:flex-end;position:relative;
-    box-shadow:0 4px 14px rgba(80,70,229,.1);
   }
   .msg-draft-tag{
     position:absolute;top:-10px;right:10px;
-    background:var(--grad-flow);color:var(--white);
-    font-size:10px;font-weight:800;padding:2px 8px;border-radius:8px;
+    background:var(--g900);color:var(--white);
+    font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;
     display:inline-flex;align-items:center;gap:3px;
   }
   .msg-draft-bubble[contenteditable="true"]:focus{outline:none}
 
   /* Controls row */
   .msg-controls{
-    padding:10px 16px 0;flex-shrink:0;background:var(--white);
-    border-top:1px solid var(--g300);display:flex;gap:6px;flex-wrap:wrap;
+    padding:12px 18px;flex-shrink:0;background:var(--white);
+    border-top:1px solid var(--g300);display:flex;gap:7px;flex-wrap:wrap;
     align-items:center;
   }
+  .msg-ctl-div{width:1px;height:18px;background:var(--g300);margin:0 4px;flex-shrink:0}
   .msg-ctl-label{
-    font-size:10px;color:var(--g650);font-weight:800;letter-spacing:.4px;
-    text-transform:uppercase;margin-right:2px;
+    font-size:11px;color:var(--g750);font-weight:700;margin-right:2px;
   }
   .msg-chip{
-    padding:5px 10px;border-radius:14px;background:var(--white);
-    border:1px solid var(--g300);font-size:11.5px;color:var(--g800);font-weight:600;
-    display:inline-flex;align-items:center;gap:4px;
+    padding:6px 12px;border-radius:16px;background:var(--white);
+    border:1px solid var(--g300);font-size:12px;color:var(--g800);font-weight:500;
+    display:inline-flex;align-items:center;gap:4px;transition:all .12s;
   }
-  .msg-chip:hover{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-lt)}
-  .msg-chip.active{border-color:var(--indigo);color:var(--indigo);background:var(--indigo-lt)}
+  .msg-chip:hover{border-color:var(--g900);color:var(--g900);box-shadow:0 2px 6px rgba(0,0,0,.06)}
+  .msg-chip.active{border-color:var(--g900);color:var(--g900);background:var(--white);font-weight:600}
   .msg-chip.trans{
-    border-color:#BFDBFE;color:var(--blue-dk);background:var(--blue-lt);
+    border-color:transparent;color:var(--white);background:var(--g900);font-weight:600;
   }
-  .msg-chip.trans.applied{background:var(--green);color:var(--white);border-color:var(--green)}
+  .msg-chip.trans:hover{background:#000;border-color:transparent;color:var(--white)}
+  .msg-chip.trans.applied{
+    background:var(--white);color:var(--indigo);border:1.5px solid var(--indigo);
+  }
+  .msg-chip.trans.applied:hover{background:var(--indigo-lt);color:var(--indigo);border-color:var(--indigo)}
 
   /* Composer */
   .msg-foot{
-    padding:12px 16px 14px;border-top:1px solid var(--g300);background:var(--white);
+    padding:14px 18px 16px;border-top:1px solid var(--g300);background:var(--white);
     flex-shrink:0;
   }
   .msg-input-row{
     display:flex;align-items:flex-end;gap:8px;
-    border:1.5px solid var(--g300);border-radius:14px;padding:6px 6px 6px 10px;
-    transition:border-color .15s;
+    border:1px solid var(--g300);border-radius:14px;padding:6px 6px 6px 10px;
+    transition:border-color .15s;background:var(--white);
   }
-  .msg-input-row:focus-within{border-color:var(--indigo)}
+  .msg-input-row:focus-within{border-color:var(--g800)}
   .msg-plus{
     width:32px;height:32px;border-radius:8px;color:var(--g650);
-    display:flex;align-items:center;justify-content:center;
+    display:flex;align-items:center;justify-content:center;transition:all .12s;
   }
   .msg-plus:hover{background:var(--g150);color:var(--g900)}
   .msg-input{
@@ -814,15 +845,15 @@
     padding:8px 4px;font-family:inherit;line-height:1.5;
   }
   .msg-send{
-    width:40px;height:36px;border-radius:10px;background:var(--green);
+    width:40px;height:36px;border-radius:10px;background:var(--g900);
     color:var(--white);display:flex;align-items:center;justify-content:center;
-    flex-shrink:0;
+    flex-shrink:0;transition:all .12s;
   }
-  .msg-send:hover{background:var(--green-dk)}
-  .msg-send.ready{background:var(--grad-flow)}
+  .msg-send:hover{background:#000;transform:translateY(-1px);box-shadow:0 4px 12px rgba(0,0,0,.15)}
+  .msg-send.ready{background:var(--g900)}
 
   .msg-foot-bottom{
-    display:flex;justify-content:space-between;align-items:center;margin-top:8px;
+    display:flex;justify-content:space-between;align-items:center;margin-top:10px;
     font-size:11px;color:var(--g650);
   }
   .msg-foot-bottom .kbd{
@@ -902,7 +933,7 @@
   <aside class="sidebar">
     <div class="sb-scroll">
       <div class="sb-compose">
-        <button class="btn-compose primary">메일쓰기</button>
+        <button class="btn-compose primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span class="sb-label">메일쓰기</span></button>
         <button class="btn-compose ghost">메모쓰기</button>
       </div>
 
@@ -922,12 +953,12 @@
       </div>
 
       <div class="sb-nav">
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>전체메일</div>
-        <div class="sb-item active"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7.5C4 6.67 4.67 6 5.5 6H18.5C19.33 6 20 6.67 20 7.5V16.5C20 17.33 19.33 18 18.5 18H5.5C4.67 18 4 17.33 4 16.5V7.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4.5 7.5L12 13L19.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>받은메일함<span class="cnt">12</span></div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3.59 6.02C3.02 4.58 4.5 3.19 5.9 3.86L20.16 10.65C21.3 11.19 21.3 12.81 20.16 13.35L5.9 20.14C4.5 20.81 3.02 19.42 3.59 17.98L5.78 12.43C5.89 12.15 5.89 11.85 5.78 11.57L3.59 6.02Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>보낸메일함<span class="cnt">218</span></div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10" cy="8" r="3" stroke="currentColor" stroke-width="2"/><path d="M4 20a6 6 0 0112 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 11l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>수신확인</div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 4C5 3.45 5.45 3 6 3H14L19 8V20C19 20.55 18.55 21 18 21H6C5.45 21 5 20.55 5 20V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3V8H19" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>임시보관함<span class="cnt">3</span></div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="3.5" width="14" height="17" rx="2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.38 7.38H15.63" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8.38 10.88H15.63" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8.38 14.38H12.93" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>메모함</div>
+        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sb-label">전체메일</span></div>
+        <div class="sb-item active"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7.5C4 6.67 4.67 6 5.5 6H18.5C19.33 6 20 6.67 20 7.5V16.5C20 17.33 19.33 18 18.5 18H5.5C4.67 18 4 17.33 4 16.5V7.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4.5 7.5L12 13L19.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb-label">받은메일함</span><span class="cnt">12</span></div>
+        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3.59 6.02C3.02 4.58 4.5 3.19 5.9 3.86L20.16 10.65C21.3 11.19 21.3 12.81 20.16 13.35L5.9 20.14C4.5 20.81 3.02 19.42 3.59 17.98L5.78 12.43C5.89 12.15 5.89 11.85 5.78 11.57L3.59 6.02Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="sb-label">보낸메일함</span><span class="cnt">218</span></div>
+        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10" cy="8" r="3" stroke="currentColor" stroke-width="2"/><path d="M4 20a6 6 0 0112 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 11l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb-label">수신확인</span></div>
+        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 4C5 3.45 5.45 3 6 3H14L19 8V20C19 20.55 18.55 21 18 21H6C5.45 21 5 20.55 5 20V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3V8H19" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="sb-label">임시보관함</span><span class="cnt">3</span></div>
+        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="3.5" width="14" height="17" rx="2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.38 7.38H15.63" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8.38 10.88H15.63" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8.38 14.38H12.93" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span><span class="sb-label">메모함</span></div>
       </div>
 
       <div class="sb-group open"><span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M8.75 4.5L16.25 12L8.75 19.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>즐겨찾는 연락처</div>
@@ -1340,13 +1371,6 @@
       <div style="height:20px"></div>
     </div>
 
-    <div class="flow-ask">
-      <div class="ask-row">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="color:var(--indigo)"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="currentColor"/></svg>
-        <input placeholder="Flow에게 물어보기 — 예: 오늘 답장 필요한 메일" />
-        <button class="ask-send" title="보내기"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3.59 6.02C3.02 4.58 4.5 3.19 5.9 3.86L20.16 10.65C21.3 11.19 21.3 12.81 20.16 13.35L5.9 20.14C4.5 20.81 3.02 19.42 3.59 17.98L5.78 12.43C5.89 12.15 5.89 11.85 5.78 11.57L3.59 6.02Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></button>
-      </div>
-    </div>
   </aside>
 </div>
 
@@ -1371,7 +1395,6 @@
           AI 답장 초안
           <span class="beta">BETA</span>
         </div>
-        <div class="dr-ctx"><span class="dot"></span>원본 메일: <b style="color:var(--g900)">윤지호 팀장 · Aurora 런칭 일정 조율</b></div>
         <div class="sp"></div>
         <button class="dr-close" onclick="closeDraft()">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M18.5 5.5L5.5 18.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 5.5L18.5 18.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -1394,7 +1417,7 @@
             </div>
           </div>
           <button class="dr-relearn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12.93 7.75V12L16.24 14.36" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.43 12C4.43 7.3 8.24 3.5 12.93 3.5C17.63 3.5 21.43 7.3 21.43 12C21.43 16.69 17.63 20.5 12.93 20.5C10.9 20.5 9.05 19.79 7.59 18.61" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.79 12.47L4.91 14.83L2.07 13.42" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 11-3-6.7L21 8"/><polyline points="21 3 21 8 16 8"/></svg>
             다시 학습
           </button>
         </div>
@@ -1418,11 +1441,6 @@
 
       <!-- Canvas editor -->
       <div class="dr-canvas" id="canvas">
-        <div class="dr-canvas-label">
-          <span class="live"></span>
-          AI가 내 말투와 메일 맥락으로 작성한 초안
-        </div>
-
         <div class="dr-draft" id="draftBody" contenteditable="true">
           <p>윤지호 팀장님, 안녕하세요.</p>
           <p>Aurora 런칭 일정 관련해 빠르게 답변드립니다.</p>
@@ -1475,48 +1493,47 @@
     <!-- RIGHT: AI Canvas controls -->
     <div class="dr-side">
       <div class="dr-side-head">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style="color:var(--indigo)"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z" fill="currentColor"/></svg>
         <div class="dr-side-title">AI Canvas</div>
       </div>
       <div class="dr-side-sub">본문을 드래그해 특정 문장만 조정하거나, 아래 컨트롤로 전체를 다시 다듬어요.</div>
 
       <!-- TONE -->
-      <div class="dr-grp-label">🗣️ 말투</div>
+      <div class="dr-grp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>말투</div>
       <div class="tone-grid">
         <button class="tone-btn active" data-tone="정중">
-          <span class="t-ico">🎩</span>
+          <span class="t-ico"><svg viewBox="0 0 24 24"><circle cx="10" cy="8" r="4"/><path d="M2.5 21a7.5 7.5 0 0115 0"/><polyline points="16 11 18 13 22 9"/></svg></span>
           정중
           <span class="t-desc">내 평소 톤 · 권장</span>
         </button>
         <button class="tone-btn" data-tone="친근">
-          <span class="t-ico">☕️</span>
+          <span class="t-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9.5" x2="9.01" y2="9.5"/><line x1="15" y1="9.5" x2="15.01" y2="9.5"/></svg></span>
           친근
           <span class="t-desc">가까운 동료에게</span>
         </button>
         <button class="tone-btn" data-tone="단호">
-          <span class="t-ico">✊</span>
+          <span class="t-ico"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg></span>
           단호
           <span class="t-desc">확정이 필요할 때</span>
         </button>
         <button class="tone-btn" data-tone="완곡">
-          <span class="t-ico">🌿</span>
+          <span class="t-ico"><svg viewBox="0 0 24 24"><path d="M20.24 12.24a6 6 0 00-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg></span>
           완곡
           <span class="t-desc">거절·지연 양해</span>
         </button>
         <button class="tone-btn" data-tone="공식">
-          <span class="t-ico">📜</span>
+          <span class="t-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
           공식
           <span class="t-desc">대외 레터</span>
         </button>
         <button class="tone-btn" data-tone="간결">
-          <span class="t-ico">⚡️</span>
+          <span class="t-ico"><svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
           간결
           <span class="t-desc">빠른 회신</span>
         </button>
       </div>
 
       <!-- LENGTH -->
-      <div class="dr-grp-label">📏 문장 길이</div>
+      <div class="dr-grp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="4" y1="12" x2="14" y2="12"/><line x1="4" y1="18" x2="17" y2="18"/></svg>문장 길이</div>
       <div class="len-wrap" id="lenWrap">
         <div class="len-pill" id="lenPill" style="transform:translateX(100%)"></div>
         <div class="len-seg" data-len="0">짧게</div>
@@ -1525,18 +1542,18 @@
       </div>
 
       <!-- REFINE CHIPS -->
-      <div class="dr-grp-label">✏️ 빠른 다듬기</div>
+      <div class="dr-grp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.5 4L17.5 8.5 13.5 10 12 14l-1.5-4L6.5 8.5 10.5 7z"/><path d="M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8z"/></svg>빠른 다듬기</div>
       <div class="refine-chips">
-        <button class="ref-chip" onclick="quickRefine('더 공손하게')">＋ 더 공손하게</button>
-        <button class="ref-chip" onclick="quickRefine('더 확신있게')">＋ 확신있게</button>
-        <button class="ref-chip" onclick="quickRefine('핵심만')">＋ 핵심만</button>
-        <button class="ref-chip" onclick="quickRefine('근거 추가')">＋ 근거 추가</button>
-        <button class="ref-chip" onclick="quickRefine('감사 인사')">＋ 감사 인사</button>
-        <button class="ref-chip" onclick="quickRefine('CTA 강조')">＋ CTA 강조</button>
+        <button class="ref-chip" onclick="quickRefine('더 공손하게')">더 공손하게</button>
+        <button class="ref-chip" onclick="quickRefine('더 확신있게')">확신있게</button>
+        <button class="ref-chip" onclick="quickRefine('핵심만')">핵심만</button>
+        <button class="ref-chip" onclick="quickRefine('근거 추가')">근거 추가</button>
+        <button class="ref-chip" onclick="quickRefine('감사 인사')">감사 인사</button>
+        <button class="ref-chip" onclick="quickRefine('CTA 강조')">CTA 강조</button>
       </div>
 
       <!-- TRANSLATE -->
-      <div class="dr-grp-label">🌐 스마트 번역</div>
+      <div class="dr-grp-label"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><line x1="3" y1="12" x2="21" y2="12"/><path d="M12 3a14 14 0 013.5 9 14 14 0 01-3.5 9 14 14 0 01-3.5-9 14 14 0 013.5-9z"/></svg>스마트 번역</div>
       <div class="trans-card">
         <div class="trans-top">
           <div class="trans-lang" id="langFrom">🇰🇷 한국어
@@ -1640,15 +1657,15 @@
     <!-- Controls row (tone / length / translate) -->
     <div class="msg-controls">
       <span class="msg-ctl-label">말투</span>
-      <button class="msg-chip active" onclick="setMsgTone(this,'친근')">☕️ 친근</button>
-      <button class="msg-chip" onclick="setMsgTone(this,'정중')">🎩 정중</button>
-      <button class="msg-chip" onclick="setMsgTone(this,'간결')">⚡️ 간결</button>
-      <button class="msg-chip" onclick="setMsgTone(this,'사과')">🙇 사과 톤</button>
-      <span style="width:1px;height:18px;background:var(--g300);margin:0 4px"></span>
+      <button class="msg-chip active" onclick="setMsgTone(this,'친근')">친근</button>
+      <button class="msg-chip" onclick="setMsgTone(this,'정중')">정중</button>
+      <button class="msg-chip" onclick="setMsgTone(this,'간결')">간결</button>
+      <button class="msg-chip" onclick="setMsgTone(this,'사과')">사과 톤</button>
+      <span class="msg-ctl-div"></span>
       <span class="msg-ctl-label">길이</span>
       <button class="msg-chip" onclick="setMsgLen(this,0)">짧게</button>
       <button class="msg-chip active" onclick="setMsgLen(this,1)">보통</button>
-      <span style="width:1px;height:18px;background:var(--g300);margin:0 4px"></span>
+      <span class="msg-ctl-div"></span>
       <button class="msg-chip trans" id="msgTransBtn" onclick="toggleMsgTrans()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12.12 20.7L15.9 10.92C16.08 10.45 16.73 10.45 16.91 10.92L20.69 20.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.83 17.43H18.98" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.1 3.3V5.92" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.72 6.79C10.77 10.76 7.82 14.14 3.88 14.62" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.48 6.79C5.48 6.79 5.35 9.62 7.57 12.09C8.66 13.3 9.9 13.94 10.86 14.27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.3 5.92H12.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
         English으로 변환
