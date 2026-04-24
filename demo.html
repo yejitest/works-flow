@@ -437,22 +437,21 @@
 
   /* Quick footer row (완료/미루기) */
   .f-quick{
-    display:flex;align-items:center;gap:10px;
+    display:flex;align-items:center;gap:16px;
     margin-top:10px;padding-top:10px;
     border-top:1px solid var(--g200);
     font-size:12px;
   }
   .f-link{
     background:none;border:none;
-    color:var(--g580);font-weight:600;cursor:pointer;
+    color:var(--g800);font-weight:600;cursor:pointer;
     padding:2px 2px;
     font-size:12px;
     display:inline-flex;align-items:center;gap:5px;
     transition:color .12s;
   }
   .f-link:hover{color:var(--g900)}
-  .f-link svg{opacity:.8;width:12px;height:12px}
-  .f-quick .sep{color:var(--g400);font-size:12px}
+  .f-link svg{opacity:.9;width:12px;height:12px}
 
   /* Restore row (완료/나중에 상태에서만 표시) */
   .f-restore{
@@ -1547,7 +1546,6 @@
         </div>
         <div class="f-quick">
           <button class="f-link" onclick="laterCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>나중에</button>
-          <span class="sep">·</span>
           <button class="f-link" onclick="completeCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>완료</button>
         </div>
         <div class="f-restore">
@@ -1627,7 +1625,6 @@
         </div>
         <div class="f-quick">
           <button class="f-link" onclick="laterCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>나중에</button>
-          <span class="sep">·</span>
           <button class="f-link" onclick="completeCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>완료</button>
         </div>
         <div class="f-restore">
@@ -1679,7 +1676,6 @@
         </div>
         <div class="f-quick">
           <button class="f-link" onclick="laterCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>나중에</button>
-          <span class="sep">·</span>
           <button class="f-link" onclick="completeCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>완료</button>
         </div>
         <div class="f-restore">
