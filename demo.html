@@ -878,6 +878,7 @@
     flex:1;overflow-y:auto;padding:18px 20px;background:var(--white);
     display:flex;flex-direction:column;gap:10px;min-height:0;
   }
+  #msgHistory{display:contents}
   .msg-date{
     text-align:center;font-size:11px;color:var(--g580);margin:4px 0 8px;font-weight:600;
   }
@@ -897,9 +898,13 @@
     background:#FEE500;color:#3C1E1E;border-top-right-radius:4px;align-self:flex-end;
   }
 
-  /* Context card (AI context source) */
+  /* Context card (AI context source) — sticky top strip */
+  .msg-ctx-strip{
+    flex-shrink:0;padding:12px 20px;border-bottom:1px solid var(--g300);
+    background:var(--white);
+  }
   .msg-ctx-card{
-    align-self:stretch;border-radius:12px;padding:12px;
+    border-radius:12px;padding:12px;
     background:linear-gradient(var(--white),var(--white)) padding-box,
                linear-gradient(135deg,rgba(155,120,238,.7) 0%,rgba(90,170,240,.7) 55%,rgba(61,196,232,.7) 100%) border-box;
     border:1.5px solid transparent;
@@ -921,24 +926,29 @@
 
   /* Draft bubble (pending) */
   .msg-draft-bubble{
-    color:var(--g900);background:var(--g150);
-    border:1px solid var(--g300);
+    color:#202124;background:#c0eafc;
+    border:1.5px solid #7ecef5;
     border-radius:14px;border-top-right-radius:4px;
     padding:10px 12px;font-size:13px;line-height:1.55;
-    max-width:72%;align-self:flex-end;position:relative;
+    max-width:72%;align-self:flex-end;
+    caret-color:#202124;
   }
-  .msg-draft-tag{
-    position:absolute;top:-10px;right:10px;
-    background:var(--g900);color:var(--white);
-    font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;
-    display:inline-flex;align-items:center;gap:3px;
+  .msg-draft-bubble[contenteditable="true"]:focus{
+    outline:none;
+    border-color:rgba(0,0,0,.3);
   }
-  .msg-draft-bubble[contenteditable="true"]:focus{outline:none}
+  .msg-draft-bubble[contenteditable="true"]:focus .draft-cursor{display:none}
+  .draft-cursor{
+    display:inline-block;width:1.5px;height:1em;
+    background:#202124;vertical-align:text-bottom;margin-left:1px;
+    animation:cursorBlink 1s step-end infinite;
+  }
+  @keyframes cursorBlink{0%,100%{opacity:1}50%{opacity:0}}
 
   /* Controls row */
   .msg-controls{
     padding:12px 18px;flex-shrink:0;background:var(--white);
-    border-top:1px solid var(--g300);display:flex;gap:7px;flex-wrap:wrap;
+    border-top:1px solid var(--g300);display:flex;gap:4px;flex-wrap:wrap;
     align-items:center;
   }
   .msg-ctl-div{width:1px;height:18px;background:var(--g300);margin:0 4px;flex-shrink:0}
@@ -967,7 +977,7 @@
     flex-shrink:0;
   }
   .msg-input-row{
-    display:flex;align-items:flex-end;gap:8px;
+    display:flex;align-items:flex-end;gap:0;
     border:1px solid var(--g300);border-radius:14px;padding:6px 6px 6px 10px;
     transition:border-color .15s;background:var(--white);
   }
@@ -980,7 +990,7 @@
   .msg-input{
     flex:1;border:none;outline:none;font-size:13px;color:var(--g900);
     background:transparent;resize:none;min-height:36px;max-height:120px;
-    padding:8px 4px;font-family:inherit;line-height:1.5;
+    padding:8px 4px 8px 8px;font-family:inherit;line-height:1.5;text-align:left;
   }
   .msg-send{
     width:40px;height:36px;border-radius:10px;background:var(--g900);
@@ -1976,18 +1986,8 @@
       </button>
     </div>
 
-    <!-- Chat preview -->
-    <div class="msg-chat" id="msgChat">
-      <div id="msgHistory">
-        <div class="msg-date">2026. 4. 17. (목)</div>
-        <div class="msg-bubble them">스프린트 회고 일정 확인 부탁드립니다 🙏 이번 주 중으로 시간 조율해서 공유드리면 감사하겠습니다!</div>
-        <div class="msg-meta">오후 5:02</div>
-        <div class="msg-bubble them" style="margin-top:10px">예지님~ 혹시 확인하셨을까요? 금요일 전에 확정하려 하는데 😅</div>
-        <div class="msg-meta">4. 19. 오전 10:14</div>
-        <div class="msg-date" style="margin-top:12px">2026. 4. 21. (화) · 오늘</div>
-      </div>
-
-      <!-- AI context card -->
+    <!-- AI context strip (sticky top) -->
+    <div class="msg-ctx-strip">
       <div class="msg-ctx-card">
         <div class="msg-ctx-ico">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>
@@ -2001,15 +2001,21 @@
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Chat preview -->
+    <div class="msg-chat" id="msgChat">
+      <div id="msgHistory">
+        <div class="msg-date">2026. 4. 17. (목)</div>
+        <div class="msg-bubble them">스프린트 회고 일정 확인 부탁드립니다 🙏 이번 주 중으로 시간 조율해서 공유드리면 감사하겠습니다!</div>
+        <div class="msg-meta">오후 5:02</div>
+        <div class="msg-bubble them" style="margin-top:10px">예지님~ 혹시 확인하셨을까요? 금요일 전에 확정하려 하는데 😅</div>
+        <div class="msg-meta">4. 19. 오전 10:14</div>
+        <div class="msg-date" style="margin-top:12px">2026. 4. 21. (화) · 오늘</div>
+      </div>
 
       <!-- Draft bubble (editable) -->
-      <div class="msg-draft-bubble" id="msgDraft" contenteditable="true">
-        <span class="msg-draft-tag">
-          <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>
-          AI 초안
-        </span>
-        도현님! 답 늦어서 죄송해요 🙏 회고는 금요일 오전 10시~11시, 오후 2시~3시, 오후 4시~5시 중에서 편하신 시간 있으시면 바로 캘린더 걸어둘게요!
-      </div>
+      <div class="msg-draft-bubble" id="msgDraft" contenteditable="true">도현님! 답 늦어서 죄송해요 🙏 회고는 금요일 오전 10시~11시, 오후 2시~3시, 오후 4시~5시 중에서 편하신 시간 있으시면 바로 캘린더 걸어둘게요!<span class="draft-cursor"></span></div>
       <div class="msg-meta right">보내기 전 · 편집 가능</div>
     </div>
 
@@ -2552,12 +2558,12 @@
     document.querySelector('.msg-controls .msg-chip[onclick*="1"]').classList.add('active');
     const transBtn = document.getElementById('msgTransBtn');
     transBtn.classList.remove('applied');
-    transBtn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h7M9 3v2c0 4-3 7-7 7M14 19l5-10 5 10"/></svg> English으로 변환`;
+    transBtn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12.12 20.7L15.9 10.92C16.08 10.45 16.73 10.45 16.91 10.92L20.69 20.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.83 17.43H18.98" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.1 3.3V5.92" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.72 6.79C10.77 10.76 7.82 14.14 3.88 14.62" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.48 6.79C5.48 6.79 5.35 9.62 7.57 12.09C8.66 13.3 9.9 13.94 10.86 14.27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.3 5.92H12.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> English으로 변환`;
     renderMsgDraft();
   }
   function renderMsgDraft(){
     const text = MSG_SCENARIOS[currentMsgCtx].variants[curTone][curLen];
-    msgDraft.innerHTML = `<span class="msg-draft-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>AI 초안</span>${text}`;
+    msgDraft.innerHTML = text + '<span class="draft-cursor"></span>';
   }
   function setMsgTone(btn, tone){
     document.querySelectorAll('.msg-controls .msg-chip').forEach(c=>{
@@ -2582,12 +2588,12 @@
     if(msgTranslated){
       msgTranslated = false;
       btn.classList.remove('applied');
-      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5h7M9 3v2c0 4-3 7-7 7M14 19l5-10 5 10"/></svg> English으로 변환`;
+      btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12.12 20.7L15.9 10.92C16.08 10.45 16.73 10.45 16.91 10.92L20.69 20.7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.83 17.43H18.98" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8.1 3.3V5.92" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M10.72 6.79C10.77 10.76 7.82 14.14 3.88 14.62" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.48 6.79C5.48 6.79 5.35 9.62 7.57 12.09C8.66 13.3 9.9 13.94 10.86 14.27" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.3 5.92H12.9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> English으로 변환`;
       renderMsgDraft();
       showToast('↺ 한국어로 되돌렸어요');
     } else {
       const text = MSG_SCENARIOS[currentMsgCtx].enVariants[curTone][curLen];
-      msgDraft.innerHTML = `<span class="msg-draft-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>AI · EN</span>${text}`;
+      msgDraft.innerHTML = text + '<span class="draft-cursor"></span>';
       msgTranslated = true;
       btn.classList.add('applied');
       btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L20 7" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg> 한국어로 되돌리기`;
@@ -2597,7 +2603,7 @@
 
   function sendMsg(){
     // Read current draft content (user may have edited)
-    const content = (msgDraft.innerText || '').replace(/^AI 초안\s*/,'').replace(/^AI · EN\s*/,'').trim();
+    const content = (msgDraft.innerText || '').trim();
     const extra = msgInput.value.trim();
     const finalText = [content, extra].filter(Boolean).join(' ');
     if(!finalText) return;
