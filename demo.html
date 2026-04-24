@@ -1542,7 +1542,7 @@
         </details>
         <div class="f-actions">
           <button class="f-btn primary" onclick="openDraft('aurora')">메일 답장</button>
-          <button class="f-btn ghost" onclick="openMsg()">메시지</button>
+          <button class="f-btn ghost" onclick="openMsg('aurora')">메시지</button>
         </div>
         <div class="f-quick">
           <button class="f-link" onclick="laterCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>나중에</button>
@@ -1671,7 +1671,7 @@
           </div>
         </details>
         <div class="f-actions">
-          <button class="f-btn primary" onclick="openMsg()">메시지</button>
+          <button class="f-btn primary" onclick="openMsg('dohyun')">메시지</button>
           <button class="f-btn ghost">일정 공유</button>
         </div>
         <div class="f-quick">
@@ -1958,10 +1958,10 @@
     <!-- Top bar -->
     <div class="msg-top">
       <div class="msg-top-left">
-        <div class="msg-avt">도</div>
+        <div class="msg-avt" id="msgAvt">도</div>
         <div class="msg-peer">
-          <div class="n">김도현 PM</div>
-          <div class="sub">Aurora Product · 온라인</div>
+          <div class="n" id="msgPeerName">김도현 PM</div>
+          <div class="sub" id="msgPeerSub">Aurora Product · 온라인</div>
         </div>
       </div>
       <div class="sp"></div>
@@ -1978,15 +1978,14 @@
 
     <!-- Chat preview -->
     <div class="msg-chat" id="msgChat">
-      <div class="msg-date">2026. 4. 17. (목)</div>
-
-      <div class="msg-bubble them">스프린트 회고 일정 확인 부탁드립니다 🙏 이번 주 중으로 시간 조율해서 공유드리면 감사하겠습니다!</div>
-      <div class="msg-meta">오후 5:02</div>
-
-      <div class="msg-bubble them" style="margin-top:10px">예지님~ 혹시 확인하셨을까요? 금요일 전에 확정하려 하는데 😅</div>
-      <div class="msg-meta">4. 19. 오전 10:14</div>
-
-      <div class="msg-date" style="margin-top:12px">2026. 4. 21. (화) · 오늘</div>
+      <div id="msgHistory">
+        <div class="msg-date">2026. 4. 17. (목)</div>
+        <div class="msg-bubble them">스프린트 회고 일정 확인 부탁드립니다 🙏 이번 주 중으로 시간 조율해서 공유드리면 감사하겠습니다!</div>
+        <div class="msg-meta">오후 5:02</div>
+        <div class="msg-bubble them" style="margin-top:10px">예지님~ 혹시 확인하셨을까요? 금요일 전에 확정하려 하는데 😅</div>
+        <div class="msg-meta">4. 19. 오전 10:14</div>
+        <div class="msg-date" style="margin-top:12px">2026. 4. 21. (화) · 오늘</div>
+      </div>
 
       <!-- AI context card -->
       <div class="msg-ctx-card">
@@ -1994,8 +1993,8 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>
         </div>
         <div class="msg-ctx-body">
-          Flow가 <b>최근 메시지 흐름 + 캘린더 빈 슬롯 3개 + 내 말투 218통</b>을 분석했어요. 바로 보낼 수 있는 초안을 준비했습니다.
-          <div class="tone">
+          <span id="msgCtxBody">Flow가 <b>최근 메시지 흐름 + 캘린더 빈 슬롯 3개 + 내 말투 218통</b>을 분석했어요. 바로 보낼 수 있는 초안을 준비했습니다.</span>
+          <div class="tone" id="msgCtxTones">
             <span>내 말투 반영</span>
             <span>이모지 적당히</span>
             <span>일정 제안 포함</span>
@@ -2064,7 +2063,7 @@
         <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L20 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </div>
       <div class="msg-sent-title">메시지를 보냈어요</div>
-      <div class="msg-sent-sub">김도현 PM · NAVER WORKS 메시지 · 방금 전</div>
+      <div class="msg-sent-sub" id="msgSentSub">김도현 PM · NAVER WORKS 메시지 · 방금 전</div>
     </div>
   </div>
 </div>
@@ -2441,10 +2440,100 @@
   const msgSent = document.getElementById('msgSent');
   const msgInput = document.getElementById('msgInput');
 
-  function openMsg(){
+  let currentMsgCtx = 'dohyun';
+
+  const MSG_SCENARIOS = {
+    dohyun: {
+      avt: '도',
+      peerName: '김도현 PM',
+      peerSub: 'Aurora Product · 온라인',
+      historyHTML: `
+        <div class="msg-date">2026. 4. 17. (목)</div>
+        <div class="msg-bubble them">스프린트 회고 일정 확인 부탁드립니다 🙏 이번 주 중으로 시간 조율해서 공유드리면 감사하겠습니다!</div>
+        <div class="msg-meta">오후 5:02</div>
+        <div class="msg-bubble them" style="margin-top:10px">예지님~ 혹시 확인하셨을까요? 금요일 전에 확정하려 하는데 😅</div>
+        <div class="msg-meta">4. 19. 오전 10:14</div>
+        <div class="msg-date" style="margin-top:12px">2026. 4. 21. (화) · 오늘</div>`,
+      ctxBody: 'Flow가 <b>최근 메시지 흐름 + 캘린더 빈 슬롯 3개 + 내 말투 218통</b>을 분석했어요. 바로 보낼 수 있는 초안을 준비했습니다.',
+      ctxTones: ['내 말투 반영','이모지 적당히','일정 제안 포함'],
+      sentSub: '김도현 PM · NAVER WORKS 메시지 · 방금 전',
+      sendToast: '🚀 김도현 PM에게 메시지를 보냈어요',
+      variants: {
+        '친근': { 0:'도현님! 회고 금요일 오전 10시 어때요? 😊',
+                 1:'도현님! 답 늦어서 죄송해요 🙏 회고는 금요일 오전 10시~11시, 오후 2시~3시, 오후 4시~5시 중에서 편하신 시간 있으시면 바로 캘린더 걸어둘게요!' },
+        '정중': { 0:'도현 PM님, 회고는 금요일 오전 10시로 잡아도 괜찮을까요?',
+                 1:'도현 PM님, 답변이 늦어 죄송합니다. 스프린트 회고는 금요일 오전 10~11시, 오후 2~3시, 오후 4~5시 중 편하신 시간으로 잡아주시면, 바로 캘린더 초대 발송하겠습니다.' },
+        '간결': { 0:'금요일 10시/14시/16시 중 편한 시간?',
+                 1:'회고 후보 3개입니다: 금 10시 / 14시 / 16시. 편하신 슬롯 알려주시면 바로 캘린더 초대 보낼게요.' },
+        '사과': { 0:'도현님 진짜 죄송해요 🙏 금요일 10시 바로 잡을게요!',
+                 1:'도현님, 4일이나 답이 늦어서 정말 죄송합니다 🙏 회고 일정은 금요일 오전 10시 / 오후 2시 / 오후 4시 중 원하시는 시간으로 바로 맞춰서 캘린더 걸어드릴게요. 혹시 다른 시간대도 괜찮으면 편히 말씀 주세요.' }
+      },
+      enVariants: {
+        '친근': { 0:"Hey Dohyun! How about Fri 10 AM for retro? 😊",
+                 1:"Hey Dohyun! Sorry for the late reply 🙏 For the retro, does Fri 10–11 AM, 2–3 PM, or 4–5 PM work? I'll send the invite right away!" },
+        '정중': { 0:"Dohyun, would Friday 10 AM work for the retro?",
+                 1:"Dohyun, apologies for the delay. For the sprint retro, please pick one: Fri 10–11 AM, 2–3 PM, or 4–5 PM — I'll send the calendar invite right after." },
+        '간결': { 0:"Fri 10 / 14 / 16 — which works?",
+                 1:"Retro options: Fri 10, 14, 16. Tell me your pick and I'll send the invite." },
+        '사과': { 0:"Really sorry, Dohyun 🙏 I'll lock Fri 10 AM.",
+                 1:"Dohyun, I'm really sorry for the 4-day delay 🙏 Let's lock in the retro: Fri 10 AM / 2 PM / 4 PM — pick any and I'll set up the calendar right away." }
+      }
+    },
+    aurora: {
+      avt: '윤',
+      peerName: '윤지호 팀장',
+      peerSub: 'Aurora Planning · 온라인',
+      historyHTML: `
+        <div class="msg-date">2026. 4. 20. (월)</div>
+        <div class="msg-bubble them">Aurora 런칭 시점 확정하고 싶은데, 이번 주 안에 후보 일자 공유 가능하세요?</div>
+        <div class="msg-meta">오후 2:30</div>
+        <div class="msg-bubble them" style="margin-top:10px">내일 15시 PM 싱크 필참 부탁드려요 🙏 싱크 전까지 후보 일자 먼저 공유해주시면 좋을 것 같아요</div>
+        <div class="msg-meta">오늘 오전 11:04</div>
+        <div class="msg-date" style="margin-top:12px">2026. 4. 21. (화) · 오늘</div>`,
+      ctxBody: 'Flow가 <b>메일 2통 + Aurora PM 싱크 일정 + 런칭 플랜 v2.3</b>을 분석해 싱크 전에 후보 일자까지 포함된 초안을 준비했어요.',
+      ctxTones: ['내 말투 반영','후보 일자 3개 포함','싱크 전 발송'],
+      sentSub: '윤지호 팀장 · NAVER WORKS 메시지 · 방금 전',
+      sendToast: '🚀 윤지호 팀장에게 메시지를 보냈어요',
+      variants: {
+        '친근': { 0:'팀장님! 내일 싱크 참석할게요. 런칭 후보 5/12·14·19 메일로 공유드렸어요 👍',
+                 1:'팀장님! 내일 Aurora PM 싱크 필참할게요~ 런칭 후보 3개(5/12, 5/14, 5/19)도 싱크 전에 메일로 공유드렸으니 편하게 보시고 선호 일자 알려주시면 바로 반영할게요 🙌' },
+        '정중': { 0:'팀장님, 내일 싱크 참석하겠습니다. 후보 3일자(5/12·14·19) 메일로 공유드렸습니다.',
+                 1:'팀장님, 내일 Aurora PM 싱크 필참하겠습니다. 런칭 후보 3개(5/12, 5/14, 5/19)를 싱크 전까지 메일로 공유드렸으니 선호 일자 회신 주시면 준비 맞춰두겠습니다.' },
+        '간결': { 0:'싱크 참석. 후보 5/12, 14, 19 메일 공유 완료.',
+                 1:'내일 싱크 필참. 런칭 후보: 5/12 / 14 / 19. 메일로 공유 완료, 선호 일자 회신 요청드립니다.' },
+        '사과': { 0:'팀장님 답이 늦어 죄송해요 🙏 후보 일자 바로 공유드릴게요.',
+                 1:'팀장님, 회신이 늦어 정말 죄송합니다 🙏 런칭 후보 3개(5/12, 5/14, 5/19)를 싱크 시작 전까지 메일로 공유드릴게요. 확정되는 대로 바로 반영하겠습니다.' }
+      },
+      enVariants: {
+        '친근': { 0:"Hey Jiho! I'll be at tomorrow's sync. Launch candidates 5/12, 14, 19 are in your inbox 👍",
+                 1:"Hey Jiho! I'll definitely be at tomorrow's Aurora PM sync. The 3 launch candidates (5/12, 5/14, 5/19) are already in your inbox — take a look and let me know your preferred date 🙌" },
+        '정중': { 0:"Jiho, I'll attend tomorrow's sync. 3 launch candidates (5/12, 14, 19) sent via email.",
+                 1:"Jiho, I'll attend tomorrow's Aurora PM sync. 3 launch candidates (5/12, 5/14, 5/19) have been emailed — please share your preferred date so I can prepare accordingly." },
+        '간결': { 0:"Sync attending. Candidates 5/12, 14, 19 in email.",
+                 1:"Attending tomorrow's sync. Launch options: 5/12 / 14 / 19 sent via email — pick your preferred date." },
+        '사과': { 0:"Jiho, sorry for the late reply 🙏 Sending candidate dates right now.",
+                 1:"Jiho, my sincere apologies for the delay 🙏 I'll send the 3 launch candidates (5/12, 5/14, 5/19) via email before the sync." }
+      }
+    }
+  };
+
+  function applyMsgCtx(ctx){
+    const cfg = MSG_SCENARIOS[ctx];
+    if (!cfg) return;
+    document.getElementById('msgAvt').textContent = cfg.avt;
+    document.getElementById('msgPeerName').textContent = cfg.peerName;
+    document.getElementById('msgPeerSub').textContent = cfg.peerSub;
+    document.getElementById('msgHistory').innerHTML = cfg.historyHTML;
+    document.getElementById('msgCtxBody').innerHTML = cfg.ctxBody;
+    document.getElementById('msgCtxTones').innerHTML = cfg.ctxTones.map(t => '<span>'+t+'</span>').join('');
+    document.getElementById('msgSentSub').textContent = cfg.sentSub;
+  }
+
+  function openMsg(ctx = 'dohyun'){
+    currentMsgCtx = ctx;
+    applyMsgCtx(ctx);
     msgSent.classList.remove('show');
     msgMask.classList.add('open');
-    // Reset draft to default
     resetMsgDraft();
   }
   function closeMsg(){ msgMask.classList.remove('open'); }
@@ -2454,24 +2543,6 @@
     if((e.metaKey||e.ctrlKey) && e.key==='Enter' && msgMask.classList.contains('open')) sendMsg();
   });
 
-  const MSG_VARIANTS = {
-    '친근': {
-      0: '도현님! 회고 금요일 오전 10시 어때요? 😊',
-      1: '도현님! 답 늦어서 죄송해요 🙏 회고는 금요일 오전 10시~11시, 오후 2시~3시, 오후 4시~5시 중에서 편하신 시간 있으시면 바로 캘린더 걸어둘게요!'
-    },
-    '정중': {
-      0: '도현 PM님, 회고는 금요일 오전 10시로 잡아도 괜찮을까요?',
-      1: '도현 PM님, 답변이 늦어 죄송합니다. 스프린트 회고는 금요일 오전 10~11시, 오후 2~3시, 오후 4~5시 중 편하신 시간으로 잡아주시면, 바로 캘린더 초대 발송하겠습니다.'
-    },
-    '간결': {
-      0: '금요일 10시/14시/16시 중 편한 시간?',
-      1: '회고 후보 3개입니다: 금 10시 / 14시 / 16시. 편하신 슬롯 알려주시면 바로 캘린더 초대 보낼게요.'
-    },
-    '사과': {
-      0: '도현님 진짜 죄송해요 🙏 금요일 10시 바로 잡을게요!',
-      1: '도현님, 4일이나 답이 늦어서 정말 죄송합니다 🙏 회고 일정은 금요일 오전 10시 / 오후 2시 / 오후 4시 중 원하시는 시간으로 바로 맞춰서 캘린더 걸어드릴게요. 혹시 다른 시간대도 괜찮으면 편히 말씀 주세요.'
-    }
-  };
   let curTone='친근', curLen=1, msgTranslated=false, msgOriginal=null;
 
   function resetMsgDraft(){
@@ -2485,7 +2556,7 @@
     renderMsgDraft();
   }
   function renderMsgDraft(){
-    const text = MSG_VARIANTS[curTone][curLen];
+    const text = MSG_SCENARIOS[currentMsgCtx].variants[curTone][curLen];
     msgDraft.innerHTML = `<span class="msg-draft-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>AI 초안</span>${text}`;
   }
   function setMsgTone(btn, tone){
@@ -2515,17 +2586,7 @@
       renderMsgDraft();
       showToast('↺ 한국어로 되돌렸어요');
     } else {
-      const enMap = {
-        '친근':{0:"Hey Dohyun! How about Fri 10 AM for retro? 😊",
-                1:"Hey Dohyun! Sorry for the late reply 🙏 For the retro, does Fri 10–11 AM, 2–3 PM, or 4–5 PM work? I'll send the invite right away!"},
-        '정중':{0:"Dohyun, would Friday 10 AM work for the retro?",
-                1:"Dohyun, apologies for the delay. For the sprint retro, please pick one: Fri 10–11 AM, 2–3 PM, or 4–5 PM — I'll send the calendar invite right after."},
-        '간결':{0:"Fri 10 / 14 / 16 — which works?",
-                1:"Retro options: Fri 10, 14, 16. Tell me your pick and I'll send the invite."},
-        '사과':{0:"Really sorry, Dohyun 🙏 I'll lock Fri 10 AM.",
-                1:"Dohyun, I'm really sorry for the 4-day delay 🙏 Let's lock in the retro: Fri 10 AM / 2 PM / 4 PM — pick any and I'll set up the calendar right away."}
-      };
-      const text = enMap[curTone][curLen];
+      const text = MSG_SCENARIOS[currentMsgCtx].enVariants[curTone][curLen];
       msgDraft.innerHTML = `<span class="msg-draft-tag"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>AI · EN</span>${text}`;
       msgTranslated = true;
       btn.classList.add('applied');
@@ -2544,7 +2605,7 @@
     msgSent.classList.add('show');
     setTimeout(()=>{
       closeMsg();
-      showToast('🚀 김도현 PM에게 메시지를 보냈어요');
+      showToast(MSG_SCENARIOS[currentMsgCtx].sendToast);
       msgInput.value = '';
     }, 1400);
   }
@@ -2668,7 +2729,7 @@
         } else if (idx === 1) {
           setTimeout(() => openDraft('tanaka'), 500);
         } else if (idx === 2) {
-          setTimeout(() => openMsg(), 500);
+          setTimeout(() => openMsg('dohyun'), 500);
         }
       });
     });
