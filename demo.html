@@ -1789,9 +1789,82 @@
   const body = document.getElementById('draftBody');
   const toast = document.getElementById('toast');
 
-  function openDraft(){
+  // ===== Draft context =====
+  let currentDraftCtx = 'aurora';
+
+  const DRAFT_CTX = {
+    aurora: {
+      recpInitial: '윤', recpName: '윤지호 팀장', recpEmail: 'jiho.yoon@worksmail.com',
+      subject: 'Re: Aurora 프로젝트 런칭 일정 조율 요청'
+    },
+    tanaka: {
+      recpInitial: 'T', recpName: 'Maya Tanaka', recpEmail: 'm.tanaka@globalpartner.com',
+      subject: 'Re: Partnership proposal review'
+    }
+  };
+
+  const TANAKA_TONE_VARIANTS = {
+    '정중': [
+      'Dear Maya,',
+      'Thank you for your follow-up on the partnership proposal.',
+      'I have reviewed the revised terms with our legal team, who are currently at <span class="hl-edit hl-pop">83% completion</span> of their review. I would like to schedule a brief check-in today to address any remaining points before the Friday deadline.',
+      'Would a 30-minute call work for you this afternoon? I am available from 3:00–5:00 PM (KST).',
+      'Best regards,<br/>Yeji Jeong'
+    ],
+    '친근': [
+      'Hi Maya,',
+      'Thanks for checking in on the partnership proposal!',
+      'Our legal team is nearly done with the review — <span class="hl-edit hl-pop">about 83% through</span> — so we\'re on track for Friday. I\'d love to hop on a quick call today to make sure we\'re aligned on the revised terms.',
+      'Are you free for 30 min this afternoon, say around 3–5 PM (KST)?',
+      'Thanks,<br/>Yeji'
+    ],
+    '단호': [
+      'Dear Maya,',
+      'Our legal team\'s review is <span class="hl-edit hl-pop">83% complete</span> and on track for Friday\'s deadline.',
+      'I will schedule a check-in today at 3:00 PM (KST) to finalize the revised terms. Please confirm your availability.',
+      'Regards,<br/>Yeji Jeong'
+    ],
+    '완곡': [
+      'Dear Maya,',
+      'Thank you for your patience regarding the revised partnership terms.',
+      'Our legal team is still reviewing and making good progress — <span class="hl-edit hl-pop">approximately 83% complete</span>. We hope to finalize by Friday, though a brief check-in today would be helpful.',
+      'Would you be available for a short call this afternoon, between 3–5 PM (KST)?',
+      'Best regards,<br/>Yeji Jeong'
+    ],
+    '공식': [
+      'Dear Ms. Tanaka,',
+      'With reference to your email regarding the revised partnership proposal terms, I would like to provide a status update.',
+      'Our legal team\'s review is currently <span class="hl-edit hl-pop">83% complete</span>. To ensure timely confirmation before the Friday deadline, I propose a brief check-in call today.',
+      'Please advise of your availability. I am available between 15:00–17:00 KST.',
+      'Yours sincerely,<br/>Yeji Jeong · NAVER WORKS'
+    ],
+    '간결': [
+      'Hi Maya,',
+      'Legal review is <span class="hl-edit hl-pop">83% done</span> — on track for Friday.',
+      'Quick check-in today? I\'m free 3–5 PM KST.',
+      'Best,<br/>Yeji'
+    ]
+  };
+
+  function applyDraftCtx(ctx) {
+    const cfg = DRAFT_CTX[ctx];
+    if (!cfg) return;
+    const recpEl = document.querySelector('.dr-recp');
+    recpEl.innerHTML = `<span class="dr-recp-avt">${cfg.recpInitial}</span>${cfg.recpName} &lt;${cfg.recpEmail}&gt;<span class="x">✕</span>`;
+    document.querySelector('.dr-form input').value = cfg.subject;
+    const activeTone = document.querySelector('.tone-btn.active')?.dataset.tone || '정중';
+    if (ctx === 'tanaka') {
+      const arr = TANAKA_TONE_VARIANTS[activeTone] || TANAKA_TONE_VARIANTS['정중'];
+      body.innerHTML = arr.map(p => '<p>' + p + '</p>').join('');
+    } else {
+      rewriteByTone(activeTone);
+    }
+  }
+
+  function openDraft(ctx = 'aurora'){
+    currentDraftCtx = ctx;
     mask.classList.add('open');
-    simulateAI(900); // briefly show tone learning → draft
+    simulateAI(900, () => applyDraftCtx(ctx));
   }
   function closeDraft(){ mask.classList.remove('open'); }
   mask.addEventListener('click',(e)=>{ if(e.target===mask) closeDraft(); });
@@ -1825,6 +1898,11 @@
   });
 
   function rewriteByTone(tone){
+    if (currentDraftCtx === 'tanaka') {
+      const arr = TANAKA_TONE_VARIANTS[tone] || TANAKA_TONE_VARIANTS['정중'];
+      body.innerHTML = arr.map(p => '<p>' + p + '</p>').join('');
+      return;
+    }
     const variants = {
       '정중': [
         '윤지호 팀장님, 안녕하세요.',
@@ -1894,6 +1972,22 @@
   });
 
   function adjustLength(level){
+    if (currentDraftCtx === 'tanaka') {
+      if (level === 0) {
+        body.innerHTML = `<p>Hi Maya,</p><p>Legal review is <span class="hl-edit hl-pop">83% done</span> — on track for Friday.</p><p>Quick check-in today 3–5 PM KST?</p><p>Best, Yeji</p>`;
+      } else if (level === 1) {
+        rewriteByTone(document.querySelector('.tone-btn.active')?.dataset.tone || '정중');
+      } else {
+        body.innerHTML = `<p>Dear Maya,</p>
+          <p>Thank you for your follow-up on the revised partnership terms.</p>
+          <p>I wanted to update you on where we stand: our legal team has been conducting a thorough review of all contract clauses and is currently <span class="hl-edit hl-pop">83% through the process</span>. The remaining items relate primarily to liability caps and the IP ownership clause, both of which we expect to resolve by tomorrow morning.</p>
+          <p>Given the Friday confirmation deadline, I believe it would be beneficial to schedule a brief check-in call today. This would allow us to walk through any outstanding questions in real time and ensure we're fully aligned before issuing the formal sign-off.</p>
+          <p>I'm available from 3:00–5:00 PM (KST) today. Would any 30-minute slot in that window work for you? Alternatively, if you prefer asynchronous updates, I can send a written summary by 2:00 PM.</p>
+          <p>Thank you again for your patience, and I look forward to moving this partnership forward.</p>
+          <p>Best regards,<br/>Yeji Jeong<br/>NAVER WORKS</p>`;
+      }
+      return;
+    }
     if(level===0){
       body.innerHTML = `
         <p>지호 팀장님,</p>
@@ -2143,12 +2237,22 @@
   function regenerate(){
     simulateAI(1000, ()=>{
       showToast('✨ 새로운 방향으로 다시 썼어요');
-      body.innerHTML = `
-        <p>윤지호 팀장님, 안녕하세요.</p>
-        <p>말씀해주신 Aurora 런칭 일정 — 팀 내부적으로 교차 확인해본 뒤, 제안 드리는 방향으로 정리해봤습니다.</p>
-        <p>리스크를 가장 먼저 고려했을 때 <span class="hl-edit hl-pop">5월 2주 차 내에서 확정</span>하는 것이 안전할 것 같고, 특히 <b>5월 14일(수)</b>이 마케팅 캠페인 오픈과 맞물려 가장 임팩트가 큰 시점으로 보입니다.</p>
-        <p>대안으로는 5월 12일(월) 또는 5월 19일(월)도 검토 가능합니다. 팀장님 선호에 맞추어 다음 스텝 준비하겠습니다.</p>
-        <p>감사합니다.<br/>정예지 드림</p>`;
+      if (currentDraftCtx === 'tanaka') {
+        body.innerHTML = `
+          <p>Dear Maya,</p>
+          <p>I appreciate your patience as our legal team finalizes the review. I wanted to share an updated perspective on the revised terms before Friday's deadline.</p>
+          <p>After cross-referencing the latest draft with our internal compliance requirements, <span class="hl-edit hl-pop">the core terms look strong</span> — we're particularly aligned on the revenue-sharing structure and data handling clauses.</p>
+          <p>There are two minor items I'd like to clarify: the exclusivity window in clause 4.2 and the renewal notice period. Both are straightforward, but I'd prefer to confirm them on a quick call rather than over email.</p>
+          <p>Could we connect today? I'm available from 3–5 PM KST. Looking forward to wrapping this up.</p>
+          <p>Best regards,<br/>Yeji Jeong</p>`;
+      } else {
+        body.innerHTML = `
+          <p>윤지호 팀장님, 안녕하세요.</p>
+          <p>말씀해주신 Aurora 런칭 일정 — 팀 내부적으로 교차 확인해본 뒤, 제안 드리는 방향으로 정리해봤습니다.</p>
+          <p>리스크를 가장 먼저 고려했을 때 <span class="hl-edit hl-pop">5월 2주 차 내에서 확정</span>하는 것이 안전할 것 같고, 특히 <b>5월 14일(수)</b>이 마케팅 캠페인 오픈과 맞물려 가장 임팩트가 큰 시점으로 보입니다.</p>
+          <p>대안으로는 5월 12일(월) 또는 5월 19일(월)도 검토 가능합니다. 팀장님 선호에 맞추어 다음 스텝 준비하겠습니다.</p>
+          <p>감사합니다.<br/>정예지 드림</p>`;
+      }
     });
   }
 
@@ -2167,8 +2271,10 @@
           row.classList.add('flash');
           setTimeout(() => row.classList.remove('flash'), 1400);
         }
-        if (idx === 0 || idx === 1) {
-          setTimeout(() => openDraft(), 500);
+        if (idx === 0) {
+          setTimeout(() => openDraft('aurora'), 500);
+        } else if (idx === 1) {
+          setTimeout(() => openDraft('tanaka'), 500);
         } else if (idx === 2) {
           setTimeout(() => openMsg(), 500);
         }
