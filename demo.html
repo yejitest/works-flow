@@ -392,6 +392,96 @@
   /* Hide excerpt in simpler layout */
   .f-src-q{display:none}
 
+  /* ── Flow tabs (to-do 스타일) ── */
+  .flow-tabs{
+    display:flex;gap:0;
+    margin:2px -4px 10px;padding:0 4px;
+    border-bottom:1px solid var(--g200);
+  }
+  .flow-tab{
+    padding:8px 2px;margin-right:18px;
+    font-size:12px;font-weight:600;color:var(--g580);
+    cursor:pointer;
+    border:none;background:none;
+    border-bottom:2px solid transparent;margin-bottom:-1px;
+    display:inline-flex;align-items:center;gap:6px;
+    transition:color .15s, border-color .15s;
+  }
+  .flow-tab:hover{color:var(--g900)}
+  .flow-tab.active{color:var(--g900);border-bottom-color:var(--g900);font-weight:700}
+  .flow-tab .tab-count{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:18px;height:17px;padding:0 5px;
+    background:var(--g150);color:var(--g750);
+    border-radius:9px;font-size:9.5px;font-weight:700;
+  }
+  .flow-tab.active .tab-count{background:var(--g900);color:var(--white)}
+
+  /* ── Card state variants ── */
+  .f-card.is-done{background:#FAFAFA}
+  .f-card.is-done .f-title{
+    text-decoration:line-through;
+    text-decoration-color:var(--g400);
+    color:var(--g500);
+  }
+  .f-card.is-done .f-desc,
+  .f-card.is-done .f-src-group{opacity:.5}
+  .f-card.is-done .f-chip,
+  .f-card.is-later .f-chip{opacity:.55}
+
+  .f-card.is-later{
+    background:linear-gradient(var(--white),var(--white)) padding-box,
+               linear-gradient(135deg,#FFD49E,#FFE7C2) border-box;
+    border:1.5px solid transparent;
+  }
+
+  /* Quick footer row (완료/미루기) */
+  .f-quick{
+    display:flex;align-items:center;gap:10px;
+    margin-top:10px;padding-top:10px;
+    border-top:1px dashed var(--g200);
+    font-size:10.5px;
+  }
+  .f-link{
+    background:none;border:none;
+    color:var(--g580);font-weight:600;cursor:pointer;
+    padding:2px 2px;
+    display:inline-flex;align-items:center;gap:4px;
+    transition:color .12s;
+  }
+  .f-link:hover{color:var(--g900)}
+  .f-link svg{opacity:.8}
+  .f-quick .sep{color:var(--g400);font-size:10px}
+
+  /* Restore row (완료/나중에 상태에서만 표시) */
+  .f-restore{
+    display:none;align-items:center;gap:10px;
+    margin-top:10px;padding-top:10px;
+    border-top:1px dashed var(--g200);
+  }
+  .f-card.is-done .f-restore,
+  .f-card.is-later .f-restore{display:flex}
+  .f-card.is-done .f-quick,
+  .f-card.is-later .f-quick,
+  .f-card.is-done .f-actions,
+  .f-card.is-later .f-actions{display:none}
+
+  .f-state-badge{
+    display:inline-flex;align-items:center;gap:5px;
+    padding:3px 9px;border-radius:20px;
+    font-size:10px;font-weight:700;letter-spacing:.2px;
+  }
+  .f-state-badge.done{background:#E8F5EC;color:#0A7A3E}
+  .f-state-badge.later{background:#FFF3DD;color:#A15800}
+
+  /* Card fade-out animation */
+  @keyframes cardShrink{
+    0%{opacity:1;transform:scale(1);max-height:600px;margin-bottom:9px}
+    60%{opacity:0;transform:scale(.96)}
+    100%{opacity:0;transform:scale(.96);max-height:0;margin-bottom:0;padding-top:0;padding-bottom:0;border-width:0}
+  }
+  .f-card.shrinking{animation:cardShrink .45s ease forwards;overflow:hidden}
+
   /* ── Action buttons — all black ── */
   .f-actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
   .f-btn{
@@ -1363,9 +1453,14 @@
     </div>
 
     <div class="flow-body">
+      <div class="flow-tabs" id="flowTabs">
+        <button class="flow-tab active" data-state="active">진행중<span class="tab-count">4</span></button>
+        <button class="flow-tab" data-state="done">완료<span class="tab-count">0</span></button>
+        <button class="flow-tab" data-state="later">나중에<span class="tab-count">0</span></button>
+      </div>
       <div class="f-section-label">🔥 오늘 꼭 처리해야 할 일</div>
 
-      <div class="f-card priority">
+      <div class="f-card priority" data-state="active">
         <div class="f-tag-row">
           <span class="f-chip pri">우선순위 1</span>
           <span class="f-chip risk">런칭 일정 리스크</span>
@@ -1448,11 +1543,19 @@
         <div class="f-actions">
           <button class="f-btn primary" onclick="openDraft('aurora')">메일 초안</button>
           <button class="f-btn ghost" onclick="openMsg()">메시지로</button>
-          <button class="f-btn ghost">무시</button>
+        </div>
+        <div class="f-quick">
+          <button class="f-link" onclick="laterCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>내일로 미루기</button>
+          <span class="sep">·</span>
+          <button class="f-link" onclick="completeCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>완료로 표시</button>
+        </div>
+        <div class="f-restore">
+          <span class="f-state-badge done">완료됨</span>
+          <button class="f-link" onclick="restoreCard(this)" style="margin-left:auto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 103-6.7L3 8"/><polyline points="3 3 3 8 8 8"/></svg>되돌리기</button>
         </div>
       </div>
 
-      <div class="f-card">
+      <div class="f-card" data-state="active">
         <div class="f-tag-row">
           <span class="f-chip due">마감 임박 · D-4</span>
           <span class="f-time">10분 전</span>
@@ -1521,11 +1624,20 @@
           <button class="f-btn primary" onclick="openDraft('tanaka')">답장 초안 만들기</button>
           <button class="f-btn ghost">법무팀 체크인</button>
         </div>
+        <div class="f-quick">
+          <button class="f-link" onclick="laterCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>내일로 미루기</button>
+          <span class="sep">·</span>
+          <button class="f-link" onclick="completeCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>완료로 표시</button>
+        </div>
+        <div class="f-restore">
+          <span class="f-state-badge done">완료됨</span>
+          <button class="f-link" onclick="restoreCard(this)" style="margin-left:auto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 103-6.7L3 8"/><polyline points="3 3 3 8 8 8"/></svg>되돌리기</button>
+        </div>
       </div>
 
       <div class="f-section-label">💡 부드럽게 챙기면 좋은 것</div>
 
-      <div class="f-card">
+      <div class="f-card" data-state="active">
         <div class="f-tag-row">
           <span class="f-chip nudge">답변 지연 · 메시지</span>
           <span class="f-time">1시간 전</span>
@@ -1564,9 +1676,18 @@
           <button class="f-btn primary" onclick="openMsg()">메시지로 답장</button>
           <button class="f-btn ghost">일정 공유</button>
         </div>
+        <div class="f-quick">
+          <button class="f-link" onclick="laterCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>내일로 미루기</button>
+          <span class="sep">·</span>
+          <button class="f-link" onclick="completeCard(this)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 12 10 17 19 7"/></svg>완료로 표시</button>
+        </div>
+        <div class="f-restore">
+          <span class="f-state-badge done">완료됨</span>
+          <button class="f-link" onclick="restoreCard(this)" style="margin-left:auto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 103-6.7L3 8"/><polyline points="3 3 3 8 8 8"/></svg>되돌리기</button>
+        </div>
       </div>
 
-      <div class="f-card">
+      <div class="f-card" data-state="active">
         <div class="f-tag-row">
           <span class="f-chip nudge">후속 제안</span>
           <span class="f-time">오늘 아침</span>
@@ -1601,8 +1722,12 @@
           </div>
         </details>
         <div class="f-actions">
-          <button class="f-btn ghost">내일로 미루기</button>
-          <button class="f-btn ghost">완료 표시</button>
+          <button class="f-btn ghost" onclick="laterCard(this)">내일로 미루기</button>
+          <button class="f-btn ghost" onclick="completeCard(this)">완료 표시</button>
+        </div>
+        <div class="f-restore">
+          <span class="f-state-badge done">완료됨</span>
+          <button class="f-link" onclick="restoreCard(this)" style="margin-left:auto"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 103-6.7L3 8"/><polyline points="3 3 3 8 8 8"/></svg>되돌리기</button>
         </div>
       </div>
 
@@ -2450,13 +2575,89 @@
     });
   }
 
+  // ===== Flow card state management (진행중/완료/나중에) =====
+  (function(){
+    const tabs = document.querySelectorAll('.flow-tab');
+    const cards = () => document.querySelectorAll('.f-card');
+    const labels = () => document.querySelectorAll('.f-section-label');
+    let currentTab = 'active';
+
+    function updateCounts(){
+      const counts = {active:0, done:0, later:0};
+      cards().forEach(c => { counts[c.dataset.state || 'active']++; });
+      tabs.forEach(t => {
+        const k = t.dataset.state;
+        const el = t.querySelector('.tab-count');
+        if (el) el.textContent = counts[k];
+      });
+    }
+    function applyFilter(){
+      cards().forEach(c => {
+        const st = c.dataset.state || 'active';
+        c.style.display = st === currentTab ? '' : 'none';
+      });
+      labels().forEach(l => { l.style.display = currentTab === 'active' ? '' : 'none'; });
+    }
+    tabs.forEach(t => {
+      t.addEventListener('click', () => {
+        tabs.forEach(x => x.classList.remove('active'));
+        t.classList.add('active');
+        currentTab = t.dataset.state;
+        applyFilter();
+      });
+    });
+
+    // Expose state mutators
+    window._flowSetState = (card, state) => {
+      card.classList.add('shrinking');
+      setTimeout(() => {
+        card.classList.remove('shrinking');
+        card.dataset.state = state;
+        card.classList.toggle('is-done', state === 'done');
+        card.classList.toggle('is-later', state === 'later');
+        // Update state badge inside restore bar
+        const badge = card.querySelector('.f-state-badge');
+        if (badge) {
+          badge.classList.remove('done','later');
+          if (state === 'done') { badge.classList.add('done'); badge.textContent = '✓ 완료됨'; }
+          if (state === 'later') { badge.classList.add('later'); badge.textContent = '⏰ 내일 오전 9시 알림'; }
+        }
+        updateCounts();
+        applyFilter();
+      }, 450);
+    };
+    window._flowRestore = (card) => {
+      card.dataset.state = 'active';
+      card.classList.remove('is-done','is-later','shrinking');
+      updateCounts();
+      applyFilter();
+    };
+    updateCounts();
+  })();
+
+  function completeCard(btn){
+    const card = btn.closest('.f-card');
+    window._flowSetState(card, 'done');
+    showToast('✓ 완료로 옮겼어요');
+  }
+  function laterCard(btn){
+    const card = btn.closest('.f-card');
+    window._flowSetState(card, 'later');
+    showToast('⏰ 내일 오전 9시에 다시 알려드릴게요');
+  }
+  function restoreCard(btn){
+    const card = btn.closest('.f-card');
+    window._flowRestore(card);
+    showToast('↺ 진행중으로 되돌렸어요');
+  }
+
   // ===== Feature 1: f-card click → scroll + flash mail row + open draft/msg =====
   (function(){
     const fCards = document.querySelectorAll('.f-card');
     const flowRows = document.querySelectorAll('.ml-row.flow-flag');
     fCards.forEach((card, idx) => {
       card.addEventListener('click', (e) => {
-        if (e.target.closest('.f-btn') || e.target.closest('.f-src-group')) return;
+        if (e.target.closest('.f-btn') || e.target.closest('.f-src-group') || e.target.closest('.f-link') || e.target.closest('.f-restore')) return;
         const row = flowRows[idx];
         if (row) {
           row.scrollIntoView({ behavior: 'smooth', block: 'center' });
