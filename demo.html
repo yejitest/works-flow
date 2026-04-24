@@ -331,18 +331,70 @@
   .f-ref.cal .dot{background:var(--blue)}
   .f-ref.msg .dot{background:var(--green)}
 
-  /* ── Source tags ── */
-  .f-sources{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap}
-  .f-src{
-    display:inline-flex;align-items:center;gap:4px;font-size:10px;
-    color:var(--g650);font-weight:600;padding:3px 8px;
-    background:var(--g100);border-radius:20px;border:1px solid var(--g200);
+  /* ── Source tags (legacy chip, hidden — replaced by .f-src-group) ── */
+  .f-sources{display:none}
+  .f-src{display:none}
+
+  /* ── Evidence block (출처 상세) ── */
+  .f-src-group{
+    margin-top:10px;
+    border-radius:10px;
+    border:1px solid var(--g200);
+    background:var(--white);
+    overflow:hidden;
   }
-  .f-src::before{content:"";width:5px;height:5px;border-radius:50%}
-  .f-src.mail::before{background:var(--red)}
-  .f-src.msg::before{background:var(--green)}
-  .f-src.cal::before{background:var(--blue)}
-  .f-src.drive::before{background:var(--orange)}
+  .f-src-head{
+    list-style:none;
+    cursor:pointer;
+    padding:8px 10px;
+    display:flex;align-items:center;gap:7px;
+    font-size:10.5px;color:var(--g650);font-weight:700;
+    letter-spacing:.2px;user-select:none;
+    background:var(--g100);
+    transition:background .15s;
+  }
+  .f-src-head::-webkit-details-marker{display:none}
+  .f-src-head:hover{background:var(--g200)}
+  .f-src-head .ico{color:var(--g580);flex-shrink:0;display:flex}
+  .f-src-head .count{color:var(--g900);font-weight:800}
+  .f-src-head .summary-line{color:var(--g580);font-weight:600;font-size:10px;margin-left:auto}
+  .f-src-head .chev{margin-left:4px;transition:transform .2s;color:var(--g500);flex-shrink:0}
+  .f-src-group[open] .chev{transform:rotate(180deg)}
+  .f-src-group[open] .f-src-head{border-bottom:1px solid var(--g200)}
+
+  .f-src-list{background:var(--white)}
+  .f-src-row{
+    display:flex;align-items:flex-start;gap:9px;
+    padding:9px 10px;
+    border-top:1px solid rgba(0,0,0,.05);
+    font-size:11px;color:var(--g750);line-height:1.45;
+    transition:background .12s;
+  }
+  .f-src-row:first-child{border-top:none}
+  .f-src-row:hover{background:var(--g50, #FAFBFC)}
+  .f-src-pill{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-width:40px;height:18px;padding:0 7px;border-radius:5px;
+    font-size:9.5px;font-weight:800;letter-spacing:.3px;
+    flex-shrink:0;margin-top:1px;
+  }
+  .f-src-pill.mail{background:#FFEBE8;color:#C4312A}
+  .f-src-pill.msg{background:#D9F5E6;color:#006E32}
+  .f-src-pill.cal{background:#E2ECFF;color:#1F55C7}
+  .f-src-pill.drive{background:#FFEDDB;color:#A15800}
+  .f-src-main{min-width:0;flex:1}
+  .f-src-t{
+    font-weight:700;color:var(--g900);font-size:11.5px;letter-spacing:-.1px;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+  }
+  .f-src-t b{color:var(--g900);font-weight:800}
+  .f-src-q{
+    color:var(--g650);font-size:10.5px;margin-top:2px;
+    overflow:hidden;text-overflow:ellipsis;
+    display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;
+  }
+  .f-src-time{font-size:10px;color:var(--g500);flex-shrink:0;margin-top:2px;font-weight:600;white-space:nowrap}
+  .f-src-time.due{color:var(--red);font-weight:800}
 
   /* ── Action buttons — all black ── */
   .f-actions{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap}
@@ -1328,22 +1380,76 @@
           내일 15시 <b>Aurora PM 싱크</b>에서 런칭 시점을 확정하려면, 오늘 중 후보 날짜 3개를 공유해야 흐름이 끊기지 않아요.
           드라이브의 <b>런칭 플랜 v2.3</b>과 일정이 어긋난 구간도 함께 확인 필요.
         </div>
-        <div class="f-ref mail">
-          <span class="dot"></span>
-          <span><b>윤지호</b> "런칭 시점을 확정하고 싶은데..."</span>
-          <span style="margin-left:auto;color:var(--g580)">오늘 16:22</span>
-        </div>
-        <div class="f-ref cal">
-          <span class="dot"></span>
-          <span>4월 22일 15:00 · <b>Aurora PM 싱크</b></span>
-          <span style="margin-left:auto;color:var(--red);font-weight:700">D-1</span>
-        </div>
-        <div class="f-sources">
-          <span class="f-src mail">메일 2</span>
-          <span class="f-src msg">메시지 3</span>
-          <span class="f-src cal">일정 1</span>
-          <span class="f-src drive">파일 2</span>
-        </div>
+        <details class="f-src-group" open>
+          <summary class="f-src-head">
+            <span class="ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg></span>
+            <span>AI가 교차 분석한 근거 · <span class="count">8</span>개</span>
+            <span class="summary-line">메일 2 · 메시지 3 · 일정 1 · 파일 2</span>
+            <span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="f-src-list">
+            <div class="f-src-row">
+              <span class="f-src-pill mail">메일</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>윤지호 팀장</b> · Aurora 런칭 일정 조율 요청</div>
+                <div class="f-src-q">"이번 주 중으로 런칭 시점을 확정하고 싶은데..."</div>
+              </div>
+              <span class="f-src-time">오늘 16:22</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill mail">메일</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>박민지</b> · QA 리소스 가용성 공유</div>
+                <div class="f-src-q">"5월 2주 차는 QA 전원 투입 가능합니다."</div>
+              </div>
+              <span class="f-src-time">어제 18:40</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill msg">메시지</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>윤지호 팀장</b> · "내일 싱크는 필참 부탁드려요"</div>
+              </div>
+              <span class="f-src-time">오늘 11:04</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill msg">메시지</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>마케팅 Jane</b> · "캠페인 오픈 5/14 확정됐어요"</div>
+              </div>
+              <span class="f-src-time">어제 14:20</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill msg">메시지</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>Alex K.</b> (파트너) · "연동 테스트 버퍼 1주 요청드립니다"</div>
+              </div>
+              <span class="f-src-time">2일 전</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill cal">일정</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>Aurora PM 싱크</b> · 4월 22일(화) 15:00</div>
+              </div>
+              <span class="f-src-time due">D-1</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill drive">파일</span>
+              <div class="f-src-main">
+                <div class="f-src-t">런칭 플랜 v2.3.key</div>
+                <div class="f-src-q">윤지호 팀장이 오늘 수정 · 런칭 일정 섹션 3건 변경</div>
+              </div>
+              <span class="f-src-time">11:47</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill drive">파일</span>
+              <div class="f-src-main">
+                <div class="f-src-t">QA 리소스 매트릭스.xlsx</div>
+                <div class="f-src-q">박민지 · 5월 가용 일정 주차별 정리</div>
+              </div>
+              <span class="f-src-time">어제</span>
+            </div>
+          </div>
+        </details>
         <div class="f-actions">
           <button class="f-btn primary" onclick="openDraft()">메일 초안</button>
           <button class="f-btn ghost" onclick="openMsg()">메시지로</button>
@@ -1360,11 +1466,63 @@
         <div class="f-desc">
           금요일까지 개정안 확인이 필요하다는 메일 — 법무팀 검토가 <b>83% 완료</b>라 오늘 중 미들 체크인을 넣어두면 마감 리스크가 줄어요.
         </div>
-        <div class="f-sources">
-          <span class="f-src mail">메일 2</span>
-          <span class="f-src msg">메시지 1</span>
-          <span class="f-src drive">파일 3</span>
-        </div>
+        <details class="f-src-group" open>
+          <summary class="f-src-head">
+            <span class="ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg></span>
+            <span>AI가 교차 분석한 근거 · <span class="count">6</span>개</span>
+            <span class="summary-line">메일 2 · 메시지 1 · 파일 3</span>
+            <span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="f-src-list">
+            <div class="f-src-row">
+              <span class="f-src-pill mail">메일</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>Maya Tanaka</b> · Re: Partnership proposal review</div>
+                <div class="f-src-q">"Could you confirm the revised terms by Friday?"</div>
+              </div>
+              <span class="f-src-time">15:47</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill mail">메일</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>박정훈 변호사</b> · 파트너십 계약 검토 현황</div>
+                <div class="f-src-q">"주요 조항 83% 검토 완료, 2건 추가 논의 필요"</div>
+              </div>
+              <span class="f-src-time">14:10</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill msg">메시지</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>법무팀 채널</b> · "리스크 포인트 2건 공유드립니다"</div>
+              </div>
+              <span class="f-src-time">오전 11:02</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill drive">파일</span>
+              <div class="f-src-main">
+                <div class="f-src-t">Partnership_Agreement_v4.pdf</div>
+                <div class="f-src-q">법무팀 · 조항 4.2 · 7.1 검토 코멘트 15건</div>
+              </div>
+              <span class="f-src-time">어제</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill drive">파일</span>
+              <div class="f-src-main">
+                <div class="f-src-t">Legal_review_checklist.xlsx</div>
+                <div class="f-src-q">박정훈 · 12/15 항목 승인, 2건 보류</div>
+              </div>
+              <span class="f-src-time">오늘 09:30</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill drive">파일</span>
+              <div class="f-src-main">
+                <div class="f-src-t">NDA_revision.docx</div>
+                <div class="f-src-q">Maya 수정본 · 조항 3항 변경 제안</div>
+              </div>
+              <span class="f-src-time">3일 전</span>
+            </div>
+          </div>
+        </details>
         <div class="f-actions">
           <button class="f-btn primary" onclick="openDraft()">답장 초안 만들기</button>
           <button class="f-btn ghost">법무팀 체크인</button>
@@ -1383,10 +1541,32 @@
           <b>메시지</b>에서 스프린트 회고 일정 조율 요청이 미응답 상태예요.
           캘린더상 회고 슬롯이 <b>이번 주 금요일</b>이라 오늘 중 답이 좋겠어요.
         </div>
-        <div class="f-sources">
-          <span class="f-src msg">메시지 1</span>
-          <span class="f-src cal">일정 1</span>
-        </div>
+        <details class="f-src-group" open>
+          <summary class="f-src-head">
+            <span class="ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg></span>
+            <span>AI가 교차 분석한 근거 · <span class="count">2</span>개</span>
+            <span class="summary-line">메시지 1 · 일정 1</span>
+            <span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="f-src-list">
+            <div class="f-src-row">
+              <span class="f-src-pill msg">메시지</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>김도현 PM</b> · 스프린트 회고 일정 확인</div>
+                <div class="f-src-q">"이번 주 중으로 시간 조율해서 공유드리면 감사하겠습니다 🙏"</div>
+              </div>
+              <span class="f-src-time">4일 전</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill cal">일정</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>스프린트 회고</b> · 4월 25일(금) 후보 3슬롯</div>
+                <div class="f-src-q">10:00 / 14:00 / 16:00 · 참석자 5명 확정 대기</div>
+              </div>
+              <span class="f-src-time due">D-1</span>
+            </div>
+          </div>
+        </details>
         <div class="f-actions">
           <button class="f-btn primary" onclick="openMsg()">메시지로 답장</button>
           <button class="f-btn ghost">일정 공유</button>
@@ -1402,10 +1582,32 @@
         <div class="f-desc">
           제출 마감 <b>4월 25일</b>이 Aurora 런칭 일정과 겹쳐요. 오늘 미리 정리하면 마감일 부담을 줄일 수 있어요.
         </div>
-        <div class="f-sources">
-          <span class="f-src mail">메일 1</span>
-          <span class="f-src cal">일정 1</span>
-        </div>
+        <details class="f-src-group" open>
+          <summary class="f-src-head">
+            <span class="ico"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg></span>
+            <span>AI가 교차 분석한 근거 · <span class="count">2</span>개</span>
+            <span class="summary-line">메일 1 · 일정 1</span>
+            <span class="chev"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><polyline points="6 9 12 15 18 9"/></svg></span>
+          </summary>
+          <div class="f-src-list">
+            <div class="f-src-row">
+              <span class="f-src-pill mail">메일</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>재무팀 공지</b> · 법인카드 내역 제출 안내 (4월)</div>
+                <div class="f-src-q">"4월 25일(금)까지 증빙과 함께 제출 부탁드립니다."</div>
+              </div>
+              <span class="f-src-time">오늘 09:12</span>
+            </div>
+            <div class="f-src-row">
+              <span class="f-src-pill cal">일정</span>
+              <div class="f-src-main">
+                <div class="f-src-t"><b>법인카드 내역 제출 마감</b> · 4월 25일(금)</div>
+                <div class="f-src-q">Aurora 런칭 일정과 겹침 — 오늘 정리 시 부담 ↓</div>
+              </div>
+              <span class="f-src-time due">D-1</span>
+            </div>
+          </div>
+        </details>
         <div class="f-actions">
           <button class="f-btn ghost">내일로 미루기</button>
           <button class="f-btn ghost">완료 표시</button>
@@ -2262,7 +2464,7 @@
     const flowRows = document.querySelectorAll('.ml-row.flow-flag');
     fCards.forEach((card, idx) => {
       card.addEventListener('click', (e) => {
-        if (e.target.closest('.f-btn')) return;
+        if (e.target.closest('.f-btn') || e.target.closest('.f-src-group')) return;
         const row = flowRows[idx];
         if (row) {
           row.scrollIntoView({ behavior: 'smooth', block: 'center' });
