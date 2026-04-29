@@ -90,87 +90,220 @@
   aside.flow{transition:transform .25s cubic-bezier(.4,.2,.2,1),opacity .2s}
 
   /* ====== Mini sidebar (collapsed) ====== */
-  .app.sb-collapsed .sb-quick,
-  .app.sb-collapsed .sb-flow-card,
-  .app.sb-collapsed .sb-group,
-  .app.sb-collapsed .sb-sub,
-  .app.sb-collapsed .sb-bottom,
-  .app.sb-collapsed .btn-compose.ghost { display:none }
+  .app.sb-collapsed .nav_lnb .top_menu,
+  .app.sb-collapsed .nav_lnb .scroll_pane,
+  .app.sb-collapsed .nav_lnb .aside_pane,
+  .app.sb-collapsed .nav_lnb .core_button a:last-of-type{display:none}
+  .app.sb-collapsed .nav_lnb .main_pane{padding-bottom:8px}
+  .app.sb-collapsed .nav_lnb .core_button{padding:16px 12px 0}
+  .app.sb-collapsed .nav_lnb .core_button a{width:40px;height:40px;line-height:40px;border-radius:50%}
+  .app.sb-collapsed .nav_lnb .core_button a strong{font-size:0}
+  .app.sb-collapsed .nav_lnb .core_button a::after{content:"+";font-size:22px;color:#fff;font-weight:600;line-height:40px;display:block}
 
-  .app.sb-collapsed .sb-label,
-  .app.sb-collapsed .sb-item .cnt { display:none }
-
-  .app.sb-collapsed .sb-scroll { padding:12px 0 8px }
-  .app.sb-collapsed .sb-compose { grid-template-columns:1fr; margin-bottom:12px; padding:0 12px }
-  .app.sb-collapsed .btn-compose.primary {
-    width:40px; height:40px; border-radius:50%; padding:0; margin-left:0;
-    display:flex; align-items:center; justify-content:center;
+  /* ====== Real NAVER WORKS sidebar (Figma tokens) ====== */
+  :root{
+    --nw-corp:#0CC759;
+    --nw-blue:#118DFF;
+    --nw-blue-cnt:#3591FF;
+    --nw-blue10:rgba(17,141,255,.10);
+    --nw-bg:#F9FAFC;
+    --nw-gray100:#F7F8FA;
+    --nw-gray200:#F1F2F5;
+    --nw-gray300:#E5E7EB;
+    --nw-gray400:#A0A6AD;
+    --nw-gray500:#71767A;
+    --nw-gray700:#5C636B;
+    --nw-gray800:#3F4247;
+    --nw-gray900:#1D1F23;
+    --nw-hover:rgba(146,162,211,.10);
   }
-  .app.sb-collapsed .sb-nav { padding:0 8px }
-  .app.sb-collapsed .sb-item {
-    padding:9px 0 9px 14px; border-radius:8px;
-  }
 
-  /* ====== Sidebar ====== */
-  .sidebar{background:var(--white);border-right:1px solid var(--g300);
-    display:flex;flex-direction:column;overflow:hidden}
-  .sb-scroll{flex:1;overflow-y:auto;padding:16px 14px 8px;min-width:240px}
+  .nav_lnb{background:var(--nw-bg);border-right:1px solid var(--nw-gray300);
+    display:flex;flex-direction:column;overflow:hidden;
+    font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Apple SD Gothic Neo","Noto Sans KR",sans-serif;
+    -webkit-font-smoothing:antialiased}
 
-  .sb-compose{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:14px}
-  .btn-compose{height:40px;border-radius:8px;font-weight:700;font-size:13px;
-    display:flex;align-items:center;justify-content:center;gap:6px}
-  .btn-compose.primary{background:var(--green);color:var(--white)}
-  .btn-compose.primary:hover{background:var(--green-dk)}
-  .btn-compose.ghost{background:var(--white);color:var(--green-dk);border:1px solid var(--green)}
-  .btn-compose.ghost:hover{background:var(--green-xlt)}
+  /* main_pane */
+  .nav_lnb .main_pane{flex-shrink:0}
+  .main_pane .core_button{display:flex;padding:16px 10px 0;position:relative;z-index:10}
+  .main_pane .core_button a{flex:0 0 auto;width:50%;height:44px;line-height:44px;
+    background:var(--nw-corp);color:#fff;font-size:14px;font-weight:600;
+    text-align:center;text-decoration:none;position:relative;overflow:hidden}
+  .main_pane .core_button a strong{display:block;height:100%;font-weight:600}
+  .main_pane .core_button a:hover strong{background:var(--nw-hover)}
+  .main_pane .core_button a:first-child{border-radius:8px 0 0 8px}
+  .main_pane .core_button a:last-of-type{border-radius:0 8px 8px 0}
+  .main_pane .core_button a + a::before{content:"";position:absolute;left:0;top:12px;
+    height:20px;border-left:1px solid rgba(255,255,255,.2)}
 
-  .sb-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;margin-bottom:14px}
-  .qf{padding:10px 4px 8px;border-radius:8px;display:flex;flex-direction:column;
-    align-items:center;justify-content:flex-start;gap:6px;color:var(--g750);cursor:pointer;
-    height:62px}
-  .qf:hover{background:var(--g150)}
-  .qf-top{height:24px;display:flex;align-items:center;justify-content:center}
-  .qf-num{font-size:15px;font-weight:800;color:var(--blue);line-height:24px}
-  .qf-ico{width:24px;height:24px;display:flex;align-items:center;justify-content:center}
-  .qf-ico svg{display:block}
-  .qf-label{font-size:11px;color:var(--g750);font-weight:500;line-height:1;height:12px;
-    display:flex;align-items:center}
-  .qf.to-badge .qf-ico{border:1.8px solid var(--g650);border-radius:999px;
-    font-size:9px;font-weight:700;color:var(--g650);width:28px;height:17px;line-height:1;
-    letter-spacing:.3px;padding-top:1px;box-sizing:border-box}
+  .main_pane .top_menu{display:flex;padding:6px 12px;border-bottom:1px solid var(--nw-hover)}
+  .main_pane .top_menu a{flex:1 1 0;padding:32px 0 6px;border-radius:4px;
+    color:var(--nw-gray900);font-size:12px;line-height:18px;
+    text-align:center;text-decoration:none;white-space:nowrap;position:relative;cursor:pointer}
+  .main_pane .top_menu a:hover{background:var(--nw-hover)}
+  .main_pane .top_menu a.selected{color:var(--nw-blue);font-weight:700}
+  .main_pane .top_menu .unread .count{position:absolute;left:0;right:0;top:8px;
+    margin:0 auto;color:var(--nw-blue);font-size:16px;font-weight:700;line-height:24px}
+  .main_pane .top_menu .mark::before,
+  .main_pane .top_menu .remind::before,
+  .main_pane .top_menu .tome::before{content:"";position:absolute;left:0;right:0;top:8px;
+    margin:0 auto;width:20px;height:20px;background:var(--nw-gray800);
+    -webkit-mask-position:center;mask-position:center;
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+    -webkit-mask-size:contain;mask-size:contain}
+  .main_pane .top_menu .mark::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M6.09783 17.4997C5.73931 17.4997 5.38079 17.3829 5.0723 17.1662C4.53035 16.7743 4.26355 16.1156 4.38028 15.4569L4.91388 12.322C4.94723 12.1302 4.88053 11.9385 4.74713 11.8051L2.47096 9.58725C1.98737 9.12034 1.82062 8.42832 2.02906 7.79466C2.2375 7.15266 2.77945 6.70243 3.43812 6.60238L6.58141 6.14381C6.77318 6.11879 6.93993 5.99373 7.02331 5.82698L8.43237 2.9755C8.73252 2.37519 9.33283 2 9.99984 2C10.6669 2 11.2755 2.37519 11.5673 2.9755L12.9764 5.82698C13.0598 6.00207 13.2265 6.11879 13.4183 6.14381L16.5616 6.60238C17.2286 6.70243 17.7705 7.15266 17.9706 7.79466C18.1791 8.43666 18.0123 9.12034 17.5287 9.58725L15.2526 11.8051C15.1108 11.9385 15.0525 12.1302 15.0858 12.322L15.6194 15.4569C15.7361 16.1156 15.4693 16.7743 14.9274 17.1662C14.3854 17.558 13.6767 17.6081 13.0848 17.2996L10.2666 15.8238C10.0999 15.7321 9.89145 15.7321 9.7247 15.8238L6.90658 17.2996C6.64811 17.433 6.36463 17.4997 6.08949 17.4997H6.09783ZM9.99984 3.49244C9.94148 3.49244 9.83309 3.50911 9.77473 3.63418L8.36567 6.48565C8.06551 7.10263 7.47354 7.52785 6.79819 7.62791L3.6549 8.08648C3.5215 8.10315 3.47147 8.2032 3.4548 8.25323C3.43812 8.30325 3.42145 8.41164 3.5215 8.5117L5.79767 10.7295C6.28959 11.2048 6.51471 11.8968 6.39798 12.5721L5.86437 15.7071C5.83936 15.8405 5.9144 15.9155 5.96443 15.9489C6.01445 15.9822 6.10617 16.0322 6.23123 15.9655L9.04935 14.4898C9.658 14.173 10.3834 14.173 10.992 14.4898L13.8101 15.9655C13.9269 16.0322 14.0269 15.9822 14.0769 15.9489C14.127 15.9155 14.202 15.8405 14.177 15.7071L13.6434 12.5721C13.5267 11.8968 13.7518 11.2048 14.2437 10.7295L16.5199 8.5117C16.6199 8.41998 16.6033 8.31159 16.5866 8.25323C16.5699 8.19486 16.5199 8.10315 16.3865 8.08648L13.2432 7.62791C12.5678 7.52785 11.9759 7.10263 11.6757 6.48565L10.2666 3.63418C10.2083 3.50911 10.0999 3.49244 10.0415 3.49244H9.99984Z' fill='%233F4247'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M6.09783 17.4997C5.73931 17.4997 5.38079 17.3829 5.0723 17.1662C4.53035 16.7743 4.26355 16.1156 4.38028 15.4569L4.91388 12.322C4.94723 12.1302 4.88053 11.9385 4.74713 11.8051L2.47096 9.58725C1.98737 9.12034 1.82062 8.42832 2.02906 7.79466C2.2375 7.15266 2.77945 6.70243 3.43812 6.60238L6.58141 6.14381C6.77318 6.11879 6.93993 5.99373 7.02331 5.82698L8.43237 2.9755C8.73252 2.37519 9.33283 2 9.99984 2C10.6669 2 11.2755 2.37519 11.5673 2.9755L12.9764 5.82698C13.0598 6.00207 13.2265 6.11879 13.4183 6.14381L16.5616 6.60238C17.2286 6.70243 17.7705 7.15266 17.9706 7.79466C18.1791 8.43666 18.0123 9.12034 17.5287 9.58725L15.2526 11.8051C15.1108 11.9385 15.0525 12.1302 15.0858 12.322L15.6194 15.4569C15.7361 16.1156 15.4693 16.7743 14.9274 17.1662C14.3854 17.558 13.6767 17.6081 13.0848 17.2996L10.2666 15.8238C10.0999 15.7321 9.89145 15.7321 9.7247 15.8238L6.90658 17.2996C6.64811 17.433 6.36463 17.4997 6.08949 17.4997H6.09783ZM9.99984 3.49244C9.94148 3.49244 9.83309 3.50911 9.77473 3.63418L8.36567 6.48565C8.06551 7.10263 7.47354 7.52785 6.79819 7.62791L3.6549 8.08648C3.5215 8.10315 3.47147 8.2032 3.4548 8.25323C3.43812 8.30325 3.42145 8.41164 3.5215 8.5117L5.79767 10.7295C6.28959 11.2048 6.51471 11.8968 6.39798 12.5721L5.86437 15.7071C5.83936 15.8405 5.9144 15.9155 5.96443 15.9489C6.01445 15.9822 6.10617 16.0322 6.23123 15.9655L9.04935 14.4898C9.658 14.173 10.3834 14.173 10.992 14.4898L13.8101 15.9655C13.9269 16.0322 14.0269 15.9822 14.0769 15.9489C14.127 15.9155 14.202 15.8405 14.177 15.7071L13.6434 12.5721C13.5267 11.8968 13.7518 11.2048 14.2437 10.7295L16.5199 8.5117C16.6199 8.41998 16.6033 8.31159 16.5866 8.25323C16.5699 8.19486 16.5199 8.10315 16.3865 8.08648L13.2432 7.62791C12.5678 7.52785 11.9759 7.10263 11.6757 6.48565L10.2666 3.63418C10.2083 3.50911 10.0999 3.49244 10.0415 3.49244H9.99984Z' fill='%233F4247'/></svg>")}
+  .main_pane .top_menu .remind::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M2.10822 9.41663C2.37488 5.63329 5.41655 2.49996 9.19155 2.12496C14.2416 1.62496 18.4499 5.88329 17.8582 10.95C17.4916 14.075 15.2166 16.725 12.1999 17.6C11.2416 17.875 10.2999 17.9583 9.40822 17.8916C8.91655 17.8583 8.59988 17.35 8.76655 16.8833C8.88322 16.575 9.18322 16.3666 9.50822 16.3916C9.67488 16.4166 9.83322 16.4166 9.99988 16.4166C13.5416 16.4166 16.4166 13.5416 16.4166 9.99996C16.4166 6.20829 13.1249 3.18329 9.24988 3.62496C6.39155 3.95829 4.03322 6.25829 3.64988 9.11662C3.39484 11.0191 3.97795 12.7847 5.08321 14.1023V12.9167C5.08321 12.5025 5.419 12.1667 5.83321 12.1667C6.24743 12.1667 6.58321 12.5025 6.58321 12.9167V15.5751C6.58321 16.131 6.13076 16.5834 5.57488 16.5834H2.91654C2.50233 16.5834 2.16654 16.2476 2.16654 15.8334C2.16654 15.4192 2.50233 15.0834 2.91654 15.0834H3.96067C2.68258 13.5736 1.95228 11.5856 2.10822 9.41663Z' fill='%233F4247'/><path d='M9.99988 5.35828C10.4141 5.35828 10.7499 5.69406 10.7499 6.10828V9.57493L13.6269 11.2982C13.9823 11.511 14.0978 11.9716 13.885 12.327C13.6721 12.6823 13.2115 12.7979 12.8562 12.585L9.61449 10.6434C9.38831 10.5079 9.24988 10.2636 9.24988 9.99994V6.10828C9.24988 5.69406 9.58566 5.35828 9.99988 5.35828Z' fill='%233F4247'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M2.10822 9.41663C2.37488 5.63329 5.41655 2.49996 9.19155 2.12496C14.2416 1.62496 18.4499 5.88329 17.8582 10.95C17.4916 14.075 15.2166 16.725 12.1999 17.6C11.2416 17.875 10.2999 17.9583 9.40822 17.8916C8.91655 17.8583 8.59988 17.35 8.76655 16.8833C8.88322 16.575 9.18322 16.3666 9.50822 16.3916C9.67488 16.4166 9.83322 16.4166 9.99988 16.4166C13.5416 16.4166 16.4166 13.5416 16.4166 9.99996C16.4166 6.20829 13.1249 3.18329 9.24988 3.62496C6.39155 3.95829 4.03322 6.25829 3.64988 9.11662C3.39484 11.0191 3.97795 12.7847 5.08321 14.1023V12.9167C5.08321 12.5025 5.419 12.1667 5.83321 12.1667C6.24743 12.1667 6.58321 12.5025 6.58321 12.9167V15.5751C6.58321 16.131 6.13076 16.5834 5.57488 16.5834H2.91654C2.50233 16.5834 2.16654 16.2476 2.16654 15.8334C2.16654 15.4192 2.50233 15.0834 2.91654 15.0834H3.96067C2.68258 13.5736 1.95228 11.5856 2.10822 9.41663Z' fill='%233F4247'/><path d='M9.99988 5.35828C10.4141 5.35828 10.7499 5.69406 10.7499 6.10828V9.57493L13.6269 11.2982C13.9823 11.511 14.0978 11.9716 13.885 12.327C13.6721 12.6823 13.2115 12.7979 12.8562 12.585L9.61449 10.6434C9.38831 10.5079 9.24988 10.2636 9.24988 9.99994V6.10828C9.24988 5.69406 9.58566 5.35828 9.99988 5.35828Z' fill='%233F4247'/></svg>")}
+  .main_pane .top_menu .tome::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='157.5 59.8 16 13' fill='none'><rect x='158.561' y='60.6202' width='14.6121' height='11.4527' rx='5.72635' stroke='black' stroke-width='1.18'/><path d='M163.302 68.5822V65.5936H162.276V64.6866H165.472V65.5936H164.446V68.5822H163.302ZM167.54 68.6523C166.333 68.6523 165.58 67.8802 165.58 66.6357V66.6303C165.58 65.3885 166.339 64.6164 167.54 64.6164C168.749 64.6164 169.505 65.3912 169.505 66.6303V66.6357C169.505 67.8775 168.752 68.6523 167.54 68.6523ZM167.54 67.7183C168.034 67.7183 168.339 67.2998 168.339 66.6357V66.6303C168.339 65.9608 168.026 65.5504 167.54 65.5504C167.062 65.5504 166.746 65.9581 166.746 66.6303V66.6357C166.746 67.3079 167.059 67.7183 167.54 67.7183Z' fill='black'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='157.5 59.8 16 13' fill='none'><rect x='158.561' y='60.6202' width='14.6121' height='11.4527' rx='5.72635' stroke='black' stroke-width='1.18'/><path d='M163.302 68.5822V65.5936H162.276V64.6866H165.472V65.5936H164.446V68.5822H163.302ZM167.54 68.6523C166.333 68.6523 165.58 67.8802 165.58 66.6357V66.6303C165.58 65.3885 166.339 64.6164 167.54 64.6164C168.749 64.6164 169.505 65.3912 169.505 66.6303V66.6357C169.505 67.8775 168.752 68.6523 167.54 68.6523ZM167.54 67.7183C168.034 67.7183 168.339 67.2998 168.339 66.6357V66.6303C168.339 65.9608 168.026 65.5504 167.54 65.5504C167.062 65.5504 166.746 65.9581 166.746 66.6303V66.6357C166.746 67.3079 167.059 67.7183 167.54 67.7183Z' fill='black'/></svg>")}
+  .main_pane .top_menu .selected::before{background:var(--nw-blue) !important}
 
-  .sb-nav{margin-bottom:14px}
-  .sb-item{display:flex;align-items:center;gap:10px;padding:9px 10px;
-    border-radius:6px;color:var(--g800);font-size:13px;cursor:pointer;position:relative}
-  .sb-item:hover{background:var(--g150)}
-  .sb-item.active{background:var(--green-lt);color:var(--g900);font-weight:600}
-  .sb-item .ic{color:var(--g650);flex-shrink:0;display:flex}
-  .sb-item.active .ic{color:var(--green-dk)}
-  .sb-item .cnt{margin-left:auto;color:var(--g580);font-size:11px}
-  .sb-item.active .cnt{color:var(--green-dk);font-weight:700}
+  /* scroll_pane */
+  .nav_lnb .scroll_pane{flex:1 1 auto;overflow-y:auto;display:flex;flex-direction:column}
+  .nav_lnb .blind{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .scroll_pane .menu_cover{flex:1 1 auto}
 
-  .sb-group{display:flex;align-items:center;gap:6px;padding:10px 8px 6px;
-    color:var(--g800);font-size:12px;font-weight:600;cursor:pointer}
-  .sb-group .chev{transition:transform .15s;color:var(--g580)}
-  .sb-group.open .chev{transform:rotate(90deg)}
-  .sb-sub{padding-left:4px}
-  .sb-sub .sb-item{padding:7px 10px;font-size:12.5px}
-  .sb-sub .sb-item .ic{color:var(--g580)}
-  .tree-child{padding-left:18px}
-  .sb-item .dot-purple{width:10px;height:10px;border-radius:50%;background:var(--purple);margin-right:2px}
+  /* menu_box */
+  .menu_box{padding:12px 10px 0}
+  .menu_box .head_bar{display:flex;align-items:center;position:relative}
+  .menu_box .head_bar .btn_fold{flex:1 1 auto;height:34px;line-height:34px;
+    padding-left:16px;color:var(--nw-gray800);font-size:12px;font-weight:400;
+    text-align:left;background:transparent;border:0;cursor:pointer;position:relative}
+  .menu_box .head_bar .btn_fold::before{content:"";position:absolute;left:4px;top:13px;
+    width:8px;height:8px;background:var(--nw-gray800);
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path d='M1.5 2.5L4 5l2.5-2.5' stroke='black' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path d='M1.5 2.5L4 5l2.5-2.5' stroke='black' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+  .menu_box.fold .head_bar .btn_fold::before{transform:rotate(-90deg)}
+  .menu_box.fold .lnb_tree{display:none}
+  .menu_box .head_bar .side_btn{visibility:visible}
 
-  .sb-flow-card{margin:0 0 14px;padding:14px;border-radius:12px;
-    background:var(--grad-flow);color:var(--white);position:relative;overflow:hidden;cursor:pointer}
-  .sb-flow-card::before{display:none}
-  .sb-flow-title{font-size:10px;font-weight:800;letter-spacing:.5px;opacity:.9}
-  .sb-flow-desc{font-size:13px;font-weight:700;margin-top:4px;line-height:1.4}
-  .sb-flow-cta{margin-top:10px;display:inline-flex;align-items:center;gap:6px;
-    padding:5px 10px;background:rgba(255,255,255,.22);border-radius:6px;
-    font-size:11px;font-weight:700}
+  /* side_btn (in head_bar) */
+  .head_bar .side_btn{width:24px;height:24px;border:0;background:transparent;
+    border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--nw-gray700)}
+  .head_bar .side_btn:hover{background:var(--nw-hover)}
+  .head_bar .btn_add::before{content:"";width:14px;height:14px;background:currentColor;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><path d='M7 1.5v11M1.5 7h11' stroke='black' stroke-width='1.6' stroke-linecap='round'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'><path d='M7 1.5v11M1.5 7h11' stroke='black' stroke-width='1.6' stroke-linecap='round'/></svg>");
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+  .head_bar .btn_setting::before{content:"";width:14px;height:14px;background:currentColor;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='black' stroke-width='1.3'><circle cx='7' cy='7' r='2'/><path d='M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.76 2.76l1.06 1.06M10.18 10.18l1.06 1.06M2.76 11.24l1.06-1.06M10.18 3.82l1.06-1.06'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='black' stroke-width='1.3'><circle cx='7' cy='7' r='2'/><path d='M7 1v1.5M7 11.5V13M1 7h1.5M11.5 7H13M2.76 2.76l1.06 1.06M10.18 10.18l1.06 1.06M2.76 11.24l1.06-1.06M10.18 3.82l1.06-1.06'/></svg>");
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
 
-  .sb-bottom{border-top:1px solid var(--g300);padding:10px 16px;font-size:11px;color:var(--g650);
-    display:flex;align-items:center;gap:4px}
-  .sb-bottom b{color:var(--blue);font-weight:700}
+  /* lnb_tree */
+  .lnb_tree{list-style:none;margin:0;padding:0}
+  .lnb_tree li{position:relative}
+  .lnb_tree li + li{padding-top:0}
+  .head_bar + .lnb_tree li + li{padding-top:0}
+  .lnb_tree .menu_item{display:flex;align-items:center;
+    height:34px;padding:0 8px 0 16px;line-height:20px;border-radius:4px;cursor:pointer;position:relative}
+  .lnb_tree .menu_item:hover{background:var(--nw-hover)}
+  .lnb_tree .menu_item.selected{background:var(--nw-blue10)}
+  .lnb_tree .menu_item.selected .item_txt{color:var(--nw-blue);font-weight:700}
+  .lnb_tree .menu_item.selected .unread_cnt{color:var(--nw-blue)}
+  .lnb_tree .menu_item.selected .item_txt::before{background:var(--nw-blue)!important}
+
+  .lnb_tree .menu_item .item_txt{flex:0 1 auto;display:inline-block;
+    max-width:100%;padding-left:32px;line-height:20px;
+    color:var(--nw-gray800);font-size:14px;text-decoration:none;
+    overflow:hidden;text-overflow:ellipsis;white-space:nowrap;position:relative;vertical-align:top}
+  .lnb_tree .menu_item .item_txt::before{content:"";position:absolute;left:0;top:0;
+    width:20px;height:20px;background:var(--nw-gray800);
+    -webkit-mask-position:center;mask-position:center;
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+    -webkit-mask-size:contain;mask-size:contain}
+
+  /* Folder type icons via mask-image */
+  .mbox_all .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='2.75' y='2.75' width='14.5' height='14.5' rx='2.25' stroke='%233F4247' stroke-width='1.5'/><path d='M4.96191 2.75H15.0381C16.2594 2.75 17.25 3.74056 17.25 4.96191C17.2498 5.36485 17.0517 5.74238 16.7197 5.9707L11.2744 9.71387C10.5068 10.2414 9.49324 10.2414 8.72559 9.71387L3.28027 5.9707C2.94825 5.74238 2.75015 5.36485 2.75 4.96191C2.75 3.74056 3.74056 2.75 4.96191 2.75Z' stroke='%233F4247' stroke-width='1.5'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='2.75' y='2.75' width='14.5' height='14.5' rx='2.25' stroke='%233F4247' stroke-width='1.5'/><path d='M4.96191 2.75H15.0381C16.2594 2.75 17.25 3.74056 17.25 4.96191C17.2498 5.36485 17.0517 5.74238 16.7197 5.9707L11.2744 9.71387C10.5068 10.2414 9.49324 10.2414 8.72559 9.71387L3.28027 5.9707C2.94825 5.74238 2.75015 5.36485 2.75 4.96191C2.75 3.74056 3.74056 2.75 4.96191 2.75Z' stroke='%233F4247' stroke-width='1.5'/></svg>")}
+  .mbox_inbox .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M4 8.25H7C7.13807 8.25 7.25 8.36193 7.25 8.5V9C7.25 9.69036 7.80964 10.25 8.5 10.25H11.5C12.1904 10.25 12.75 9.69036 12.75 9V8.5C12.75 8.36193 12.8619 8.25 13 8.25H16C16.6904 8.25 17.25 8.80964 17.25 9.5V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V9.5C2.75 8.80964 3.30964 8.25 4 8.25Z' stroke='%23118DFF' stroke-width='1.5'/><path d='M5.63965 2.75H14.3604C14.4578 2.75007 14.5461 2.80703 14.5869 2.89551L17.043 8.21582C17.1794 8.51143 17.25 8.8336 17.25 9.15918V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V9.15918L2.7627 8.91602C2.78894 8.67424 2.85467 8.43761 2.95703 8.21582L5.41309 2.89551C5.45392 2.80703 5.54221 2.75007 5.63965 2.75Z' stroke='%23118DFF' stroke-width='1.5'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M4 8.25H7C7.13807 8.25 7.25 8.36193 7.25 8.5V9C7.25 9.69036 7.80964 10.25 8.5 10.25H11.5C12.1904 10.25 12.75 9.69036 12.75 9V8.5C12.75 8.36193 12.8619 8.25 13 8.25H16C16.6904 8.25 17.25 8.80964 17.25 9.5V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V9.5C2.75 8.80964 3.30964 8.25 4 8.25Z' stroke='%23118DFF' stroke-width='1.5'/><path d='M5.63965 2.75H14.3604C14.4578 2.75007 14.5461 2.80703 14.5869 2.89551L17.043 8.21582C17.1794 8.51143 17.25 8.8336 17.25 9.15918V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V9.15918L2.7627 8.91602C2.78894 8.67424 2.85467 8.43761 2.95703 8.21582L5.41309 2.89551C5.45392 2.80703 5.54221 2.75007 5.63965 2.75Z' stroke='%23118DFF' stroke-width='1.5'/></svg>")}
+  .mbox_send .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 9L9.75277 9.71291C9.89487 9.73423 10 9.8563 10 10C10 10.1437 9.89487 10.2658 9.75277 10.2871L5 11V9Z' fill='%233F4247'/><path d='M2.78223 3.97461C2.42656 2.90697 3.55237 1.94981 4.54883 2.47266L16.7783 8.89355C17.6702 9.36184 17.6702 10.6382 16.7783 11.1064L4.54883 17.5273C3.55236 18.0502 2.42656 17.093 2.78223 16.0254L4.50098 10.8691C4.68891 10.305 4.68891 9.69502 4.50098 9.13086L2.78223 3.97461Z' stroke='%233F4247' stroke-width='1.5'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 9L9.75277 9.71291C9.89487 9.73423 10 9.8563 10 10C10 10.1437 9.89487 10.2658 9.75277 10.2871L5 11V9Z' fill='%233F4247'/><path d='M2.78223 3.97461C2.42656 2.90697 3.55237 1.94981 4.54883 2.47266L16.7783 8.89355C17.6702 9.36184 17.6702 10.6382 16.7783 11.1064L4.54883 17.5273C3.55236 18.0502 2.42656 17.093 2.78223 16.0254L4.50098 10.8691C4.68891 10.305 4.68891 9.69502 4.50098 9.13086L2.78223 3.97461Z' stroke='%233F4247' stroke-width='1.5'/></svg>")}
+  .mbox_receipt .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12.25 15.3672L13.52 16.8872C13.91 17.3572 14.62 17.3672 15.02 16.9172L18.25 13.3672' stroke='%233F4247' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/><path d='M11.5786 12.2182C11.4186 12.0182 11.3086 11.7582 11.3086 11.5382V10.4982C11.5986 10.2082 11.9186 9.86823 12.0386 9.73823C12.4186 9.31824 12.6686 8.53823 12.8386 6.73823C13.0586 4.29823 11.4986 2.72823 9.57861 2.75823C7.64861 2.72823 6.08861 4.29823 6.31861 6.73823C6.48861 8.53823 6.73861 9.31824 7.11861 9.73823C7.23861 9.86823 7.55861 10.2082 7.84861 10.4982V11.5382C7.84861 11.8782 7.60861 12.2882 7.31861 12.4582C6.42861 13.0082 3.10861 14.7482 2.89861 15.4182C2.73861 15.9482 2.75861 16.1082 2.75861 16.6482V17.2482H10.8486' stroke='%233F4247' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M12.25 15.3672L13.52 16.8872C13.91 17.3572 14.62 17.3672 15.02 16.9172L18.25 13.3672' stroke='%233F4247' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/><path d='M11.5786 12.2182C11.4186 12.0182 11.3086 11.7582 11.3086 11.5382V10.4982C11.5986 10.2082 11.9186 9.86823 12.0386 9.73823C12.4186 9.31824 12.6686 8.53823 12.8386 6.73823C13.0586 4.29823 11.4986 2.72823 9.57861 2.75823C7.64861 2.72823 6.08861 4.29823 6.31861 6.73823C6.48861 8.53823 6.73861 9.31824 7.11861 9.73823C7.23861 9.86823 7.55861 10.2082 7.84861 10.4982V11.5382C7.84861 11.8782 7.60861 12.2882 7.31861 12.4582C6.42861 13.0082 3.10861 14.7482 2.89861 15.4182C2.73861 15.9482 2.75861 16.1082 2.75861 16.6482V17.2482H10.8486' stroke='%233F4247' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>")}
+  .mbox_temp .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 2.75H7.79883C8.08238 2.75009 8.35762 2.84639 8.5791 3.02344L10.2578 4.36621C10.5681 4.61441 10.9533 4.74996 11.3506 4.75H15C16.2426 4.75 17.25 5.75736 17.25 7V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V5C2.75 3.75736 3.75736 2.75 5 2.75Z' stroke='%233F4247' stroke-width='1.5'/><path d='M3.5 8.75H16.5' stroke='%233F4247' stroke-width='1.5'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 2.75H7.79883C8.08238 2.75009 8.35762 2.84639 8.5791 3.02344L10.2578 4.36621C10.5681 4.61441 10.9533 4.74996 11.3506 4.75H15C16.2426 4.75 17.25 5.75736 17.25 7V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V5C2.75 3.75736 3.75736 2.75 5 2.75Z' stroke='%233F4247' stroke-width='1.5'/><path d='M3.5 8.75H16.5' stroke='%233F4247' stroke-width='1.5'/></svg>")}
+  .mbox_memo .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='2.75' y='2.75' width='14.5' height='14.5' rx='2.25' stroke='%233F4247' stroke-width='1.5'/><path d='M6.5 7.25H13.5' stroke='%233F4247' stroke-width='1.5' stroke-linecap='round'/><path d='M6.5 10.75H10.5' stroke='%233F4247' stroke-width='1.5' stroke-linecap='round'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><rect x='2.75' y='2.75' width='14.5' height='14.5' rx='2.25' stroke='%233F4247' stroke-width='1.5'/><path d='M6.5 7.25H13.5' stroke='%233F4247' stroke-width='1.5' stroke-linecap='round'/><path d='M6.5 10.75H10.5' stroke='%233F4247' stroke-width='1.5' stroke-linecap='round'/></svg>")}
+  .mbox_folder .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 2.75H7.79883C8.08238 2.75009 8.35762 2.84639 8.5791 3.02344L10.2578 4.36621C10.5681 4.61441 10.9533 4.74996 11.3506 4.75H15C16.2426 4.75 17.25 5.75736 17.25 7V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V5C2.75 3.75736 3.75736 2.75 5 2.75Z' stroke='%233F4247' stroke-width='1.5'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 2.75H7.79883C8.08238 2.75009 8.35762 2.84639 8.5791 3.02344L10.2578 4.36621C10.5681 4.61441 10.9533 4.74996 11.3506 4.75H15C16.2426 4.75 17.25 5.75736 17.25 7V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V5C2.75 3.75736 3.75736 2.75 5 2.75Z' stroke='%233F4247' stroke-width='1.5'/></svg>")}
+  .mbox_spam .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M1.6665 10.0001C1.6665 5.40008 5.39984 1.66675 9.99984 1.66675C14.5998 1.66675 18.3332 5.40008 18.3332 10.0001C18.3332 14.6001 14.5998 18.3334 9.99984 18.3334C5.39984 18.3334 1.6665 14.6001 1.6665 10.0001ZM14.2709 4.67045C13.1 3.73009 11.6142 3.16675 9.99984 3.16675C6.23317 3.16675 3.1665 6.23341 3.1665 10.0001C3.1665 11.6145 3.72985 13.1003 4.6702 14.2712L14.2709 4.67045ZM15.3293 5.72876L5.72851 15.3295C6.89943 16.27 8.38533 16.8334 9.99984 16.8334C13.7665 16.8334 16.8332 13.7667 16.8332 10.0001C16.8332 8.38558 16.2698 6.89968 15.3293 5.72876Z' fill='%233F4247'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill-rule='evenodd' clip-rule='evenodd' d='M1.6665 10.0001C1.6665 5.40008 5.39984 1.66675 9.99984 1.66675C14.5998 1.66675 18.3332 5.40008 18.3332 10.0001C18.3332 14.6001 14.5998 18.3334 9.99984 18.3334C5.39984 18.3334 1.6665 14.6001 1.6665 10.0001ZM14.2709 4.67045C13.1 3.73009 11.6142 3.16675 9.99984 3.16675C6.23317 3.16675 3.1665 6.23341 3.1665 10.0001C3.1665 11.6145 3.72985 13.1003 4.6702 14.2712L14.2709 4.67045ZM15.3293 5.72876L5.72851 15.3295C6.89943 16.27 8.38533 16.8334 9.99984 16.8334C13.7665 16.8334 16.8332 13.7667 16.8332 10.0001C16.8332 8.38558 16.2698 6.89968 15.3293 5.72876Z' fill='%233F4247'/></svg>")}
+  .mbox_trash .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11.7495 1.66675C12.6244 1.66675 13.3333 2.37491 13.3335 3.24976V3.83276H17.5835C17.9975 3.83294 18.3334 4.16877 18.3335 4.58276C18.3335 4.99687 17.9976 5.33259 17.5835 5.33276H17.1665V15.5837C17.1663 17.1061 15.9389 18.3337 14.4165 18.3337H5.5835C4.06108 18.3337 2.83371 17.1061 2.8335 15.5837V5.33276H2.4165C2.00229 5.33276 1.6665 4.99698 1.6665 4.58276C1.66664 4.16866 2.00237 3.83276 2.4165 3.83276H6.6665V3.24976C6.66668 2.37501 7.37477 1.66692 8.24951 1.66675H11.7495ZM4.3335 15.5837C4.33371 16.2777 4.88951 16.8337 5.5835 16.8337H14.4165C15.1105 16.8337 15.6663 16.2777 15.6665 15.5837V5.33276H13.3335V5.33374H6.6665V5.33276H4.3335V15.5837ZM6.74951 6.66675C7.1661 6.66675 7.49938 7.0002 7.49951 7.41675V14.2507C7.49929 14.6672 7.16604 15.0007 6.74951 15.0007C6.33315 15.0005 5.99973 14.6671 5.99951 14.2507V7.41675C5.99964 7.00032 6.3331 6.66694 6.74951 6.66675ZM9.99951 6.66675C10.4161 6.66675 10.7494 7.0002 10.7495 7.41675V14.2507C10.7493 14.6672 10.416 15.0007 9.99951 15.0007C9.58315 15.0005 9.24973 14.6671 9.24951 14.2507V7.41675C9.24964 7.00032 9.5831 6.66694 9.99951 6.66675ZM13.2495 6.66675C13.6661 6.66675 13.9994 7.0002 13.9995 7.41675V14.2507C13.9993 14.6672 13.666 15.0007 13.2495 15.0007C12.8332 15.0005 12.4997 14.6671 12.4995 14.2507V7.41675C12.4996 7.00032 12.8331 6.66694 13.2495 6.66675ZM8.24951 2.98315C8.09978 2.98332 7.98308 3.10002 7.98291 3.24976V3.83276H12.0161V3.24976C12.0159 3.09991 11.8994 2.98315 11.7495 2.98315H8.24951Z' fill='%233F4247'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M11.7495 1.66675C12.6244 1.66675 13.3333 2.37491 13.3335 3.24976V3.83276H17.5835C17.9975 3.83294 18.3334 4.16877 18.3335 4.58276C18.3335 4.99687 17.9976 5.33259 17.5835 5.33276H17.1665V15.5837C17.1663 17.1061 15.9389 18.3337 14.4165 18.3337H5.5835C4.06108 18.3337 2.83371 17.1061 2.8335 15.5837V5.33276H2.4165C2.00229 5.33276 1.6665 4.99698 1.6665 4.58276C1.66664 4.16866 2.00237 3.83276 2.4165 3.83276H6.6665V3.24976C6.66668 2.37501 7.37477 1.66692 8.24951 1.66675H11.7495ZM4.3335 15.5837C4.33371 16.2777 4.88951 16.8337 5.5835 16.8337H14.4165C15.1105 16.8337 15.6663 16.2777 15.6665 15.5837V5.33276H13.3335V5.33374H6.6665V5.33276H4.3335V15.5837ZM6.74951 6.66675C7.1661 6.66675 7.49938 7.0002 7.49951 7.41675V14.2507C7.49929 14.6672 7.16604 15.0007 6.74951 15.0007C6.33315 15.0005 5.99973 14.6671 5.99951 14.2507V7.41675C5.99964 7.00032 6.3331 6.66694 6.74951 6.66675ZM9.99951 6.66675C10.4161 6.66675 10.7494 7.0002 10.7495 7.41675V14.2507C10.7493 14.6672 10.416 15.0007 9.99951 15.0007C9.58315 15.0005 9.24973 14.6671 9.24951 14.2507V7.41675C9.24964 7.00032 9.5831 6.66694 9.99951 6.66675ZM13.2495 6.66675C13.6661 6.66675 13.9994 7.0002 13.9995 7.41675V14.2507C13.9993 14.6672 13.666 15.0007 13.2495 15.0007C12.8332 15.0005 12.4997 14.6671 12.4995 14.2507V7.41675C12.4996 7.00032 12.8331 6.66694 13.2495 6.66675ZM8.24951 2.98315C8.09978 2.98332 7.98308 3.10002 7.98291 3.24976V3.83276H12.0161V3.24976C12.0159 3.09991 11.8994 2.98315 11.7495 2.98315H8.24951Z' fill='%233F4247'/></svg>")}
+  .add_vip .item_txt::before{
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'><path d='M10 4v12M4 10h12'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round'><path d='M10 4v12M4 10h12'/></svg>")}
+
+  /* mbox_custom_folder — colored folder shape */
+  .mbox_custom_folder .item_txt::before{content:none}
+  .mbox_custom_folder .icon_custom_mailbox{position:absolute;left:0;top:0;
+    width:20px;height:20px;display:inline-block;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 2.75H7.79883C8.08238 2.75009 8.35762 2.84639 8.5791 3.02344L10.2578 4.36621C10.5681 4.61441 10.9533 4.74996 11.3506 4.75H15C16.2426 4.75 17.25 5.75736 17.25 7V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V5C2.75 3.75736 3.75736 2.75 5 2.75Z' stroke='%233F4247' stroke-width='1.5'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'><path d='M5 2.75H7.79883C8.08238 2.75009 8.35762 2.84639 8.5791 3.02344L10.2578 4.36621C10.5681 4.61441 10.9533 4.74996 11.3506 4.75H15C16.2426 4.75 17.25 5.75736 17.25 7V15C17.25 16.2426 16.2426 17.25 15 17.25H5C3.75736 17.25 2.75 16.2426 2.75 15V5C2.75 3.75736 3.75736 2.75 5 2.75Z' stroke='%233F4247' stroke-width='1.5'/></svg>");
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+    -webkit-mask-size:contain;mask-size:contain}
+
+  /* unread count (inline, right next to text), side_btn (in menu_item) */
+  .lnb_tree .menu_item .unread_cnt{flex:0 0 auto;padding-left:4px;
+    color:var(--nw-blue-cnt);font-size:14px;font-weight:400;line-height:20px}
+  .lnb_tree .menu_item .side_btn{margin-left:auto;width:22px;height:22px;border:0;background:transparent;
+    border-radius:4px;cursor:pointer;visibility:hidden;color:var(--nw-gray700);padding:0;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .lnb_tree .menu_item:hover .side_btn{visibility:visible}
+  .lnb_tree .menu_item .side_btn:hover{background:rgba(146,162,211,.18)}
+  .lnb_tree .menu_item .btn_more::before{content:"";width:14px;height:14px;background:currentColor;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='black'><circle cx='3' cy='7' r='1.2'/><circle cx='7' cy='7' r='1.2'/><circle cx='11' cy='7' r='1.2'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='black'><circle cx='3' cy='7' r='1.2'/><circle cx='7' cy='7' r='1.2'/><circle cx='11' cy='7' r='1.2'/></svg>");
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+  .lnb_tree .menu_item .btn_setting::before{content:"";width:14px;height:14px;background:currentColor;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='black' stroke-width='1.3'><path d='M3 4l4 4 4-4M3 9l4 4 4-4'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14' fill='none' stroke='black' stroke-width='1.3'><path d='M3 4l4 4 4-4M3 9l4 4 4-4'/></svg>");
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
+
+  /* btn_fold (toggle) inside menu_item */
+  .lnb_tree .menu_item .btn_fold{position:absolute;left:0;top:0;
+    width:20px;height:34px;padding:13px 4px;line-height:0;
+    border:0;background:transparent;cursor:pointer;color:var(--nw-gray400)}
+  .lnb_tree .menu_item .btn_fold::before{content:"";display:inline-block;width:8px;height:8px;
+    background:currentColor;
+    -webkit-mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path d='M2.5 1.5L5 4 2.5 6.5' stroke='black' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    mask-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><path d='M2.5 1.5L5 4 2.5 6.5' stroke='black' stroke-width='1.4' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;transform:rotate(90deg);transition:transform .15s}
+  .lnb_tree li.fold > .menu_item .btn_fold::before{transform:rotate(0deg)}
+  .lnb_tree li.fold > .lnb_sub_tree{display:none}
+
+  /* nested */
+  .lnb_tree .lnb_sub_tree{list-style:none;margin:0;padding:0}
+  .lnb_tree .lnb_sub_tree .btn_fold{left:12px}
+  .lnb_tree .lnb_sub_tree .menu_item{padding-left:28px}
+  .lnb_tree .lnb_sub_tree .lnb_sub_tree .btn_fold{left:24px}
+  .lnb_tree .lnb_sub_tree .lnb_sub_tree .menu_item{padding-left:40px}
+  .lnb_tree .lnb_sub_tree .lnb_sub_tree .lnb_sub_tree .btn_fold{left:36px}
+  .lnb_tree .lnb_sub_tree .lnb_sub_tree .lnb_sub_tree .menu_item{padding-left:52px}
+
+  /* aside_pane */
+  .nav_lnb .aside_pane{flex-shrink:0;border-top:1px solid var(--nw-gray300);
+    padding:10px 16px}
+  .nav_lnb .aside_pane .indicator{color:var(--nw-gray700);font-size:12px;line-height:18px}
+  .nav_lnb .aside_pane .indicator .cnt{color:var(--nw-blue);text-decoration:none;font-weight:700}
+  .nav_lnb .aside_pane .indicator .total::before{content:"/";display:inline-block;margin:0 4px;color:var(--nw-gray400)}
+  .nav_lnb .aside_pane .indicator em{font-style:normal}
 
   /* ====== Main ====== */
   .main{background:var(--white);display:flex;flex-direction:column;overflow:hidden}
@@ -191,32 +324,34 @@
   .tb-ico:hover{background:var(--g150);color:var(--g800)}
   .tb-ico.active{color:var(--g900);background:var(--g150)}
 
-  .mail-list{flex:1;overflow-y:auto}
-  .ml-row{display:grid;grid-template-columns:40px 28px 28px 160px 36px 1fr 90px 40px;
-    gap:0;align-items:center;padding:0 14px;height:44px;
-    border-bottom:1px solid var(--g200);cursor:pointer;font-size:13px;color:var(--g800)}
-  .ml-row:hover{background:var(--g100)}
-  .ml-row.unread{background:var(--white)}
-  .ml-row.unread .ml-from{font-weight:700;color:var(--g900)}
-  .ml-row.unread .ml-subj{color:var(--g900);font-weight:600}
-  .ml-row.read{background:var(--g100)}
+  .mail-list{flex:1;overflow-y:auto;background:#fff}
+  .ml-row{display:grid;grid-template-columns:32px 32px 32px 136px 1fr 76px 80px;
+    column-gap:0;align-items:center;padding:0 8px;height:40px;
+    border-bottom:1px solid #F1F3F9;cursor:pointer;font-size:14px;color:#3F4247;background:#fff}
+  .ml-row:hover{background:#F7F8FA}
+  .ml-row.unread .ml-from,
+  .ml-row.unread .ml-subj{color:#202124;font-weight:700}
+  .ml-row.read{background:#fff}
   .ml-row.flow-flag{background:linear-gradient(90deg, rgba(21,126,251,.06), rgba(80,70,229,.02));
     box-shadow:inset 3px 0 0 var(--blue)}
   .ml-row.flow-flag:hover{background:linear-gradient(90deg, rgba(21,126,251,.09), rgba(80,70,229,.03))}
 
-  .ml-chk{width:16px;height:16px;border:1.5px solid var(--g400);border-radius:3px;justify-self:start;margin-left:6px}
-  .ml-star{color:var(--g400);font-size:15px;text-align:center}
-  .ml-star.on{color:var(--orange)}
-  .ml-read{color:var(--g580);display:flex;align-items:center;justify-content:center}
-  .ml-read.unread{color:var(--blue)}
-  .ml-from{color:var(--g800);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:8px}
-  .ml-to-badge{width:26px;height:18px;border:1.5px solid var(--g400);border-radius:9px;
-    font-size:9px;font-weight:700;color:var(--g580);
-    display:inline-flex;align-items:center;justify-content:center;letter-spacing:.3px}
-  .ml-to-badge.active{border-color:var(--blue);color:var(--blue)}
-  .ml-subj-wrap{display:flex;align-items:center;gap:6px;min-width:0;padding-left:6px}
-  .ml-subj{color:var(--g750);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1}
-  .ml-chip{flex-shrink:0;padding:3px 6px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.2px}
+  .ml-chk{width:16px;height:16px;border:1.5px solid #C6CBCE;border-radius:3px;justify-self:center}
+
+  .ml-read{display:block;width:20px;height:20px;justify-self:center;
+    background-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'> <path d='M4.08301 18.1667C2.84134 18.1667 1.83301 17.1584 1.83301 15.9167V7.65004C1.83301 7.42504 1.93301 7.20837 2.11634 7.06671L8.69967 1.79171C9.07467 1.49171 9.52467 1.33337 9.99967 1.33337C10.4747 1.33337 10.9247 1.49171 11.2997 1.79171L17.883 7.06671C18.058 7.20837 18.1663 7.42504 18.1663 7.65004V15.9167C18.1663 17.1584 17.158 18.1667 15.9163 18.1667H4.08301Z' fill='white'/> <path d='M10.0005 0.833374C10.5753 0.833443 11.1418 1.01663 11.6167 1.39978L18.1997 6.67517C18.4913 6.90845 18.6664 7.26655 18.6665 7.64978V15.9164C18.6665 17.433 17.4332 18.6664 15.9165 18.6664H4.0835C2.56683 18.6664 1.3335 17.433 1.3335 15.9164V7.64978C1.33357 7.27487 1.50036 6.90845 1.80029 6.67517L8.3833 1.40857C8.8583 1.02524 9.43382 0.833374 10.0005 0.833374ZM11.563 13.1898L11.561 13.1918C10.6456 13.9196 9.35435 13.9197 8.43896 13.1918L8.43799 13.1908L2.3335 8.30603V15.9164C2.3335 16.883 3.11683 17.6664 4.0835 17.6664H15.9165C16.8832 17.6664 17.6665 16.883 17.6665 15.9164V8.30017L11.563 13.1898ZM10.0005 1.83337C9.63385 1.83337 9.29162 1.94969 9.0083 2.18298L2.64795 7.27869L9.06201 12.4095C9.61287 12.8471 10.3881 12.8462 10.939 12.4086L17.3462 7.27576L10.9917 2.18298C10.7002 1.95818 10.3586 1.83345 10.0005 1.83337Z' fill='%23C6CBCE'/> </svg>");background-position:center;background-repeat:no-repeat;background-size:contain}
+  .ml-read.unread{background-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'> <path d='M18.3252 14.7495C18.3252 16.2661 17.1005 17.4915 15.584 17.4917H4.4082C2.89175 17.4915 1.66699 16.266 1.66699 14.7495V6.0083L8.3584 11.3745C8.84164 11.7661 9.41678 11.9584 10 11.9585C10.5833 11.9585 11.1583 11.7578 11.6416 11.3745L11.6338 11.3667L18.3252 6.0083V14.7495ZM15.584 2.5083C16.8421 2.50849 17.8918 3.35844 18.2168 4.5083L10.8584 10.3999C10.3584 10.8082 9.64991 10.8082 9.1416 10.3999H9.13379L1.77539 4.5083C2.10037 3.35843 3.15004 2.50846 4.4082 2.5083H15.584Z' fill='%2393B4EE'/> </svg>")}
+  .ml-read svg{display:none}
+  .ml-star{width:20px;height:20px;justify-self:center;font-size:0;
+    background-image:url("data:image/svg+xml;utf8,<svg width='20' height='20' viewBox='0 0 20 20' fill='none' xmlns='http://www.w3.org/2000/svg'> <path d='M9.99951 2.5C10.478 2.5 10.9108 2.76875 11.1177 3.19434L11.1187 3.19727L12.5278 6.04785C12.6868 6.37654 12.9982 6.58984 13.3462 6.6377V6.63867L16.4878 7.0957V7.09668C16.9722 7.16947 17.3527 7.49117 17.4937 7.94336L17.4946 7.94922C17.6449 8.41203 17.5253 8.8953 17.1812 9.22754L17.1802 9.22949L14.9097 11.4414C14.672 11.6653 14.562 11.972 14.5786 12.2773L14.5933 12.4072L15.1265 15.541L15.1274 15.5439C15.2107 16.0138 15.0209 16.4812 14.6343 16.7607C14.2464 17.0412 13.7407 17.0778 13.3159 16.8564H13.3169L10.4985 15.3809H10.4976C10.1855 15.2136 9.80458 15.2132 9.49268 15.3809L6.67432 16.8564C6.48898 16.9515 6.28679 16.9984 6.09326 16.999C5.84641 16.998 5.59128 16.9176 5.36475 16.7598C4.97875 16.4801 4.78936 16.0134 4.87256 15.5439L4.87354 15.541L5.40674 12.4072C5.46925 12.0468 5.34318 11.6933 5.10107 11.4512L5.09619 11.4473L2.81982 9.22949L2.81787 9.22754C2.47381 8.89519 2.35542 8.40422 2.50439 7.95117V7.94922C2.65343 7.49018 3.03843 7.1688 3.51318 7.09668L3.51221 7.0957L6.65283 6.6377C7.01339 6.58825 7.31669 6.35761 7.47021 6.05078L7.47119 6.04883L8.87939 3.19922C9.09608 2.76584 9.52486 2.50012 9.99951 2.5Z' fill='white' stroke='%23C6CBCE'/> </svg>");background-position:center;background-repeat:no-repeat;background-size:contain}
+  .ml-star.on{background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'><path d='M10 2.5c.48 0 .91.27 1.12.69l1.41 2.85c.16.33.47.55.82.59l3.14.46c.49.07.87.4 1.01.85.15.46.03.94-.31 1.27l-2.27 2.21a1.16 1.16 0 0 0-.33.97l.53 3.13c.08.47-.11.94-.5 1.22-.39.28-.9.31-1.32.1l-2.82-1.48c-.31-.17-.69-.17-1 0l-2.82 1.48c-.42.21-.93.18-1.32-.1-.39-.28-.58-.75-.5-1.22l.53-3.13a1.16 1.16 0 0 0-.33-.97L2.79 9.21c-.34-.33-.46-.81-.31-1.27.14-.45.52-.78 1.01-.85l3.14-.46c.36-.04.66-.27.83-.59l1.41-2.85A1.25 1.25 0 0 1 10 2.5z' fill='%23FFB032'/></svg>")}
+  .ml-from{color:#202124;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 12px 0 4px;font-size:14px}
+  .ml-row.read .ml-from{font-weight:400;color:#3F4247}
+  .ml-to-badge{display:none}
+  .ml-subj-wrap{display:flex;align-items:center;gap:6px;min-width:0;padding-right:12px}
+  .ml-subj{color:#202124;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;flex:1;font-size:14px;font-weight:700}
+  .ml-row.read .ml-subj{color:#3F4247;font-weight:400}
+  .ml-chip{flex-shrink:0;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.2px;line-height:14px}
   .ml-chip.flow{background:var(--grad-flow);color:var(--white);display:inline-flex;flex-direction:row;align-items:center;gap:3px;white-space:nowrap;flex-shrink:0;line-height:1}
   .ml-chip.flow svg{display:inline;vertical-align:middle;flex-shrink:0}
   .ml-chip.hr{background:var(--green-lt);color:var(--green-dk)}
@@ -224,11 +359,14 @@
   .ml-chip.reminder{background:var(--orange-lt);color:#C87A00}
   .ml-chip.impt{color:var(--red);background:transparent;padding:0;font-size:14px}
   .ml-chip.ext{background:#FFE9E6;color:var(--red)}
+  .ml-chip.label{padding:2px 4px;color:#71767A;background:transparent}
+  .ml-chip.label-green{color:#03C75A;background:transparent}
+  .ml-chip.label-orange{background:#FFB032;color:#fff}
   .ml-attach{color:var(--g580);margin-right:4px}
-  .ml-time{font-size:12px;color:var(--g580);text-align:right}
-  .ml-row.unread .ml-time{color:var(--g800);font-weight:600}
-  .ml-more{color:var(--g400);text-align:center;opacity:0;transition:opacity .1s}
-  .ml-row:hover .ml-more{opacity:1}
+  .ml-time{font-size:12px;color:#3F4247;text-align:right;font-weight:400;padding-right:8px}
+  .ml-size{font-size:12px;color:#3F4247;text-align:right;font-weight:400;padding-right:8px}
+  .ml-row.unread .ml-time,.ml-row.unread .ml-size{color:#3F4247}
+  .ml-more{display:none}
 
   .pager{height:48px;display:flex;align-items:center;justify-content:center;gap:4px;
     border-top:1px solid var(--g300);flex-shrink:0}
@@ -1122,56 +1260,144 @@
 
 <div class="app">
   <!-- ============ SIDEBAR ============ -->
-  <aside class="sidebar">
-    <div class="sb-scroll">
-      <div class="sb-compose">
-        <button class="btn-compose primary"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 4V20M4 12H20" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg><span class="sb-label">메일쓰기</span></button>
-        <button class="btn-compose ghost">메모쓰기</button>
+  <aside class="sidebar nav_lnb" style="width:250px">
+    <div class="main_pane">
+      <div class="core_button">
+        <a href="#" class="skin_corp_bg skin_corp_txt"><strong>메일쓰기</strong></a>
+        <a href="#" class="skin_corp_bg skin_corp_txt"><strong>메모쓰기</strong></a>
       </div>
-
-      <div class="sb-quick">
-        <div class="qf"><div class="qf-top"><div class="qf-num">12</div></div><div class="qf-label">안읽음</div></div>
-        <div class="qf"><div class="qf-top"><div class="qf-ico" style="color:var(--g650)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12.0066 4L9.526 9.626L3.25 10.094L8.114 13.953L6.51 20L12.0066 16.62M11.994 4L14.474 9.626L20.75 10.094L15.886 13.953L17.49 20L11.994 16.62" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="qf-label">중요</div></div>
-        <div class="qf"><div class="qf-top"><div class="qf-ico" style="color:var(--g650)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12.93 7.75V12L16.24 14.36" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.43 12C4.43 7.3 8.24 3.5 12.93 3.5C17.63 3.5 21.43 7.3 21.43 12C21.43 16.69 17.63 20.5 12.93 20.5C10.9 20.5 9.05 19.79 7.59 18.61" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.79 12.47C6.79 12.47 5.65 13.91 4.91 14.83C3.8 14.28 2.07 13.42 2.07 13.42" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div><div class="qf-label">리마인드</div></div>
-        <div class="qf to-badge"><div class="qf-top"><div class="qf-ico">TO</div></div><div class="qf-label">받는사람</div></div>
-      </div>
-
-      <div class="sb-flow-card">
-        <div class="sb-flow-title"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style="vertical-align:middle;margin-right:4px"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg>Flow AI</div>
-        <div class="sb-flow-desc">지금 해야 할 일<br/>3개를 찾았어요</div>
-        <div class="sb-flow-cta" onclick="document.querySelector('.app').classList.remove('flow-collapsed')">지금 확인
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M8.75 4.5L16.25 12L8.75 19.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
-      </div>
-
-      <div class="sb-nav">
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7h16M4 12h16M4 17h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span><span class="sb-label">전체메일</span></div>
-        <div class="sb-item active"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M4 7.5C4 6.67 4.67 6 5.5 6H18.5C19.33 6 20 6.67 20 7.5V16.5C20 17.33 19.33 18 18.5 18H5.5C4.67 18 4 17.33 4 16.5V7.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M4.5 7.5L12 13L19.5 7.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb-label">받은메일함</span><span class="cnt">12</span></div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3.59 6.02C3.02 4.58 4.5 3.19 5.9 3.86L20.16 10.65C21.3 11.19 21.3 12.81 20.16 13.35L5.9 20.14C4.5 20.81 3.02 19.42 3.59 17.98L5.78 12.43C5.89 12.15 5.89 11.85 5.78 11.57L3.59 6.02Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="sb-label">보낸메일함</span><span class="cnt">218</span></div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="10" cy="8" r="3" stroke="currentColor" stroke-width="2"/><path d="M4 20a6 6 0 0112 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 11l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="sb-label">수신확인</span></div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M5 4C5 3.45 5.45 3 6 3H14L19 8V20C19 20.55 18.55 21 18 21H6C5.45 21 5 20.55 5 20V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M14 3V8H19" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="sb-label">임시보관함</span><span class="cnt">3</span></div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="5" y="3.5" width="14" height="17" rx="2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M8.38 7.38H15.63" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8.38 10.88H15.63" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8.38 14.38H12.93" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span><span class="sb-label">메모함</span></div>
-      </div>
-
-      <div class="sb-group open"><span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M8.75 4.5L16.25 12L8.75 19.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>즐겨찾는 연락처</div>
-      <div class="sb-sub">
-        <div class="sb-item"><span class="ic" style="color:var(--g580)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M12 4V20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M4 12H20" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></span>즐겨찾는 연락처 추가하기</div>
-      </div>
-
-      <div class="sb-group open" style="margin-top:4px"><span class="chev"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M8.75 4.5L16.25 12L8.75 19.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>내 메일함</div>
-      <div class="sb-sub">
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7C3 5.9 3.9 5 5 5H9L11 7H19C20.1 7 21 7.9 21 9V18C21 19.1 20.1 20 19 20H5C3.9 20 3 19.1 3 18V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>2분기 OKR</div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7C3 5.9 3.9 5 5 5H9L11 7H19C20.1 7 21 7.9 21 9V18C21 19.1 20.1 20 19 20H5C3.9 20 3 19.1 3 18V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>Aurora 프로젝트</div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7C3 5.9 3.9 5 5 5H9L11 7H19C20.1 7 21 7.9 21 9V18C21 19.1 20.1 20 19 20H5C3.9 20 3 19.1 3 18V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span><span class="dot-purple"></span>글로벌 파트너</div>
-        <div class="tree-child">
-          <div class="sb-item"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 7C3 5.9 3.9 5 5 5H9L11 7H19C20.1 7 21 7.9 21 9V18C21 19.1 20.1 20 19 20H5C3.9 20 3 19.1 3 18V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>Tokyo Office</div>
-          <div class="sb-item"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 7C3 5.9 3.9 5 5 5H9L11 7H19C20.1 7 21 7.9 21 9V18C21 19.1 20.1 20 19 20H5C3.9 20 3 19.1 3 18V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>Singapore HQ</div>
-          <div class="sb-item"><span class="ic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 7C3 5.9 3.9 5 5 5H9L11 7H19C20.1 7 21 7.9 21 9V18C21 19.1 20.1 20 19 20H5C3.9 20 3 19.1 3 18V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>Vendor 계약</div>
-        </div>
-        <div class="sb-item"><span class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 7C3 5.9 3.9 5 5 5H9L11 7H19C20.1 7 21 7.9 21 9V18C21 19.1 20.1 20 19 20H5C3.9 20 3 19.1 3 18V7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></span>사내 피드백</div>
+      <div class="top_menu">
+        <a href="#" class="unread selected">안읽음<span class="count">12</span></a>
+        <a href="#" class="mark">중요</a>
+        <a href="#" class="remind">리마인드</a>
+        <a href="#" class="tome">받는사람</a>
       </div>
     </div>
-    <div class="sb-bottom">용량 <b>42.18GB</b> / 3TB</div>
+
+    <div class="scroll_pane">
+      <h2 class="blind">메일함</h2>
+      <div class="menu_cover">
+
+        <!-- 기본 메일함 -->
+        <div class="menu_box">
+          <ul class="lnb_tree">
+            <li><div class="menu_item mbox_all"><a href="#" class="item_txt">전체메일</a><button type="button" class="btn_setting side_btn" title="정리하기"><i class="blind">정리하기</i></button></div></li>
+            <li><div class="menu_item mbox_inbox selected"><a href="#" class="item_txt">받은메일함</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+            <li><div class="menu_item mbox_send"><a href="#" class="item_txt">보낸메일함</a><span class="unread_cnt">218</span><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+            <li><div class="menu_item mbox_receipt"><a href="#" class="item_txt">수신확인</a></div></li>
+            <li><div class="menu_item mbox_temp"><a href="#" class="item_txt">임시보관함</a><span class="unread_cnt">3</span><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+            <li><div class="menu_item mbox_memo"><a href="#" class="item_txt">메모함</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+          </ul>
+        </div>
+
+        <!-- 즐겨찾는 연락처 -->
+        <div class="menu_box vip">
+          <div class="head_bar"><button type="button" class="btn_fold">즐겨찾는 연락처</button></div>
+          <ul class="lnb_tree">
+            <li><div class="menu_item add_vip"><a href="#" class="item_txt">즐겨찾는 연락처 추가하기</a></div></li>
+          </ul>
+        </div>
+
+        <!-- 내 메일함 -->
+        <div class="menu_box mybox">
+          <div class="head_bar">
+            <button type="button" class="btn_fold">내 메일함</button>
+            <button type="button" class="btn_add side_btn" title="새 메일함 추가"><i class="blind">새 메일함 추가</i></button>
+            <button type="button" class="btn_setting side_btn" title="설정하기"><i class="blind">설정하기</i></button>
+          </div>
+          <ul class="lnb_tree">
+
+            <!-- 2분기 OKR (custom orange) -->
+            <li>
+              <div class="menu_item mbox_custom_folder mbox_folder">
+                <a href="#" class="item_txt">2분기 OKR<span class="icon_custom_mailbox" aria-hidden="true" style="background-color:rgb(215,154,60)"></span></a>
+                <button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button>
+                <button type="button" class="btn_fold"><i class="blind">하위 메일함 토글</i></button>
+              </div>
+              <ul class="lnb_sub_tree">
+                <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">OKR Jira</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+              </ul>
+            </li>
+
+            <!-- Aurora 프로젝트 -->
+            <li>
+              <div class="menu_item mbox_folder">
+                <a href="#" class="item_txt">Aurora 프로젝트</a>
+                <button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button>
+              </div>
+            </li>
+
+            <!-- Tokyo Office (custom purple) -->
+            <li>
+              <div class="menu_item mbox_custom_folder mbox_folder">
+                <a href="#" class="item_txt">Tokyo Office<span class="icon_custom_mailbox" aria-hidden="true" style="background-color:rgb(145,65,233)"></span></a>
+                <button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button>
+                <button type="button" class="btn_fold"><i class="blind">하위 메일함 토글</i></button>
+              </div>
+              <ul class="lnb_sub_tree">
+                <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">Figma</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">Jira</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">BTS</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">Zeplin</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                <li>
+                  <div class="menu_item mbox_custom_folder mbox_folder">
+                    <a href="#" class="item_txt">파트너 협업<span class="icon_custom_mailbox" aria-hidden="true" style="background-color:rgb(110,130,145)"></span></a>
+                    <button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button>
+                  </div>
+                </li>
+              </ul>
+            </li>
+
+            <!-- 글로벌 파트너십 -->
+            <li>
+              <div class="menu_item mbox_folder">
+                <a href="#" class="item_txt">글로벌 파트너십</a>
+                <button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button>
+                <button type="button" class="btn_fold"><i class="blind">하위 메일함 토글</i></button>
+              </div>
+              <ul class="lnb_sub_tree">
+                <li class="fold">
+                  <div class="menu_item mbox_folder">
+                    <a href="#" class="item_txt">APAC</a>
+                    <button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button>
+                    <button type="button" class="btn_fold"><i class="blind">하위 메일함 토글</i></button>
+                  </div>
+                  <ul class="lnb_sub_tree"></ul>
+                </li>
+                <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">EMEA</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">NA</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">LATAM</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                <li>
+                  <div class="menu_item mbox_folder">
+                    <a href="#" class="item_txt">성공 사례</a>
+                    <button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button>
+                    <button type="button" class="btn_fold"><i class="blind">하위 메일함 토글</i></button>
+                  </div>
+                  <ul class="lnb_sub_tree">
+                    <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">Q1 사례</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                    <li><div class="menu_item mbox_folder"><a href="#" class="item_txt">Q2 사례</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+
+          </ul>
+        </div>
+
+        <!-- 스팸/휴지통 -->
+        <div class="menu_box">
+          <ul class="lnb_tree">
+            <li><div class="menu_item mbox_spam"><a href="#" class="item_txt">스팸메일함</a><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+            <li><div class="menu_item mbox_trash"><a href="#" class="item_txt">휴지통</a><span class="unread_cnt">21</span><button type="button" class="btn_more side_btn" title="추가 메뉴"><i class="blind">추가 메뉴</i></button></div></li>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="aside_pane">
+      <div class="indicator">용량 <a href="#" class="cnt">42.18GB</a><span class="total"><em>3TB</em></span></div>
+    </div>
   </aside>
 
   <!-- ============ MAIN ============ -->
@@ -1201,13 +1427,12 @@
         <span class="ml-star on">★</span>
         <span class="ml-read unread"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 7.5C4 6.67 4.67 6 5.5 6H18.5C19.33 6 20 6.67 20 7.5V16.5C20 17.33 19.33 18 18.5 18H5.5C4.67 18 4 17.33 4 16.5V7.5Z" fill="currentColor"/><path d="M4.5 7.5L12 13L19.5 7.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">윤지호 팀장</span>
-        <span class="ml-to-badge active">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-chip flow"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg> Flow AI</span>
           <span class="ml-subj">Aurora 프로젝트 런칭 일정 조율 요청 - 안녕하세요, 지호입니다. 이번 주 중으로 런칭 시점을 확정하고 싶은데...</span>
         </span>
         <span class="ml-time">16:22</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">342 KB</span>
       </div>
 
       <div class="ml-row unread flow-flag" onclick="openDraft('tanaka')">
@@ -1215,14 +1440,13 @@
         <span class="ml-star on">★</span>
         <span class="ml-read unread"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 7.5C4 6.67 4.67 6 5.5 6H18.5C19.33 6 20 6.67 20 7.5V16.5C20 17.33 19.33 18 18.5 18H5.5C4.67 18 4 17.33 4 16.5V7.5Z" fill="currentColor"/><path d="M4.5 7.5L12 13L19.5 7.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">Maya Tanaka</span>
-        <span class="ml-to-badge active">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-chip flow"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg> Flow AI</span>
           <span class="ml-chip ext">외부</span>
           <span class="ml-subj">Re: Partnership proposal review — Could you confirm the revised terms by Friday? Our legal team...</span>
         </span>
         <span class="ml-time">15:47</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">12.4 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1230,13 +1454,12 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.75"/><path d="M3.5 9.5H20.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
         <span class="ml-from">한소은 매니저</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-chip invite">일정 초대</span>
           <span class="ml-subj">[필수 참석] 2분기 타운홀 미팅 - 4.28(화) 오후 03:00 본사 그랜드홀 (GMT+09:00)</span>
         </span>
         <span class="ml-time">14:12</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">8.5 KB</span>
       </div>
 
       <div class="ml-row unread">
@@ -1244,12 +1467,11 @@
         <span class="ml-star">☆</span>
         <span class="ml-read unread"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 7.5C4 6.67 4.67 6 5.5 6H18.5C19.33 6 20 6.67 20 7.5V16.5C20 17.33 19.33 18 18.5 18H5.5C4.67 18 4 17.33 4 16.5V7.5Z" fill="currentColor"/><path d="M4.5 7.5L12 13L19.5 7.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">장우빈 선임</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-subj">프로토타입 v3 공유드립니다 — 전달 주신 피드백 반영해서 두 가지 버전으로 나눠봤어요. 편하실 때...</span>
         </span>
         <span class="ml-time">12:40</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">67.3 KB</span>
       </div>
 
       <div class="ml-row unread">
@@ -1257,13 +1479,12 @@
         <span class="ml-star">☆</span>
         <span class="ml-read unread"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 7.5C4 6.67 4.67 6 5.5 6H18.5C19.33 6 20 6.67 20 7.5V16.5C20 17.33 19.33 18 18.5 18H5.5C4.67 18 4 17.33 4 16.5V7.5Z" fill="currentColor"/><path d="M4.5 7.5L12 13L19.5 7.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">인사이트팀</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-chip hr">HR</span>
           <span class="ml-subj">4월 셋째 주 직원 만족도 리포트 공유</span>
         </span>
         <span class="ml-time">11:08</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">67.3 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1271,13 +1492,12 @@
         <span class="ml-star on">★</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">오세라 디자이너</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <svg class="ml-attach" width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20 11.24L12.44 18.59C11.51 19.49 10.25 20 8.94 20C7.63 20 6.37 19.49 5.45 18.59C4.52 17.69 4 16.47 4 15.2C4 13.92 4.52 12.7 5.45 11.8L12.5 4.94C13.12 4.34 13.96 4 14.83 4C15.71 4 16.55 4.34 17.16 4.94C17.78 5.54 18.13 6.35 18.13 7.2C18.13 8.05 17.79 8.87 17.17 9.47L10.1 16.33C9.79 16.63 9.37 16.8 8.93 16.8C8.5 16.8 8.08 16.63 7.77 16.33C7.46 16.03 7.29 15.62 7.29 15.2C7.29 14.77 7.46 14.36 7.77 14.06L14.76 7.28" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
           <span class="ml-subj">브랜드 리뉴얼 컨셉 시안 1차 — 세 가지 방향성으로 정리했습니다. 특히 B안이 이번 캠페인 톤과...</span>
         </span>
         <span class="ml-time">4. 20. 18:47</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">24.1 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1285,12 +1505,11 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">법무팀 노트</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-subj">[공지] 대외 발신 메일 시 외부 링크 정책 변경 안내</span>
         </span>
         <span class="ml-time">4. 20. 15:30</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">342 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1298,12 +1517,11 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">박지오 리드</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-subj">A/B 테스트 1차 결과 — 전환율 기준 B안이 유의미하게 높게 나왔습니다. 자세한 지표는 첨부를...</span>
         </span>
         <span class="ml-time">4. 20. 10:15</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">38.9 KB</span>
       </div>
 
       <div class="ml-row unread flow-flag" onclick="openDraft()">
@@ -1311,13 +1529,12 @@
         <span class="ml-star on">★</span>
         <span class="ml-read unread"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 7.5C4 6.67 4.67 6 5.5 6H18.5C19.33 6 20 6.67 20 7.5V16.5C20 17.33 19.33 18 18.5 18H5.5C4.67 18 4 17.33 4 16.5V7.5Z" fill="currentColor"/><path d="M4.5 7.5L12 13L19.5 7.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">김도현 PM</span>
-        <span class="ml-to-badge active">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-chip flow"><svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 6.6L21 11l-6.6 2.4L12 20l-2.4-6.6L3 11l6.6-2.4L12 2z"/></svg> Flow AI</span>
           <span class="ml-subj">스프린트 회고 일정 확인 부탁드립니다 🙏 — 이번 주 내로 시간 조율해서 공유드리면 감사하겠습니다...</span>
         </span>
         <span class="ml-time">4. 19. 17:02</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">156 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1325,12 +1542,11 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">Spark Newsletter</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-subj">이번 주의 디자인 인사이트 — AI 네이티브 UX의 6가지 원칙</span>
         </span>
         <span class="ml-time">4. 19. 09:00</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">59.6 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1338,13 +1554,12 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" stroke-width="1.75"/><path d="M3.5 9.5H20.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/><path d="M8 3V6M16 3V6" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/></svg></span>
         <span class="ml-from">서지안 리크루터</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-chip invite">일정 초대</span>
           <span class="ml-subj">[선택 참석] 신규 입사자 웰컴 세션 - 5.02(금) 오전 10:30 네모홀 (GMT+09:00)</span>
         </span>
         <span class="ml-time">4. 18. 14:20</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">128 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1352,13 +1567,12 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">재무지원팀</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-chip reminder">리마인드</span>
           <span class="ml-subj">[법인카드] 4월 사용 내역 증빙 제출 요청 (~4/25)</span>
         </span>
         <span class="ml-time">4. 18. 11:05</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">85.7 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1366,13 +1580,12 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">최도윤 리서처</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-subj">사용자 인터뷰 6차 녹취록 정리본 — 주요 인사이트 3개로 압축했습니다. 확인 후 공유 부탁...</span>
           <span class="ml-chip impt">❗</span>
         </span>
         <span class="ml-time">4. 17. 20:11</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">12.4 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1380,12 +1593,11 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">IT헬프데스크</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-subj">VPN 인증 수단 업데이트 안내 (Fortinet → Okta Verify)</span>
         </span>
         <span class="ml-time">4. 17. 15:42</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">156 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1393,12 +1605,11 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">이선우 CTO</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-subj">기술 로드맵 Q3 초안 — 커먼트 남겨주시면 내일 전체 세션에서 함께 다뤄보려 합니다.</span>
         </span>
         <span class="ml-time">4. 16. 09:30</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">1.2 MB</span>
       </div>
 
       <div class="ml-row read">
@@ -1406,13 +1617,12 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">아카이브봇</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-chip reminder">리마인드</span>
           <span class="ml-subj">[알림] 6개월 이상 미확인 첨부파일 12건 자동 보관 예정</span>
         </span>
         <span class="ml-time">4. 16. 07:00</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">67.3 KB</span>
       </div>
 
       <div class="ml-row read">
@@ -1420,12 +1630,11 @@
         <span class="ml-star">☆</span>
         <span class="ml-read"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 9.5L12 4L20 9.5V17.5C20 18.33 19.33 19 18.5 19H5.5C4.67 19 4 18.33 4 17.5V9.5Z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/><path d="M4 9.5L12 14L20 9.5" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
         <span class="ml-from">민지수 에디터</span>
-        <span class="ml-to-badge">TO</span>
         <span class="ml-subj-wrap">
           <span class="ml-subj">사내 블로그 4월호 초안 — 리뷰 요청드리고, 코멘트는 문서 내 제안 모드로 남겨주세요.</span>
         </span>
         <span class="ml-time">4. 15. 16:28</span>
-        <span class="ml-more"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="18.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="12" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/><circle cx="5.5" cy="12" r="1.75" stroke="currentColor" stroke-width="1.75"/></svg></span>
+        <span class="ml-size">267 KB</span>
       </div>
 
     </div>
